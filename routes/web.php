@@ -17,4 +17,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+
+Route::middleware('auth')->group(function () {
+    Route::resource('users', \App\Http\Controllers\UserController::class);
+    Route::post('users/{id}/restore', [\App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
+});
+
+
+// Datatables
+Route::prefix('datatables')->group(function () {
+    Route::get('/users', [\App\Http\Controllers\DataTables\UserController::class, 'index'])->name('datatables.users');
+});
+
+require __DIR__ . '/auth.php';

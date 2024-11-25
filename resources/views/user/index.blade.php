@@ -41,9 +41,9 @@
                     </div>
 
                     <div class="flow-root">
-                        <div class="mt-8 overflow-x-visible">
-                            <div class="inline-block min-w-full py-2 align-middle">
-                                <div class="flex gap-2 items-center justify-end w-full">
+                        <div class="mt-8 overflow-x-auto">
+                            <div class="inline-block my-6 min-w-full py-2 align-middle">
+                                <div class="flex flex-col md:flex-row gap-2 items-center md:justify-end w-full">
                                     {{-- show_deleted --}}
                                     <div class="flex items-center space-x-2 bg-gray-100 p-1.5 px-3 border shadow-sm rounded-lg">
                                         <label for="show_deleted" class="text-sm text-gray-700">Show Deleted</label>

@@ -21,6 +21,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::resource('users', \App\Http\Controllers\UserController::class);
     Route::post('users/{id}/restore', [\App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
+    
+    Route::get('master', function () {
+        return view('master-data.index');
+    })->name('data.master');
 });
 
 

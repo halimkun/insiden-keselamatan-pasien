@@ -67,12 +67,28 @@ class UserController extends Controller
                             </div>
                             <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
                                 <ul>
-                                    <li><a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">Show</a></li>
-                                    <li><a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">Edit</a></li>
+                                    <li>
+                                        <a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h1.5m3.5 3a3 3 0 1 0 6 0a3 3 0 1 0-6 0m5.2 2.2L22 22"/></svg>
+                                            Show
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h3.5m4.92.61a2.1 2.1 0 0 1 2.97 2.97L18 22h-3v-3z"/></svg>
+                                            Edit
+                                        </a>
+                                    </li>
                                     <li>
                                         ' . ( $user->deleted_at 
-                                            ? '<button class="text-green-600 hover:text-green-900 restore-user" data-id="' . $user->id . '" data-name="' . $user->name . '" onclick="confirmRestore.showModal()">Restore</button>' 
-                                            : '<button class="text-red-600 hover:text-red-900 delete-user" data-id="' . $user->id . '" data-name="' . $user->name . '" onclick="confirmDelete.showModal()">Delete</button>' 
+                                            ? '<button class="text-green-600 hover:text-green-900 restore-user" data-id="' . $user->id . '" data-name="' . $user->name . '" onclick="confirmRestore.showModal()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h3m3 7l5-5m0 4.5V17h-4.5"/></svg>
+                                                Restore
+                                            </button>' 
+                                            : '<button class="text-red-600 hover:text-red-900 delete-user" data-id="' . $user->id . '" data-name="' . $user->name . '" onclick="confirmDelete.showModal()">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>
+                                                Delete
+                                            </button>' 
                                         ) . '
                                     </li>
                                 </ul>

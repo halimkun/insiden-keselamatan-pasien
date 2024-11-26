@@ -25,12 +25,16 @@ Route::middleware('auth')->group(function () {
     Route::get('master', function () {
         return view('master-data.index');
     })->name('data.master');
+    Route::group(['prefix'=> 'master'], function () {
+        Route::resource('unit', \App\Http\Controllers\UnitController::class);
+    });
 });
 
 
 // Datatables
 Route::prefix('datatables')->group(function () {
     Route::get('/users', [\App\Http\Controllers\DataTables\UserController::class, 'index'])->name('datatables.users');
+    Route::get('/units', [\App\Http\Controllers\DataTables\UnitController::class, 'index'])->name('datatables.units');
 });
 
 require __DIR__ . '/auth.php';

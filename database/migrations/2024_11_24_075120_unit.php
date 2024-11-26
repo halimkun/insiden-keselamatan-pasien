@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_unit');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

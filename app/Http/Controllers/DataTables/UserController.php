@@ -21,12 +21,6 @@ class UserController extends Controller
             }
 
             return DataTables::of($users)
-                // add columns nomor urut
-                ->addColumn("nomor", function ($user) {
-                    static $nomor = 1;
-                    return $nomor++;
-                })
-
                 ->addColumn('roles', function($user) {
                     // Create a badge for each role with color
                     $roles = $user->roles->pluck('name'); // Get the list of roles
@@ -98,9 +92,8 @@ class UserController extends Controller
                 })
                 ->rawColumns(['action', 'roles']) // Menandakan kolom action akan mengandung HTML
                 ->make(true); // Return dalam format DataTables
+        } else {
+            throw new \Exception("Request harus dari AJAX");
         }
-
-        // Jika bukan request AJAX, tampilkan view
-        return view('datatables.users');
     }
 }

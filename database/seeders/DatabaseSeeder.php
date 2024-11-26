@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // call other seeders
         $this->call(PermissionAndRoles::class);
+        $this->call(MasterData::class);
 
         // ===== ===== ===== ===== =====  Administrator  User 
         // Administrator user

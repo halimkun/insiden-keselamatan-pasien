@@ -41,38 +41,40 @@
                         </div>
                     </header>
 
-                    <div class="mt-8">
-                        <div class="inline-block min-w-full py-2 pb-7 align-middle">
-                            <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
-                                {{-- show_deleted --}}
-                                <div class="flex items-center space-x-2 rounded-lg border bg-gray-100 p-1.5 px-3 shadow-sm">
-                                    <label for="show_deleted" class="text-sm text-gray-700">Show Deleted</label>
-                                    <input type="checkbox" id="show_deleted" class="checkbox checkbox-xs" />
+                    <div class="flow-root">
+                        <div class="mt-8">
+                            <div class="inline-block min-w-full py-2 pb-7 align-middle">
+                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                                    {{-- show_deleted --}}
+                                    <div class="flex items-center space-x-2 rounded-lg border bg-gray-100 p-1.5 px-3 shadow-sm">
+                                        <label for="show_deleted" class="text-sm text-gray-700">Show Deleted</label>
+                                        <input type="checkbox" id="show_deleted" class="checkbox checkbox-xs" />
+                                    </div>
+
+                                    {{-- search box --}}
+                                    <div class="flex items-center space-x-2">
+                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
+                                    </div>
                                 </div>
 
-                                {{-- search box --}}
-                                <div class="flex items-center space-x-2">
-                                    <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
-                                </div>
-                            </div>
+                                <div class="w-full overflow-x-auto lg:overflow-visible">
+                                    <table class="w-full divide-y divide-gray-300" id="tableData">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
-                            <div class="w-full overflow-x-auto lg:overflow-visible">
-                                <table class="w-full divide-y divide-gray-300" id="tableData">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
-    
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Username</th>
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Roles</th>
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Email</th>
-    
-                                            <th scope="col" class="px-2 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                #
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Username</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Roles</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Email</th>
+
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                                    <span class="text-lg">#</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,9 +168,13 @@
                         type: 'GET'
                     },
 
-                    columns: [{
-                            data: 'nomor',
-                            name: 'nomor'
+                    columns: [
+                        {
+                            data: 'id',
+                            name: 'id',
+                            render: function(data, type, row, meta) {
+                                return meta.row + meta.settings._iDisplayStart + 1;
+                            }
                         },
                         {
                             data: 'name',
@@ -182,7 +188,7 @@
                             data: 'roles',
                             name: 'roles',
                             searchable: true
-                        }, // Added Roles column
+                        },
                         {
                             data: 'email',
                             name: 'email',
@@ -196,11 +202,12 @@
                     ],
 
                     createdRow: function(row, data, dataIndex) {
-                        $(row).find('td').eq(0).addClass('px-2 py-4 text-sm text-gray-500');
-                        $(row).find('td').eq(1).addClass('px-2 py-4 text-sm text-gray-500');
-                        $(row).find('td').eq(2).addClass('whitespace-nowrap px-2 py-4 text-sm text-gray-500');
-                        $(row).find('td').eq(3).addClass('whitespace-nowrap px-2 py-4 text-sm text-gray-500');
-                        $(row).find('td').eq(4).addClass('whitespace-nowrap px-2 py-4 text-sm text-gray-500');
+                        $(row).find('td').eq(0).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(1).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(2).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(3).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(4).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(5).addClass('py-3 pl-4 pr-3 text-center text-sm text-gray-500');
                     }
                 });
 

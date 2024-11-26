@@ -37,15 +37,30 @@ class MasterData extends Seeder
 
         // ======================================== Jenis Insiden
         $jenisInsiden = [
-            'Kejadian Potensial Cedera',
-            'Kejadian Nyaris Cedera',
-            'Kejadian Tidak Cedera',
-            'Kejadian Tidak Diharapkan',
-            'Kejadian Sentinel'
+            [
+                "alias" => "KPC",
+                "nama_jenis_insiden" =>  "Kejadian Potensial Cedera",
+            ],
+            [
+                "alias" => "KNC",
+                "nama_jenis_insiden" =>  "Kejadian Nyaris Cedera",
+            ],
+            [
+                "alias" => "KTC",
+                "nama_jenis_insiden" =>  "Kejadian Tidak Cedera",
+            ],
+            [
+                "alias" => "KTD",
+                "nama_jenis_insiden" =>  "Kejadian Tidak Diharapkan",
+            ],
+            [
+                "alias" => "SENTINEL",
+                "nama_jenis_insiden" =>  "Kejadian Sentinel"
+            ],
         ];
 
         foreach ($jenisInsiden as $jenisInsiden) {
-            JenisInsiden::create(['nama_jenis_insiden' => $jenisInsiden]);
+            JenisInsiden::create($jenisInsiden);
         }
     }
 }

@@ -76,6 +76,8 @@ class JenisInsidenController extends Controller
 
     public function destroy($id): RedirectResponse
     {
+        return redirect()->back()->with('error', 'Jenis Insiden tidak bisa untuk dihapus');
+
         JenisInsiden::find($id)->delete();
 
         return Redirect::route('jenis-insiden.index')

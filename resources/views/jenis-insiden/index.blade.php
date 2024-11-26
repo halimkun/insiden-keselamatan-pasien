@@ -31,15 +31,15 @@
                 <div class="w-full">
                     <header class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Jenis Insidens') }}</h2>
-                            <p class="mt-1 text-sm text-gray-600">A list of all the {{ __('Jenis Insidens') }}.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Jenis Insiden') }}</h2>
+                            <p class="mt-1 text-sm text-gray-600">Data jenis insiden keselaamatan pasien.</p>
                         </div>
-                        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        {{-- <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <a type="button" href="{{ route('jenis-insiden.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 <x-icons.circle-plus class="h-5 w-5" />
                                 Add New
                             </a>
-                        </div>
+                        </div> --}}
                     </header>
 
                     <div class="flow-root">
@@ -51,6 +51,7 @@
                                             <tr>
                                                 <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Alias</th>
                                                 <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama Jenis Insiden</th>
 
                                                 <th scope="col" class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
@@ -119,12 +120,17 @@
                         type: 'GET',
                     },
 
-                    columns: [{
+                    columns: [
+                        {
                             data: 'id',
                             name: 'id',
                             render: function(data, type, row, meta) {
                                 return meta.row + meta.settings._iDisplayStart + 1;
                             }
+                        },
+                        {
+                            data: 'alias',
+                            name: 'alias',
                         },
                         {
                             data: 'nama_jenis_insiden',
@@ -137,7 +143,7 @@
                     ],
 
                     createdRow: function(row, data, dataIndex) {
-                        $(row).find('td').eq(2).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
+                        $(row).find('td').eq(3).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
                     }
                 });
             });

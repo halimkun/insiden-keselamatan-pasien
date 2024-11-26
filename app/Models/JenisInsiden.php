@@ -19,14 +19,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class JenisInsiden extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = "jenis_insiden";
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -39,7 +39,7 @@ class JenisInsiden extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['nama_jenis_insiden'];
+    protected $fillable = ['alias', 'nama_jenis_insiden'];
 
 
     /**
@@ -49,5 +49,4 @@ class JenisInsiden extends Model
     {
         return $this->hasMany(\App\Models\Insiden::class, 'id', 'jenis_insiden_id');
     }
-    
 }

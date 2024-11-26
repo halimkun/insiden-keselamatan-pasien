@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     })->name('data.master');
     Route::group(['prefix'=> 'master'], function () {
         Route::resource('unit', \App\Http\Controllers\UnitController::class);
+        Route::resource('jenis-insiden', \App\Http\Controllers\JenisInsidenController::class);
         Route::resource('penanggung-biaya', \App\Http\Controllers\PenanggungBiayaController::class);
     });
 });
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('datatables')->group(function () {
     Route::get('/users', [\App\Http\Controllers\DataTables\UserController::class, 'index'])->name('datatables.users');
     Route::get('/units', [\App\Http\Controllers\DataTables\UnitController::class, 'index'])->name('datatables.units');
+    Route::get('/jenis-insiden', [\App\Http\Controllers\DataTables\JenisInsidenController::class, 'index'])->name('datatables.jenis-insiden');
     Route::get('/penanggung-biaya', [\App\Http\Controllers\DataTables\PenanggungBiayaController::class, 'index'])->name('datatables.penanggung-biaya');
 });
 

@@ -18,7 +18,7 @@
                     </x-nav-link>
 
                     @can('view_master_data')
-                        <x-nav-link :href="route('data.master')" :active="request()->routeIs('data.master')" class="inline-flex items-center gap-2">
+                        <x-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center gap-2">
                             <x-icons.database class="h-[1rem] w-[1rem]" />
                             Master Data
                         </x-nav-link>

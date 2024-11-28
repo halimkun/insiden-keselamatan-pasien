@@ -29,7 +29,7 @@
 
                     <div class="flow-root">
                         <div class="mt-8">
-                            <div class="max-w-xl py-2 align-middle">
+                            <div class="w-full py-2 align-middle">
                                 <form method="POST" action="{{ route('users.store') }}"  role="form" enctype="multipart/form-data">
                                     @csrf
 

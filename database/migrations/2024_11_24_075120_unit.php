@@ -17,6 +17,11 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        // alter to karyawan table
+        Schema::table('user_detail', function (Blueprint $table) {
+            $table->foreignId('unit_id')->after('jabatan')->constrained('unit')->onDelete('cascade');
+        });
     }
 
     /**

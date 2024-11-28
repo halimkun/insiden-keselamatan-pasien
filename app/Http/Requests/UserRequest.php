@@ -22,9 +22,13 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'name' => 'required|string',
-			'username' => 'required|string',
-			'email' => 'required|string',
+            'name'       => 'required|string',
+            'username'   => 'required|string',
+            'email'      => 'required|string|email',
+            'no_hp'      => 'nullable|string|regex:/^[0-9]{10,15}$/',
+            'jabatan'    => 'required|string',
+            'unit'       => 'required|exists:unit,id',
+            'departemen' => 'required|string',
         ];
     }
 }

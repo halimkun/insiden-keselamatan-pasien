@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pelapor', function (Blueprint $table) {
             $table->id();
             $table->string('jenis_pelapor'); // e.g., karyawan, pasien, keluarga
-            $table->foreignId('karyawan_id')->nullable()->constrained('karyawan');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
     }

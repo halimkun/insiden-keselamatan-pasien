@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Routing\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -16,10 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        // $users = User::paginate();
-        $users = User::all();
-
-        return view('user.index', compact('users'));
+        return view('user.index');
     }
 
     /**
@@ -28,8 +27,9 @@ class UserController extends Controller
     public function create(): View
     {
         $user = new User();
+        $units = Unit::all();
 
-        return view('user.create', compact('user'));
+        return view('user.create', compact('user', 'units'))->with('isCreate', true);
     }
 
     /**
@@ -37,7 +37,21 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $user = User::create($request->only('name', 'user', 'username', 'email'));
+
+        $detail = [
+            'user_id'    => $user->id,
+            'jabatan'    => $request->jabatan,
+            'unit_id'    => $request->unit,
+            'departemen' => $request->departemen,
+            'no_hp'      => $request->no_hp,
+        ];
+
+        // update or create user detail
+        \App\Models\UserDetail::updateOrCreate(
+            ['user_id' => $user->id],
+            $detail
+        );
 
         return Redirect::route('users.index')
             ->with('success', 'User created successfully.');
@@ -59,8 +73,9 @@ class UserController extends Controller
     public function edit($id): View
     {
         $user = User::find($id);
+        $units = Unit::all();
 
-        return view('user.edit', compact('user'));
+        return view('user.edit', compact('user', 'units'));
     }
 
     /**
@@ -68,13 +83,29 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->validated());
+        $user->update($request->only('name', 'user', 'email'));
+
+        $detail = [
+            'user_id'    => $user->id,
+            'jabatan'    => $request->jabatan,
+            'unit_id'    => $request->unit,
+            'departemen' => $request->departemen,
+            'no_hp'      => $request->no_hp,
+        ];
+
+        // update or create user detail
+        \App\Models\UserDetail::updateOrCreate(
+            ['user_id' => $user->id],
+            $detail
+        );
 
         return Redirect::route('users.index')
             ->with('success', 'User updated successfully');
     }
 
-    // restore
+    /**
+     * Restore the specified resource from storage.
+     */
     public function restore(string $id, Request $request): RedirectResponse
     {
         // validate the request
@@ -89,6 +120,9 @@ class UserController extends Controller
             ->with('error', 'User not found');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id): RedirectResponse
     {
         User::find($id)->delete();

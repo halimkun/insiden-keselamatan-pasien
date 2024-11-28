@@ -6,7 +6,7 @@
                 Master Data {{ request()->segment(2) ? "- " . \Str::headline(\Str::replace('-', " ", request()->segment(2))) : "" }}
             </h2>
 
-            <x-master-data.navigation />
+            <x-master-data.navigation-boxed />
         </div>
     </x-slot>
 
@@ -27,7 +27,7 @@
                     </div>
 
                     <div class="p-10 bg-indigo-50 flex items-center justify-center rounded-xl hover:bg-indigo-100 transition-all duration-300 ease-in-out group">
-                        <x-icons.database-star class="h-10 w-10 text-amber-500 group-hover:scale-110 transition-all duration-300 ease-in-out" />
+                        <x-icons.database-star class="h-[2rem] w-[2rem] text-amber-500 group-hover:scale-110 transition-all duration-300 ease-in-out" />
                     </div>
                 </div>
             </div>

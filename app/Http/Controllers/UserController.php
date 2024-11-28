@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Redirect;
 class UserController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware("permission:view_karyawan")->only(["index", "show"]);
+        $this->middleware("permission:create_karyawan")->only(["create", "store"]);
+        $this->middleware("permission:edit_karyawan")->only(["edit", "update", "restore"]);
+        $this->middleware("permission:delete_karyawan")->only(["destroy"]);
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request): View

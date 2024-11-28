@@ -16,8 +16,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = \App\Models\User::with('detail')->findOrFail($request->user()->id);
+        
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user
         ]);
     }
 
@@ -26,15 +28,18 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
-
+        $request->user()->fill($request->only("name", "email", "username"));
+        
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
-
+        
         $request->user()->save();
+        
+        $request->user()->detail->fill($request->only("no_hp"));
+        $request->user()->detail->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated')->with('success', 'Profile updated successfully.');
     }
 
     /**

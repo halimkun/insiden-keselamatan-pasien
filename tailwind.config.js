@@ -9,6 +9,7 @@ export default {
         './resources/views/**/*.blade.php',
 
         './app/Http/Controllers/DataTables/**/*.php',
+        './app/DataTables/**/*.php',
         
         './node_modules/@tailwindcss/forms/**/*.js',
         './node_modules/@tailwindcss/typography/**/*.js',
@@ -27,6 +28,7 @@ export default {
 
     plugins: [
         forms,
+        require('@tailwindcss/forms'),
         require('@tailwindcss/typography'),
         require('daisyui'),
     ],

@@ -9,7 +9,7 @@
     <div class="flex w-full flex-col items-start justify-start gap-6 lg:flex-row">
         <div class="w-full">
             <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full {{ !($isCreate ?? false) ? 'bg-gray-100' : '' }}" :readonly="!($isCreate ?? false)" :value="old('username', $user?->username)" autocomplete="username" placeholder="Username" />
+            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full " :readonly="!($isCreate ?? false)" :value="old('username', $user?->username)" autocomplete="username" placeholder="Username" />
             <x-input-error class="mt-2" :messages="$errors->get('username')" />
         </div>
 

@@ -89,6 +89,11 @@ class UserController extends Controller
                         </div>
                     ';
                 })
+
+                ->orderColumn('roles', function ($query, $order) {
+                    return $query->with('roles')->orderBy('name', $order);
+                })
+
                 ->rawColumns(['action', 'roles']) // Menandakan kolom action akan mengandung HTML
                 ->make(true); // Return dalam format DataTables
         } else {

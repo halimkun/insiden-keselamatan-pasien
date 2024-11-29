@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ $jenisInsiden->name ?? __('Show') . ' ' . __('Jenis Insiden') }}
+            {{ $jenisInsiden->name ?? __('Detail Data') . ' ' . __('Jenis Insiden') }}
         </h2>
     </x-slot>
 
@@ -11,8 +11,8 @@
                 <div class="w-full">
                     <header class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Show') }} Jenis Insiden</h2>
-                            <p class="mt-1 text-sm text-gray-600">Details of {{ __('Jenis Insiden') }}.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">Detail Jenis Insiden</h2>
+                            <p class="mt-1 text-sm text-gray-600">Detail data jenis insiden.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <a type="button" href="{{ route('jenis-insiden.index') }}" class="inline-flex items-center gap-2 rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">

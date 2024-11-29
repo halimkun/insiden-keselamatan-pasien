@@ -31,13 +31,13 @@
                 <div class="w-full">
                     <header class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Units') }}</h2>
-                            <p class="mt-1 text-sm text-gray-600">A list of all the {{ __('Units') }}.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">Unit Kerja</h2>
+                            <p class="mt-1 text-sm text-gray-600">Data Unit Kerja Rumah Sakit.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <a type="button" href="{{ route('unit.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 <x-icons.circle-plus class="h-5 w-5" />
-                                Add New
+                                Tambah Data
                             </a>
                         </div>
                     </header>

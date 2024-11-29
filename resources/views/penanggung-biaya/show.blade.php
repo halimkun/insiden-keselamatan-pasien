@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $penanggungBiaya->name ?? __('Show') . " " . __('Penanggung Biaya') }}
+            {{ $penanggungBiaya->name ?? __('Detail Data') . " " . __('Penanggung Biaya') }}
         </h2>
     </x-slot>
 
@@ -11,8 +11,8 @@
                 <div class="w-full">
                     <header class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Show') }} Penanggung Biaya</h2>
-                            <p class="mt-1 text-sm text-gray-600">Details of {{ __('Penanggung Biaya') }}.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">Detail Penanggung Biaya</h2>
+                            <p class="mt-1 text-sm text-gray-600">Details Data Penanggung Biaya.
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                             <a type="button" href="{{ route('penanggung-biaya.index') }}" class="inline-flex items-center gap-2 rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">

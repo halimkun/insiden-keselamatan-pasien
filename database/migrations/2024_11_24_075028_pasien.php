@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->foreignId('penanggung_biaya_id')->constrained('penanggung_biaya');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

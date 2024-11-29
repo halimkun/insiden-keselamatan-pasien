@@ -12,20 +12,25 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="inline-flex items-center gap-2">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="inline-flex items-center justify-center gap-2">
                         <x-icons.dashboard class="h-[1rem] w-[1rem]" />
                         Dashboard
                     </x-nav-link>
 
+                    <x-nav-link :href="route('pasien.index')" :active="request()->routeIs('pasien.index')" class="inline-flex items-center justify-center gap-2">
+                        <x-icons.health-recognition class="h-[1.1rem] w-[1.1rem]" />
+                        Pasien
+                    </x-nav-link>
+
                     @can('view_master_data')
-                        <x-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center gap-2">
+                        <x-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center justify-center gap-2">
                             <x-icons.database class="h-[1rem] w-[1rem]" />
                             Master Data
                         </x-nav-link>
                     @endcan
 
                     @can('view_karyawan')
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="inline-flex items-center gap-2">
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="inline-flex items-center justify-center gap-2">
                             <x-icons.users class="h-[1rem] w-[1rem]" />
                             Karyawan
                         </x-nav-link>

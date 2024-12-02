@@ -29,7 +29,7 @@ class Pasien extends DataTable
 
             ->addColumn("nama", function ($pasien) {
                 return '
-                    <div class="flex items-center gap-2">
+                    <div class="flex lg:items-center gap-2 lg:gap-3 w-full">
                         <div>
                             ' . ($pasien->jenis_kelamin == 'P' 
                                 ? Blade::render('<x-icons.gender-female class="h-[1.1rem] w-[1.1rem]" />') 
@@ -37,7 +37,9 @@ class Pasien extends DataTable
                                     ? Blade::render('<x-icons.gender-male class="h-[1.1rem] w-[1.1rem]" />') 
                                     : '')) . '
                         </div>
-                        <div class="font-medium">' . $pasien->nama . '</div>
+                        <div class="font-medium w-[120px] lg:w-full max-w-md whitespace-normal">
+                            ' . $pasien->nama . '
+                        </div>
                     </div>
                 ';
             })
@@ -104,6 +106,16 @@ class Pasien extends DataTable
             })
             ->orderColumn('tanggal_lahir', function ($query, $order) {
                 $query->orderBy('tanggal_lahir', $order);
+            })
+
+            ->filterColumn('no_rekam_medis', function ($query, $keyword) {
+                $query->where('no_rekam_medis', 'like', "%$keyword%");
+            })
+            ->filterColumn('nama', function ($query, $keyword) {
+                $query->where('nama', 'like', "%$keyword%");
+            })
+            ->filterColumn('tanggal_lahir', function ($query, $keyword) {
+                $query->where('tanggal_lahir', 'like', "%$keyword%");
             })
 
             ->rawColumns(['action', 'nama', 'no_rekam_medis', 'tanggal_lahir'])

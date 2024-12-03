@@ -16,9 +16,20 @@ class MasterData extends Seeder
     {
         // ======================================== Unit
         $units = [
+            'Casemix',
+            'Farmasi',
             'Radiologi',
-            'Nifas'
+            'Nifas',
+            'Gizi',
+            'Kamar Operasi',
+            'Patologi',
+            'Laundry',
+            'Laboratorium',
+            'Persalinan',
+            'Perinatologi',
         ];
+
+        sort($units);
 
         foreach ($units as $unit) {
             Unit::create(['nama_unit' => $unit]);
@@ -27,8 +38,12 @@ class MasterData extends Seeder
         // ======================================== Penanggung Biaya
         $penanggungBiaya = [
             'BPJS Kesehatan',
-            'Mandiri Health',
-            'Asuransi Sinar Mas'
+            'Jamkesda',
+            'Umum / Pribadi',
+            'Asuransi Swasta',
+            'Pemerintah',
+            'Perusahaan',
+            'Lain-Lain'
         ];
 
         foreach ($penanggungBiaya as $biaya) {

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // call other seeders
         $this->call(PermissionAndRoles::class);
         $this->call(MasterData::class);
+        $this->call(PasienData::class);
 
         // ===== ===== ===== ===== =====  Administrator  User 
         // Administrator user
@@ -60,13 +61,20 @@ class DatabaseSeeder extends Seeder
                 'email' => 'direksi2@mail.com',
             ],
         ];
-        
+
         foreach ($drksi as $user) {
             $u = User::factory()->create($user);
             $u->assignRole('direksi');
         }
 
         // ===== ===== ===== ===== =====  Pelapor User
+        $me = User::factory()->create([
+            'name'     => 'Pelapor',
+            'username' => 'pelapor',
+            'email'    => 'pelapor@mail.com'
+        ]);
+        $me->assignRole('pelapor');
+
         $u = User::factory(5)->create();
         $u->each(function ($user) {
             $user->assignRole('pelapor');

@@ -8,17 +8,18 @@ use Illuminate\Database\Eloquent\Model;
  * Class Tindakan
  *
  * @property $id
- * @property $deskripsi_tindakan
+ * @property $tindakan
+ * @property $oleh
  * @property $created_at
  * @property $updated_at
  *
  * @property Insiden[] $insidens
  * @package App
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Tindakan extends Model
 {
-    
+    protected $table = 'tindakan';
+
     protected $perPage = 20;
 
     /**
@@ -26,7 +27,7 @@ class Tindakan extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['deskripsi_tindakan'];
+    protected $fillable = ['tindakan', 'oleh'];
 
 
     /**

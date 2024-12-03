@@ -41,7 +41,7 @@
 
         <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
     </div>
-    <div>
+    {{-- <div>
         <x-input-label for="penanggung_biaya_id" :value="__('Penanggung Biaya')" />
         <select name="penanggung_biaya_id" id="penanggung_biaya_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
             <option value="">-- Pilih Penanggung Biaya --</option>
@@ -51,7 +51,7 @@
         </select>
 
         <x-input-error class="mt-2" :messages="$errors->get('penanggung_biaya_id')" />
-    </div>
+    </div> --}}
 
     <div class="flex items-center gap-4">
         <x-primary-button>Submit</x-primary-button>

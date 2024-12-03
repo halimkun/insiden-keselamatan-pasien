@@ -44,12 +44,13 @@ class Pasien extends DataTable
                 ';
             })
 
+            // buat format taggal, Tahun, Bulan, Hari
             ->addColumn("tanggal_lahir", function ($pasien) {
                 return '
                     <p class="flex items-center gap-2">
                         ' . $pasien->tanggal_lahir->format('d F Y') . '
                     </p>
-                    <p class="text-xs font-semibold">' . $pasien->tanggal_lahir->age . ' Tahun</p>
+                    <p class="text-xs font-semibold">' . $pasien->tanggal_lahir->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari') . '</p>
                 ';
             })
 

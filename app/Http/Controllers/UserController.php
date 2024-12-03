@@ -18,10 +18,10 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("permission:view_karyawan")->only(["index", "show"]);
-        $this->middleware("permission:create_karyawan")->only(["create", "store"]);
-        $this->middleware("permission:edit_karyawan")->only(["edit", "update", "restore"]);
-        $this->middleware("permission:delete_karyawan")->only(["destroy"]);
+        // $this->middleware("permission:view_karyawan")->only(["index", "show"]);
+        // $this->middleware("permission:create_karyawan")->only(["create", "store"]);
+        // $this->middleware("permission:edit_karyawan")->only(["edit", "update", "restore"]);
+        // $this->middleware("permission:delete_karyawan")->only(["destroy"]);
     }
 
     /**

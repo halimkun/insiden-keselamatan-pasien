@@ -17,24 +17,25 @@
                         Dashboard
                     </x-nav-link>
 
+                    <x-nav-link :href="route('insiden.index')"  :active="request()->routeIs('insiden.index')" class="inline-flex items-center justify-center gap-2">
+                        <x-icons.alert-triangle class="h-[1.1rem] w-[1.1rem]" />
+                        Insiden
+                    </x-nav-link>
+
                     <x-nav-link :href="route('pasien.index')" :active="request()->routeIs('pasien.index')" class="inline-flex items-center justify-center gap-2">
                         <x-icons.health-recognition class="h-[1.1rem] w-[1.1rem]" />
                         Pasien
                     </x-nav-link>
 
-                    @can('view_master_data')
-                        <x-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center justify-center gap-2">
-                            <x-icons.database class="h-[1rem] w-[1rem]" />
-                            Master Data
-                        </x-nav-link>
-                    @endcan
+                    <x-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center justify-center gap-2">
+                        <x-icons.database class="h-[1rem] w-[1rem]" />
+                        Master Data
+                    </x-nav-link>
 
-                    @can('view_karyawan')
-                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="inline-flex items-center justify-center gap-2">
-                            <x-icons.users class="h-[1rem] w-[1rem]" />
-                            Karyawan
-                        </x-nav-link>
-                    @endcan
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="inline-flex items-center justify-center gap-2">
+                        <x-icons.users class="h-[1rem] w-[1rem]" />
+                        Karyawan
+                    </x-nav-link>
                 </div>
             </div>
 

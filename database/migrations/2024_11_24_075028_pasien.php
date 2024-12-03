@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pasien', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('nik')->unique();
+            $table->string('nik')->unique()->nullable()->default(null)->comment('Nomor Induk Kependudukan');
             $table->string('no_rekam_medis')->unique();
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');

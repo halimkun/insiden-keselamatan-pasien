@@ -27,7 +27,10 @@ class PasienRequest extends FormRequest
 			'tanggal_lahir'       => 'required',
 			'jenis_kelamin'       => 'required',
 			'alamat'              => 'string',
-			'penanggung_biaya_id' => 'required',
+            'nik'                 => 'nullable|numeric|digits:16',
+            'tempat_lahir'        => 'string',
+            'no_telp'             => 'nullable|numeric|digits_between:10,13',
+            'email'               => 'nullable|email',
         ];
     }
 }

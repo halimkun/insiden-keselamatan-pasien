@@ -17,14 +17,27 @@ return new class extends Migration
             $table->foreignId('jenis_insiden_id')->constrained('jenis_insiden');
             $table->date('tanggal_insiden');
             $table->time('waktu_insiden');
-            $table->string('kronologi');
-            $table->foreignId('unit_id')->constrained('unit');
-            $table->foreignId('pelapor_id')->constrained('pelapor');
+            $table->string('insiden');
+            $table->text('kronologi');
+            $table->string('jenis_pelapor');
+            $table->string('jenis_pelapor_lainnya')->nullable()->default(null);
+            $table->string('korban_insiden');
+            $table->string('korban_insiden_lainnya')->nullable()->default(null);
+            $table->string('layanan_insiden');
+            $table->string('layanan_insiden_lainnya')->nullable()->default(null);
+            $table->string('kasus_insiden');
+            $table->string('kasus_insiden_lainnya')->nullable()->default(null);
             $table->string('tempat_kejadian');
-            $table->foreignId('akibat_id')->constrained('akibat');
-            $table->foreignId('tindakan_id')->constrained('tindakan');
+            $table->foreignId('unit_id')->constrained('unit');
+            $table->string('dampak_insiden');
+            $table->foreignId('tindakan_id')->nullable()->default(null)->constrained('tindakan');
+            $table->tinyInteger('pernah_terjadi')->default(0);
+            $table->string('status_pelapor');
             $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']); // Input manually
+            
+            // $table->foreignId('pelapor_id')->constrained('pelapor');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

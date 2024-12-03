@@ -14,11 +14,16 @@ return new class extends Migration
         Schema::create('pasien', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('nik')->unique();
             $table->string('no_rekam_medis')->unique();
+            $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->enum('jenis_kelamin', ['L', 'P']);
+            $table->string('no_telp')->nullable();
+            $table->string('email')->nullable();
             $table->string('alamat')->nullable();
-            $table->foreignId('penanggung_biaya_id')->constrained('penanggung_biaya');
+
+            // $table->foreignId('penanggung_biaya_id')->constrained('penanggung_biaya');
             $table->timestamps();
             $table->softDeletes();
         });

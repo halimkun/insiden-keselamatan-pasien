@@ -104,6 +104,32 @@
         </form>
     </dialog>
 
+    {{-- Restore Confirmation --}}
+    <dialog id="confirmRestore" class="modal">
+        <div class="modal-box">
+            <form method="POST">
+                @csrf
+
+                <input type="hidden" name="deleted_at" value="">
+
+                <h3 class="text-lg font-bold">Restore Confirmation !</h3>
+                <p class="text-sm">Are you sure you want to restore <span class="font-semibold" id="nama"></span> data?</p>
+
+                <div class="modal-action mt-10 flex justify-end space-x-4">
+                    <x-primary-button>Restore</x-primary-button>
+
+                    <form method="dialog">
+                        <x-secondary-button class="bg-red-500" onclick="confirmRestore.close()">Close</x-secondary-button>
+                    </form>
+                </div>
+            </form>
+        </div>
+
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
     @push('scripts')
         <script>
             $(document).ready(function() {
@@ -113,6 +139,14 @@
                     var url = "{{ route('pasien.destroy', ':id') }}".replace(':id', $(this).data('id'));
                     confirmDelete.showModal();
                     $('#confirmDelete form').attr('action', url);
+                });
+
+                // restore-user on click get data-id
+                $(document).on('click', '.restore-pasien', function() {
+                    $('#confirmRestore #nama').text($(this).data('nama'));
+                    var url = "{{ route('pasien.restore', ':id') }}".replace(':id', $(this).data('id'));
+                    confirmRestore.showModal();
+                    $('#confirmRestore form').attr('action', url);
                 });
 
                 var table = $('#tableData').DataTable({

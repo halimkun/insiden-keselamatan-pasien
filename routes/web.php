@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('pasien', \App\Http\Controllers\PasienController::class);
+    Route::post('pasien/{id}/restore', [\App\Http\Controllers\PasienController::class, 'restore'])->name('pasien.restore');
+
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
 });
 

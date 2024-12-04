@@ -41,6 +41,19 @@
                     <div class="flow-root">
                         <div class="mt-8">
                             <div class="inline-block min-w-full py-2 align-middle">
+                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                                    {{-- show_deleted --}}
+                                    <div class="flex items-center space-x-2 rounded-lg border bg-gray-100 p-1.5 px-3 shadow-sm">
+                                        <label for="show_deleted" class="text-sm text-gray-700">Show Deleted</label>
+                                        <input type="checkbox" id="show_deleted" class="checkbox checkbox-xs" />
+                                    </div>
+
+                                    {{-- search box --}}
+                                    <div class="flex items-center space-x-2">
+                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
+                                    </div>
+                                </div>
+
                                 <div class="w-full overflow-x-auto lg:overflow-visible">
                                     <table class="w-full divide-y divide-gray-300" id="tableData">
                                         <thead>
@@ -74,7 +87,7 @@
                 @method('DELETE')
 
                 <h3 class="text-lg font-bold">Delete Confirmation !</h3>
-                <p class="text-sm">Are you sure you want to delete <span class="font-semibold" id="name"></span> user?</p>
+                <p class="text-sm">Are you sure you want to delete <span class="font-semibold" id="name"></span> data?</p>
 
                 <div class="modal-action mt-10 flex justify-end space-x-4">
                     <x-danger-button onclick="confirmDelete.close()">Delete</x-danger-button>
@@ -95,9 +108,9 @@
         <script>
             $(document).ready(function() {
                 // delete-user on click get data-id
-                $(document).on('click', '.delete-unit', function() {
-                    $('#confirmDelete #unit').text($(this).data('unit'));
-                    var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
+                $(document).on('click', '.delete-pasien', function() {
+                    $('#confirmDelete #name').text($(this).data('nama'));
+                    var url = "{{ route('pasien.destroy', ':id') }}".replace(':id', $(this).data('id'));
                     confirmDelete.showModal();
                     $('#confirmDelete form').attr('action', url);
                 });
@@ -153,6 +166,16 @@
                     createdRow: function(row, data, dataIndex) {
                         $(row).find('td').eq(4).addClass('py-3 pl-4 pr-3 text-center text-sm text-gray-500');
                     }
+                });
+
+                // search
+                $('#search').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
+
+                // show_deleted
+                $('#show_deleted').change(function() {
+                    table.draw();
                 });
             });
         </script>

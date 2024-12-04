@@ -83,11 +83,11 @@ class Pasien extends DataTable
                                 </li>
                                 <li>
                                     ' . ($pasien->deleted_at
-                                        ? '<button class="text-green-600 hover:text-green-900 restore-pasien" data-id="' . $pasien->id . '" data-="' . $pasien->nama . '" onclick="confirmRestore.showModal()">
+                                        ? '<button class="text-green-600 hover:text-green-900 restore-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmRestore.showModal()">
                                             ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
                                             Restore
                                         </button>'
-                                        : '<button class="text-red-600 hover:text-red-900 delete-pasien" data-id="' . $pasien->id . '" data-jenis_insiden="' . $pasien->nama . '" onclick="confirmDelete.showModal()">
+                                        : '<button class="text-red-600 hover:text-red-900 delete-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmDelete.showModal()">
                                             ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
                                             Delete
                                         </button>'
@@ -128,7 +128,13 @@ class Pasien extends DataTable
      */
     public function query(PasienModel $model): QueryBuilder
     {
-        return $model->newQuery();
+        $model = $model->newQuery();
+
+        if ($this->request->has("show_deleted") && $this->request->show_deleted) {
+            return $model->onlyTrashed(); // Hanya menampilkan data yang sudah dihapus
+        }
+
+        return $model;
     }
 
     /**

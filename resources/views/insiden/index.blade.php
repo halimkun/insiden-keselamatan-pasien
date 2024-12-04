@@ -25,6 +25,13 @@
                     <div class="flow-root">
                         <div class="mt-8">
                             <div class="inline-block min-w-full py-2 align-middle">
+                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                                    {{-- search box --}}
+                                    <div class="flex items-center space-x-2">
+                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
+                                    </div>
+                                </div>
+
                                 <div class="w-full overflow-x-auto lg:overflow-visible">
                                     <table class="w-full divide-y divide-gray-300">
                                         <thead>
@@ -76,4 +83,8 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        
+    @endpush
 </x-app-layout>

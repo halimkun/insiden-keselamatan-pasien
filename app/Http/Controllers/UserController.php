@@ -136,6 +136,20 @@ class UserController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
+        $user = User::find($id);
+
+        // has role admin
+        if ($user->hasRole(['admin', 'administrator'])) {
+            $anotherAdmin = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin')->orWhere('name', 'administrator');
+            })->where('id', '!=', $id)->count();
+
+            if ($anotherAdmin < 1) {
+                return Redirect::route('users.index')
+                    ->with('error', 'Cannot delete ' . $user->name . ' (Administator), Because there is no another admin');
+            }
+        }
+
         User::find($id)->delete();
 
         return Redirect::route('users.index')

@@ -76,8 +76,4 @@
 
         <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
     </div>
-
-    <div class="flex items-center gap-4">
-        <x-primary-button>Submit</x-primary-button>
-    </div>
 </div>

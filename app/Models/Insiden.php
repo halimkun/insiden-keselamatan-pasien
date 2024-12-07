@@ -78,6 +78,14 @@ class Insiden extends Model
         "kasus_insiden",
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'tanggal_insiden' => 'date'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

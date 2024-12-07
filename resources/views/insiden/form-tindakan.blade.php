@@ -2,7 +2,7 @@
 
     <div>
         <x-input-label for="tindakan" value="Tindakan" />
-        <textarea id="tindakan" name="tindakan" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" autocomplete="tindakan" placeholder="Detail tindakan pasca insiden dan hasilnya">{{ old('tindakan', $insiden?->tindakan?->deskripsi_tindakan) }}</textarea>
+        <textarea id="tindakan" name="tindakan" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" autocomplete="tindakan" placeholder="Detail tindakan pasca insiden dan hasilnya">{{ old('tindakan', $insiden?->tindakan?->tindakan) }}</textarea>
 
         <x-input-error class="mt-2" :messages="$errors->get('tindakan')" />
     </div>

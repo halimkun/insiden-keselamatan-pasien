@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('tindakan', function (Blueprint $table) {
             $table->id();
             $table->string('tindakan');
-            $table->string('oleh');
+            $table->enum('oleh', ['dokter', 'perawat', 'tim', 'petugas']);
+            $table->string('detail')->nullable();
             $table->timestamps();
         });
     }

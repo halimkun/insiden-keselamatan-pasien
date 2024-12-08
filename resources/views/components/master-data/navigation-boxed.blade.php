@@ -1,4 +1,4 @@
-<div role="tablist" class="tabs-boxed flex flex-col w-full md:w-fit md:tabs gap-1">
+<div role="tablist" class="tabs-boxed tabs gap-1">
     <a 
         role="tab" 
         href="{{ route('unit.index') }}" 

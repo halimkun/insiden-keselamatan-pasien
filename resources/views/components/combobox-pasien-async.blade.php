@@ -75,6 +75,8 @@
 </div>
 
 <script>
+    const apiPasienSearch = '{{ route("api.pasien.search") }}';    
+
     function handleUrl(rm) {
         const url = new URL(window.location.href);
         
@@ -114,7 +116,7 @@
                 }
 
                 setTimeout(() => {
-                    fetch(`http://127.0.0.1:8000/api/pasien/search?keyword=${this.query}`)
+                    fetch(apiPasienSearch + `?keyword=${this.query}`)
                         .then(response => response.json())
                         .then(data => {
                             this.results = data.map(item => ({

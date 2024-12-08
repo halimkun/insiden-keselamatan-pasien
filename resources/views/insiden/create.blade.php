@@ -1,23 +1,4 @@
 <x-app-layout>
-    @push('styles')
-        {{-- using public url --}}
-        <link rel="stylesheet" href="{{ asset('static/css/responsive.dataTables.css') }}">
-        <link rel="stylesheet" href="{{ asset('static/css/dataTables.tailwindcss.css') }}">
-        <link rel="stylesheet" href="{{ asset('static/css/scroller.dataTables.css') }}">
-        <link rel="stylesheet" href="{{ asset('static/css/fixedColumns.dataTables.css') }}">
-
-        <style>
-            .dt-search {
-                display: none;
-                visibility: hidden;
-            }
-
-            .dt-scroll-body {
-                height: auto;
-                background: transparent !important;
-            }
-        </style>
-    @endpush
 
     <x-slot name="header">
         <h2 class="flex items-center gap-3 text-xl font-semibold leading-tight text-gray-800">
@@ -30,44 +11,153 @@
         @csrf
         <div class="py-6">
             <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 {{ request('act') == 'tambah' ? 'border border-amber-500' : '' }}">
                     <div class="w-full">
                         <header class="flex flex-col items-center justify-between gap-4 lg:flex-row">
                             <div class="flex w-full items-center justify-start gap-4 lg:justify-center">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-500 p-5">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-full {{ request('act') == 'tambah' ? 'bg-amber-500' : 'bg-indigo-500' }} p-5">
                                     <p class="m-0 p-0 font-semibold leading-none text-white">1</p>
                                 </div>
 
                                 <div class="sm:flex-auto">
-                                    <h2 class="text-lg font-semibold text-indigo-500">Pilih Pasien</h2>
-                                    <p class="text-sm text-gray-600">Pilih pasien yang terkait dengan insiden.</p>
+                                    <h2 class="text-lg font-semibold {{ request('act') == 'tambah' ? 'text-amber-500' : 'text-indigo-500' }}">
+                                        {{ request('act') == 'tambah' ? "Tambah" : "Pilih" }} Pasien
+                                    </h2>
+                                    <p class="text-sm text-gray-600">{{ request('act') == 'tambah' ? "Tambah" : "Pilih" }} pasien yang terkait dengan insiden.</p>
                                 </div>
                             </div>
 
-                            {{-- search --}}
-                            <x-text-input id="search" placeholder="Search" class="input input-sm w-full lg:w-64" />
+                            {{-- back --}}
+                            @if (request('act') == 'tambah')
+                                <a href="{{ route('insiden.create') }}" class="inline-flex items-center gap-2 rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600">
+                                    <x-icons.arrow-back class="h-5 w-5" />
+                                    <span>Kembali</span>
+                                </a>
+                            @endif
                         </header>
+                        
+                        <div class="mt-6">
+                            @if (request('step') > 1 && request('act') != 'tambah')
+                                <input type="hidden" class="mb-4" readonly name="pasien_id" value="{{ request('step') > 1 ? old('pasien_id', $pasien?->id) : null }}" />
+                            @endif
 
-                        <div class="flow-root">
-                            <div class="inline-block min-w-full py-2 align-middle">
-                                <div class="w-full overflow-x-auto lg:overflow-visible">
-                                    <table class="w-full divide-y divide-gray-300" id="tableData">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="py-3 pl-3 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama</th>
-                                                <th scope="col" class="py-3 pl-3 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Rekam Medis</th>
-                                                <th scope="col" class="py-3 pl-3 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tanggal Lahir</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                            @if (request('act') == 'tambah')
+                                <input type="hidden" name="act" value="tambah" />
+                                <div class="flex flex-col md:flex-row items-start gap-4">
+                                    <div class="w-full">
+                                        <x-input-label for="no_rekam_medis" :value="__('No Rekam Medis')" />
+                                        <x-text-input id="no_rekam_medis" name="no_rekam_medis" type="text" class="mt-1 block- w-full" :value="old('no_rekam_medis', $pasien?->no_rekam_medis)" autocomplete="no_rekam_medis" placeholder="No Rekam Medis" inputmode="numeric" />
+                                            
+                                        <x-input-error class="mt-2" :messages="$errors->get('no_rekam_medis')" />
+                                    </div>
+
+                                    <div class="w-full">
+                                        <x-input-label for="nama" :value="__('Nama')" />
+                                        <x-text-input class="w-full mt-1" id="nama" type="text" name="nama" label="Nama"
+                                            value="{{ request('step') > 1 ? old('nama', $pasien?->nama) : null }}"
+                                            placeholder="Nama" />
+
+                                        <x-input-error class="mt-2" :messages="$errors->get('nama')" />
+                                    </div>
+
+                                    <div class="w-full">
+                                        <x-input-label for="jenis_kelamin" :value="__('Jenis Kelamin')" />
+                                        <select name="jenis_kelamin" id="jenis_kelamin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                            <option value="">-- Pilih Jenis Kelamin --</option>
+                                            <option value="L" {{ old('jenis_kelamin', $pasien?->jenis_kelamin) == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                            <option value="P" {{ old('jenis_kelamin', $pasien?->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                        </select>
+                            
+                            
+                                        <x-input-error class="mt-2" :messages="$errors->get('jenis_kelamin')" />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <x-input-error class="mt-2" :messages="$errors->get('pasien_id')" />
+                                <div class="mt-4 flex flex-col md:flex-row items-start gap-4">
+                                    <div class="w-full">
+                                        <x-input-label for="tempat_lahir" :value="__('Tempat Lahir')" />
+                                        <x-text-input id="tempat_lahir" name="tempat_lahir" type="text" class="mt-1 block w-full" :value="old('tempat_lahir', $pasien?->tempat_lahir)" autocomplete="tempat_lahir" placeholder="Nama pasien" />
+                                
+                                        <x-input-error class="mt-2" :messages="$errors->get('tempat_lahir')" />
+                                    </div>
+
+                                    <div class="w-full">
+                                        <x-input-label for="tanggal_lahir" :value="__('Tanggal Lahir')" />
+                                        <x-text-input id="tanggal_lahir" name="tanggal_lahir" type="date" class="mt-1 block w-full" :value="old('tanggal_lahir', $pasien?->tanggal_lahir?->format('Y-m-d'))" autocomplete="tanggal_lahir" placeholder="Tanggal Lahir" />
+                            
+                                        <x-input-error class="mt-2" :messages="$errors->get('tanggal_lahir')" />
+                                    </div>
+
+                                    <div class="w-full">
+                                        <x-input-label for="nik" value="Nomor KTP" />
+                                        <x-text-input id="nik" name="nik" type="text" class="mt-1 block w-full" :value="old('nik', $pasien?->nik)" autocomplete="nik" placeholder="Nama pasien" />
+                                
+                                        <x-input-error class="mt-2" :messages="$errors->get('nik')" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex flex-col md:flex-row gap-6">
+                                    <div class="w-full">
+                                        <x-input-label for="no_telp" :value="__('No Telepon')" />
+                                        <x-text-input id="no_telp" name="no_telp" type="text" class="mt-1 block w-full" :value="old('no_telp', $pasien?->no_telp)" autocomplete="no_telp" placeholder="No Telepon" inputmode="numeric" />
+                            
+                                        <x-input-error class="mt-2" :messages="$errors->get('no_telp')" />
+                                    </div>
+                            
+                                    <div class="w-full">
+                                        <x-input-label for="email" :value="__('Email')" />
+                                        <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $pasien?->email)" autocomplete="email" placeholder="Email" />
+                            
+                                        <x-input-error class="mt-2" :messages="$errors->get('email')" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <x-input-label for="alamat" :value="__('Alamat')" />
+                                    <textarea name="alamat" id="alamat" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" placeholder="Alamat">{{ old('alamat', $pasien?->alamat) }}</textarea>
+                            
+                                    <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
+                                </div>
+                            @else
+                                <div class="flex items-start gap-4">
+                                    <div class="w-full max-w-xs">
+                                        <x-input-label for="no_rekam_medis" :value="__('No Rekam Medis')" />
+                                        <x-combobox-pasien-async 
+                                            @pasien-selected="handleSelectedResult" 
+                                            rm="{{ request('step') > 1 ? old('no_rekam_medis', $pasien?->no_rekam_medis) : null }}"
+                                        />
+                                        <p class="text-sm text-gray-600 mt-1">
+                                            Cari atau tambah pasien baru.
+                                        </p>
+                                    </div>
+
+                                    <div class="w-full">
+                                        <x-input-label for="nama" :value="__('Nama')" />
+                                        <x-text-input class="w-full mt-1" id="nama" type="text" name="nama" label="Nama"
+                                            value="{{ request('step') > 1 ? old('nama', $pasien?->nama) : null }}" :readonly="request('act') != 'tambah'"
+                                            placeholder="Nama" />
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-4 mt-4">
+                                    <x-text-input class="flex-2" id="dob" type="text" name="dob" label="DOB"
+                                        value="{{ request('step') > 1 ? old('tanggal_lahir', $pasien?->tanggal_lahir->format('Y-m-d')) : null }}"
+                                        readonly placeholder="DOB" />
+                                    <x-text-input class="flex-1" id="dob" type="text" name="dob" label="DOB"
+                                        value="{{ request('step') > 1 ? old('tanggal_lahir', $pasien?->tanggal_lahir->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari')) : null }}"
+                                        readonly placeholder="DOB" />
+                                    <x-text-input class="flex-1" id="gender" type="text" name="gender" label="Gender"
+                                        value="{{ request('step') > 1 ? old('jenis_kelamin', $pasien?->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan') : null }}"
+                                        readonly placeholder="gender" />
+                                </div>
+                            @endif
+                            
+                            <x-input-error class="mt-2" :messages="$errors->get('pasien_id')" />
+                        </div>
                     </div>
                 </div>
 
+                @if (request('step') > 1)
                 <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                     <div class="w-full">
                         <header class="flex flex-col items-center justify-between gap-4 lg:flex-row">
@@ -148,8 +238,10 @@
 
                         <div class="mt-6">
                             {{-- simple paragraf dengan inti bahwa memastikan data sudah benar --}}
-                            <p class="text-sm text-gray-600">Sebelum mengirim laporan, pastikan data yang diinput sudah benar.</p>
-                            <p class="text-sm text-gray-600">Informasi tambahan : Nama anda akan tercatat sebagai seseorang yang mengirimkan laporan insiden ini.</p>
+                            <p class="text-sm text-gray-600">Sebelum mengirim laporan, pastikan data yang diinput sudah
+                                benar.</p>
+                            <p class="text-sm text-gray-600">Informasi tambahan : Nama anda akan tercatat sebagai
+                                seseorang yang mengirimkan laporan insiden ini.</p>
 
                             <div class="flex items-center gap-4 mt-4">
                                 <x-primary-button>Submit</x-primary-button>
@@ -157,23 +249,17 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </form>
 
     @push('scripts')
-        <script src="{{ asset('static/js/dataTables.js') }}"></script>
-        <script src="{{ asset('static/js/dataTables.tailwindcss.js') }}"></script>
+    <script src="{{ asset('static/js/dataTables.js') }}"></script>
+    <script src="{{ asset('static/js/dataTables.tailwindcss.js') }}"></script>
 
-        <script src="{{ asset('static/js/dataTables.scroller.js') }}"></script>
-        <script src="{{ asset('static/js/scroller.dataTables.js') }}"></script>
-        <script src="{{ asset('static/js/dataTables.fixedColumns.js') }}"></script>
-        <script src="{{ asset('static/js/fixedColumns.dataTables.js') }}"></script>
-
-        <script>
-            const oldValue = "{{ old('pasien_id') }}";
-            console.log(oldValue);
-            
+    <script>
+        const oldValue = "{{ old('pasien_id') }}";
             $(document).ready(function() {
                 // delete-user on click get data-id
                 $(document).on('click', '.delete-unit', function() {
@@ -182,72 +268,7 @@
                     confirmDelete.showModal();
                     $('#confirmDelete form').attr('action', url);
                 });
-
-                // datatable
-                var table = $('#tableData').DataTable({
-                    processing: true,
-                    serverSide: true,
-
-                    lengthChange: false,
-
-                    pageLength: 10,
-
-                    scroller: true,
-                    scrollY: 300,
-
-                    fixedColumns: {
-                        leftColumns: 1,
-                    },
-
-                    ajax: {
-                        url: "{{ route('datatables.pasien') }}",
-                        data: function(d) {
-                            d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
-                        },
-                        type: 'GET',
-                    },
-
-                    order: [
-                        [2, 'DESC']
-                    ],
-
-                    columns: [{
-                            data: 'nama',
-                            name: 'nama',
-                            render: function(data, type, row, meta) {
-                                const isChecked = oldValue == row.id ? 'checked' : '';
-                                return `
-                                    <div class="flex lg:items-center gap-1.5">
-                                        <input type="radio" name="pasien_id" value="${row.id}" ${isChecked} class="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                                        ${data}
-                                    </div>
-                                `;
-                            }
-                        },
-                        {
-                            data: 'no_rekam_medis',
-                            name: 'no_rekam_medis',
-                        },
-                        {
-                            data: 'tanggal_lahir',
-                            name: 'tanggal_lahir',
-                        }
-                    ],
-
-                    rowCallback: function(row, data) {
-                        $(row).on('click', function(e) {
-                            if (!$(e.target).is('input[type="radio"]')) {
-                                $(row).find('input[type="radio"]').prop('checked', true);
-                            }
-                        });
-                    },
-                });
-
-                // search
-                $('#search').on('keyup', function() {
-                    table.search(this.value).draw();
-                });
             });
-        </script>
+    </script>
     @endpush
 </x-app-layout>

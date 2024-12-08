@@ -22,7 +22,16 @@ class InsidenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pasien_id'               => 'required|exists:pasien,id',
+            'act'                     => 'nullable|string|in:tambah',
+
+            'pasien_id'               => 'required_if:act,null|exists:pasien,id',
+
+            'no_rekam_medis'          => 'required_if:act,tambah',
+            'nama'                    => 'required_if:act,tambah|string|max:255',
+            'jenis_kelamin'           => 'required_if:act,tambah|in:L,P',
+            'tempat_lahir'            => 'required_if:act,tambah|string|max:255',
+            'tanggal_lahir'           => 'required_if:act,tambah|date',
+
             'jenis_insiden_id'        => 'required|exists:jenis_insiden,id',
             'tanggal_insiden'         => 'required|date',
             'waktu_insiden'           => 'required|date_format:H:i',
@@ -39,7 +48,7 @@ class InsidenRequest extends FormRequest
             
             'kasus_insiden'           => 'required|array',                                       // Pastikan input berupa array
             'kasus_insiden.*'         => 'required|string|max:255',                              // Validasi setiap elemen array
-            'kasus_insiden_lainnya'   => 'required_with:kasus_insiden.lainnya|string|max:255',
+            'kasus_insiden_lainnya'   => 'required_with:kasus_insiden.lainnya|nullable|string|max:255',
             
             'tempat_kejadian'         => 'required|string|max:255',
             'unit_id'                 => 'required|exists:unit,id',
@@ -53,6 +62,22 @@ class InsidenRequest extends FormRequest
             'pernah_terjadi'          => 'required|boolean',
             'status_pelapor'          => 'required|string|max:255',
             'grading_risiko'          => 'required|in:biru,hijau,kuning,merah',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'no_rekam_medis.required_if' => 'No. Rekam Medis wajib diisi jika tidak memilih pasien',
+            'nama.required_if'           => 'Nama wajib diisi jika tidak memilih pasien',
+            'jenis_kelamin.required_if'  => 'Jenis Kelamin wajib dipilih jika tidak memilih pasien',
+            'tempat_lahir.required_if'   => 'Tempat Lahir wajib diisi jika tidak memilih pasien',
+            'tanggal_lahir.required_if'  => 'Tanggal Lahir wajib diisi jika tidak memilih pasien',
         ];
     }
 

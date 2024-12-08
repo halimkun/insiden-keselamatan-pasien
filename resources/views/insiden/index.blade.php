@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        <h2 class="flex items-center gap-3 text-xl font-semibold leading-tight text-gray-800">
+            <x-icons.alert-triangle class="h-5 w-5" />
             Insiden
         </h2>
     </x-slot>
@@ -15,7 +16,7 @@
                             <p class="mt-1 text-sm text-gray-600">Data insiden pasien yang terjadi di rumah sakit.</p>
                         </div>
                         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('insiden.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 <x-icons.circle-plus class="h-5 w-5" />
                                 Add New
                             </a>
@@ -38,25 +39,54 @@
                                             <tr>
                                                 <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Pasien</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Insiden</th>
                                                 <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Jenis</th>
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tanggal Insiden</th>
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Pelapor</th>
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tempat</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tgl Kejadian</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Dampak</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Korban</th>
+                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Grading</th>
 
-                                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
+                                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">#</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 bg-white">
                                             @foreach ($insidens as $insiden)
                                                 <tr class="even:bg-gray-50">
-                                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-semibold text-gray-900">{{ ++$i }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ++$i }}</td>
 
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->pasien_id }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->jenis_insiden_id }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->tanggal_insiden }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->pelapor_id }}</td>
-                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->tempat_kejadian }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->insiden }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $insiden->jenisInsiden->alias }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                        <p class="font-medium">{{ $insiden->tanggal_insiden->translatedFormat('D, d M Y') }}</p>
+                                                        <p class="text-xs">{{ $insiden->waktu_insiden }}</p>
+                                                    </td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Str::title($insiden->dampak_insiden) }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ \Str::title($insiden->korban_insiden == 'lainnya' ? $insiden->korban_insiden_lainnya : $insiden->korban_insiden) }}</td>
+                                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                        @if (\Str::lower($insiden->grading->grading_risiko) == 'merah')
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                                {{ $insiden->grading->grading_risiko }}
+                                                            </span>
+                                                        @endif
+
+                                                        @if (\Str::lower($insiden->grading->grading_risiko) == 'kuning')
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                                {{ $insiden->grading->grading_risiko }}
+                                                            </span>
+                                                        @endif
+
+                                                        @if (\Str::lower($insiden->grading->grading_risiko) == 'hijau')
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                                {{ $insiden->grading->grading_risiko }}
+                                                            </span>
+                                                        @endif
+
+                                                        @if (\Str::lower($insiden->grading->grading_risiko) == 'biru')
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                                {{ $insiden->grading->grading_risiko }}
+                                                            </span>
+                                                        @endif
+                                                    </td>
 
                                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                         <form action="{{ route('insiden.destroy', $insiden->id) }}" method="POST">

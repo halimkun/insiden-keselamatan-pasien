@@ -1,15 +1,31 @@
 <div class="space-y-6">
 
+    <div class="w-full">
+        <x-input-label for="tgl_pasien_masuk" value="Tanggal Pasien Masuk" />
+        <x-text-input id="tgl_pasien_masuk" name="tgl_pasien_masuk" type="date" class="mt-1 block w-full" :value="old('tgl_pasien_masuk', $insiden?->tgl_pasien_masuk?->format('Y-m-d'))" autocomplete="tgl_pasien_masuk" placeholder="Tanggal Insiden" />
+
+        <x-input-error class="mt-2" :messages="$errors->get('tgl_pasien_masuk')" />
+    </div>
+
     <div class="flex gap-3">
         <div class="w-full">
             <x-input-label for="tanggal_insiden" :value="__('Tanggal Insiden')" />
-            <x-text-input id="tanggal_insiden" name="tanggal_insiden" type="date" class="mt-1 block w-full" :value="old('tanggal_insiden', $insiden?->tanggal_insiden)" autocomplete="tanggal_insiden" placeholder="Tanggal Insiden" />
+            <x-text-input id="tanggal_insiden" name="tanggal_insiden" type="date" class="mt-1 block w-full" :value="old('tanggal_insiden', $insiden?->tanggal_insiden?->format('Y-m-d'))" autocomplete="tanggal_insiden" placeholder="Tanggal Insiden" />
 
             <x-input-error class="mt-2" :messages="$errors->get('tanggal_insiden')" />
         </div>
         <div class="w-full">
+            @php
+                $waktuInsiden = explode(':', $insiden?->waktu_insiden);
+                if (count($waktuInsiden) >= 2) {
+                    $waktuInsiden = $waktuInsiden[0] . ':' . $waktuInsiden[1];
+                } else {
+                    $waktuInsiden = '';
+                }
+            @endphp
+
             <x-input-label for="waktu_insiden" :value="__('Jam Insiden')" />
-            <x-text-input id="waktu_insiden" name="waktu_insiden" type="time" class="mt-1 block w-full" :value="old('waktu_insiden', $insiden?->waktu_insiden)" autocomplete="waktu_insiden" placeholder="Waktu Insiden" />
+            <x-text-input id="waktu_insiden" name="waktu_insiden" type="time" class="mt-1 block w-full" :value="old('waktu_insiden', $waktuInsiden)" autocomplete="waktu_insiden" placeholder="Waktu Insiden" />
 
             <x-input-error class="mt-2" :messages="$errors->get('waktu_insiden')" />
         </div>
@@ -127,6 +143,10 @@
     </div>
 
     <div class="w-full">
+        @php
+            $kasusArray = array_map('trim', explode(',', $insiden?->kasus_insiden));
+        @endphp
+
         <x-input-label for="kasus_insiden" value="Insiden terjadi pada pasien ( sesuai kasus penyakit / spesialisasi )" />
         <div class="mt-1 grid grid-cols-2 items-start lg:grid-cols-3 gap-3">
             @foreach ([
@@ -146,7 +166,7 @@
             ] as $kasus)
                 <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                     <label class="label cursor-pointer items-center justify-start gap-2">
-                        <input type="checkbox" value="{{ $kasus }}" name="kasus_insiden[]" class="checkbox checkbox-xs rounded checked:bg-red-500" {{ in_array($kasus, old('kasus_insiden', [])) ? 'checked' : '' }}/>
+                        <input type="checkbox" value="{{ $kasus }}" name="kasus_insiden[]" class="checkbox checkbox-xs rounded checked:bg-red-500" {{ in_array($kasus, old('kasus_insiden', $kasusArray)) ? 'checked' : '' }} />
                         <span class="label-text">{{ $kasus }}</span>
                     </label>
                 </div>
@@ -154,7 +174,7 @@
 
             <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                 <label class="label cursor-pointer items-center justify-start gap-2 p-0.5 m-0">
-                    <input type="checkbox" value="lainnya" name="kasus_insiden[]" class="checkbox checkbox-xs rounded checked:bg-red-500" {{ in_array('lainnya', old('kasus_insiden', [])) ? 'checked' : '' }}/>
+                    <input type="checkbox" value="lainnya" name="kasus_insiden[]" class="checkbox checkbox-xs rounded checked:bg-red-500" {{ in_array('lainnya', old('kasus_insiden', [])) ? 'checked' : '' }} {{ in_array('lainnya', $kasusArray) ? 'checked' : '' }} />
                     <x-text-input id="kasus_insiden_lainnya" name="kasus_insiden_lainnya" type="text" class="input-sm w-full" :value="old('kasus_insiden_lainnya', $insiden?->kasus_insiden_lainnya)" autocomplete="kasus_insiden_lainnya" placeholder="Kasus Insiden Lainnya" />
                 </label>
                 <div class="ml-7">
@@ -208,89 +228,98 @@
 
         <x-input-error class="mt-2" :messages="$errors->get('dampak_insiden')" />
     </div>
-
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                // Jenis Pelapor
-                if ($('input[name="jenis_pelapor"]:checked').val() === 'lainnya') {
-                    $('#jenis_pelapor_lainnya_wrapper').removeClass('hidden');
-                }
-
-                $('input[name="jenis_pelapor"]').on('change', function() {
-                    $('input[name="jenis_pelapor"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
-
-                    if ($(this).is(':checked')) {
-                        $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
-                    }
-
-                    if ($(this).val() === 'lainnya') {
-                        $('#jenis_pelapor_lainnya_wrapper').removeClass('hidden');
-                    } else {
-                        $('#jenis_pelapor_lainnya_wrapper').addClass('hidden');
-                    }
-                });
-
-                // Korban Insiden
-                if ($('input[name="korban_insiden"]:checked').val() === 'lainnya') {
-                    $('#korban_insiden_lainnya_wrapper').removeClass('hidden');
-                }
-
-                $('input[name="korban_insiden"]').on('change', function() {
-                    $('input[name="korban_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
-
-                    if ($(this).is(':checked')) {
-                        $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
-                    }
-
-                    if ($(this).val() === 'lainnya') {
-                        $('#korban_insiden_lainnya_wrapper').removeClass('hidden');
-                    } else {
-                        $('#korban_insiden_lainnya_wrapper').addClass('hidden');
-                    }
-                });
-
-                // Layanan Insiden
-                if ($('input[name="layanan_insiden"]:checked').val() === 'lainnya') {
-                    $('#layanan_insiden_lainnya_wrapper').removeClass('hidden');
-                }
-
-                $('input[name="layanan_insiden"]').on('change', function() {
-                    $('input[name="layanan_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
-                    
-                    if ($(this).is(':checked')) {
-                        $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
-                    }
-
-                    if ($(this).val() === 'lainnya') {
-                        $('#layanan_insiden_lainnya_wrapper').removeClass('hidden');
-                    } else {
-                        $('#layanan_insiden_lainnya_wrapper').addClass('hidden');
-                    }
-                });
-
-                // Dampak Insiden
-                $('input[name="dampak_insiden"]').on('change', function() {
-                    $('input[name="dampak_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
-
-                    if ($(this).is(':checked')) {
-                        $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
-                    }
-                });
-
-                // Kasus Insiden
-                if ($('input[name="kasus_insiden[]"]:checked').val() === 'lainnya') {
-                    $('#kasus_insiden_lainnya').removeClass('hidden');
-                }
-                
-                $('input[name="kasus_insiden[]"]').on('change', function() {
-                    if ($(this).is(':checked')) {
-                        $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
-                    } else {
-                        $(this).parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
-                    }
-                });
-            });
-        </script>
-    @endpush
 </div>
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Jenis Insiden
+            $('input[name="jenis_insiden_id"]').on('change', function() {
+                $('input[name="jenis_insiden_id"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+            });
+
+            // Jenis Pelapor
+            if ($('input[name="jenis_pelapor"]:checked').val() === 'lainnya') {
+                $('#jenis_pelapor_lainnya_wrapper').removeClass('hidden');
+            }
+
+            $('input[name="jenis_pelapor"]').on('change', function() {
+                $('input[name="jenis_pelapor"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+
+                if ($(this).val() === 'lainnya') {
+                    $('#jenis_pelapor_lainnya_wrapper').removeClass('hidden');
+                } else {
+                    $('#jenis_pelapor_lainnya_wrapper').addClass('hidden');
+                }
+            });
+
+            // Korban Insiden
+            if ($('input[name="korban_insiden"]:checked').val() === 'lainnya') {
+                $('#korban_insiden_lainnya_wrapper').removeClass('hidden');
+            }
+
+            $('input[name="korban_insiden"]').on('change', function() {
+                $('input[name="korban_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+
+                if ($(this).val() === 'lainnya') {
+                    $('#korban_insiden_lainnya_wrapper').removeClass('hidden');
+                } else {
+                    $('#korban_insiden_lainnya_wrapper').addClass('hidden');
+                }
+            });
+
+            // Layanan Insiden
+            if ($('input[name="layanan_insiden"]:checked').val() === 'lainnya') {
+                $('#layanan_insiden_lainnya_wrapper').removeClass('hidden');
+            }
+
+            $('input[name="layanan_insiden"]').on('change', function() {
+                $('input[name="layanan_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+                
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+
+                if ($(this).val() === 'lainnya') {
+                    $('#layanan_insiden_lainnya_wrapper').removeClass('hidden');
+                } else {
+                    $('#layanan_insiden_lainnya_wrapper').addClass('hidden');
+                }
+            });
+
+            // Dampak Insiden
+            $('input[name="dampak_insiden"]').on('change', function() {
+                $('input[name="dampak_insiden"]').parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+            });
+
+            // Kasus Insiden
+            if ($('input[name="kasus_insiden[]"]:checked').val() === 'lainnya') {
+                $('#kasus_insiden_lainnya').removeClass('hidden');
+            }
+            
+            $('input[name="kasus_insiden[]"]').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $(this).parent().parent().addClass('bg-indigo-100 hover:bg-indigo-200');
+                } else {
+                    $(this).parent().parent().removeClass('bg-indigo-100 hover:bg-indigo-200');
+                }
+            });
+        });
+    </script>
+@endpush

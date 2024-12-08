@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::middleware('web')->prefix('pasien')->group(function () {
-    Route::get('/search', 'App\Http\Controllers\Api\PasienController@search');
-    Route::post('/search', 'App\Http\Controllers\Api\PasienController@search');
+    Route::get('/search', 'App\Http\Controllers\Api\PasienController@search')->name('api.pasien.search');
+    Route::post('/search', 'App\Http\Controllers\Api\PasienController@search')->name('api.pasien.search.post');
 });

@@ -16,9 +16,17 @@
 
     <x-slot name="header">
         <div class="flex flex-col items-center justify-between gap-6 md:flex-row md:gap-0">
-            <h2 class="flex items-center gap-2 text-xl font-semibold leading-none text-gray-800">
+            <h2 class="md:flex items-center gap-2 text-xl font-semibold leading-none text-gray-800 hidden">
                 <x-icons.database class="h-5 w-5" />
                 Master Data {{ request()->segment(2) ? '- ' . \Str::headline(\Str::replace('-', ' ', request()->segment(2))) : '' }}
+            </h2>
+            
+            <h2 class="flex flex-col items-center gap-2 text-xl font-semibold leading-none text-gray-800 md:hidden">
+                <div class="flex gap-3">
+                    <x-icons.database class="h-5 w-5" />
+                    Master Data
+                </div>
+                {{ request()->segment(2) ? \Str::headline(\Str::replace('-', ' ', request()->segment(2))) : '' }}
             </h2>
 
             <x-master-data.navigation-boxed />
@@ -45,6 +53,13 @@
                     <div class="flow-root">
                         <div class="mt-8">
                             <div class="inline-block min-w-full py-2 align-middle">
+                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                                    {{-- search box --}}
+                                    <div class="flex items-center space-x-2">
+                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
+                                    </div>
+                                </div>
+
                                 <div class="w-full overflow-x-auto lg:overflow-visible">
                                     <table class="w-full divide-y divide-gray-300" id="tableData">
                                         <thead>
@@ -140,6 +155,11 @@
                     createdRow: function(row, data, dataIndex) {
                         $(row).find('td').eq(2).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
                     }
+                });
+
+                // search
+                $('#search').on('keyup', function() {
+                    table.search(this.value).draw();
                 });
             });
         </script>

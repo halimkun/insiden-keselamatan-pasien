@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Insiden
@@ -32,6 +33,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Insiden extends Model
 {
+    use SoftDeletes;
+    
     /**
      * The table associated with the model.
      *
@@ -53,6 +56,7 @@ class Insiden extends Model
      */
     protected $fillable = [
         "pasien_id",
+        'tgl_pasien_masuk',
         "jenis_insiden_id",
         "tanggal_insiden",
         "waktu_insiden",
@@ -64,6 +68,7 @@ class Insiden extends Model
         "korban_insiden_lainnya",
         "layanan_insiden",
         "layanan_insiden_lainnya",
+        "kasus_insiden",
         "kasus_insiden_lainnya",
         "tempat_kejadian",
         "unit_id",
@@ -74,16 +79,32 @@ class Insiden extends Model
         "oleh_petugas",
         "pernah_terjadi",
         "status_pelapor",
-        "grading_risiko",
-        "kasus_insiden",
+        "grading_id",
+        "created_by",
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'tanggal_insiden' => 'date',
+        'tgl_pasien_masuk' => 'date',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function jenisInsiden()
     {
+        return $this->belongsTo(\App\Models\JenisInsiden::class, 'jenis_insiden_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function jenis() {
         return $this->belongsTo(\App\Models\JenisInsiden::class, 'jenis_insiden_id', 'id');
     }
 
@@ -109,5 +130,21 @@ class Insiden extends Model
     public function unit()
     {
         return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function grading()
+    {
+        return $this->belongsTo(\App\Models\Grading::class, 'grading_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function oleh()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
     }
 }

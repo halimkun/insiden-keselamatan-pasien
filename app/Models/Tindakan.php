@@ -27,7 +27,7 @@ class Tindakan extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['tindakan', 'oleh'];
+    protected $fillable = ['tindakan', 'oleh', 'detail'];
 
 
     /**

@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\DataTables;
 
-use App\DataTables\User;
-use Illuminate\Http\Request;
+use App\DataTables\Insiden;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Blade;
-use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
 
-class UserController extends Controller
+class InsidenController extends Controller
 {
-    public function index(Request $request, User $dataTable)
+    public function index(Request $request, Insiden $dataTable)
     {
         if ($request->ajax()) {
             return $dataTable->ajax();

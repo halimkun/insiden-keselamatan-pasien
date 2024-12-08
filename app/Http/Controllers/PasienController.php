@@ -77,6 +77,23 @@ class PasienController extends Controller
     }
 
     /**
+     * Restore the specified resource from storage.
+     */
+    public function restore(string $id, Request $request): RedirectResponse
+    {
+        // validate the request
+        $user = Pasien::onlyTrashed()->find($id);
+        if ($user) {
+            $user->restore();
+            return Redirect::route('pasien.index')
+                ->with('success', 'User restored successfully');
+        }
+
+        return Redirect::route('pasien.index')
+            ->with('error', 'User not found');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($id): RedirectResponse

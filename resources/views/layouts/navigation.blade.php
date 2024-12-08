@@ -86,8 +86,29 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="space-y-1 pb-3 pt-2">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="inline-flex items-center justify-start gap-2">
+                <x-icons.dashboard class="h-[1rem] w-[1rem]" />
+                Dashboard
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('insiden.index')"  :active="request()->routeIs('insiden.index')" class="inline-flex items-center justify-start gap-2">
+                <x-icons.alert-triangle class="h-[1.1rem] w-[1.1rem]" />
+                Insiden
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('pasien.index')" :active="request()->routeIs('pasien.index')" class="inline-flex items-center justify-start gap-2">
+                <x-icons.health-recognition class="h-[1.1rem] w-[1.1rem]" />
+                Pasien
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('data.master')" :active="request()->segment(1) == 'master'" class="inline-flex items-center justify-start gap-2">
+                <x-icons.database class="h-[1rem] w-[1rem]" />
+                Master Data
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')" class="inline-flex items-center justify-start gap-2">
+                <x-icons.users class="h-[1rem] w-[1rem]" />
+                Karyawan
             </x-responsive-nav-link>
         </div>
 

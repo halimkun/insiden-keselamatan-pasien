@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('pasien', \App\Http\Controllers\PasienController::class);
+    Route::post('pasien/{id}/restore', [\App\Http\Controllers\PasienController::class, 'restore'])->name('pasien.restore');
+
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
 });
 
@@ -40,6 +42,7 @@ Route::middleware('auth')->group(function () {
 // Datatables
 Route::prefix('datatables')->group(function () {
     Route::get('/users', [\App\Http\Controllers\DataTables\UserController::class, 'index'])->name('datatables.users');
+    Route::get('/insiden', [\App\Http\Controllers\DataTables\InsidenController::class, 'index'])->name('datatables.insiden');
     Route::get('/units', [\App\Http\Controllers\DataTables\UnitController::class, 'index'])->name('datatables.units');
     Route::get('/pasien', [\App\Http\Controllers\DataTables\PasienController::class, 'index'])->name('datatables.pasien');
     Route::get('/jenis-insiden', [\App\Http\Controllers\DataTables\JenisInsidenController::class, 'index'])->name('datatables.jenis-insiden');

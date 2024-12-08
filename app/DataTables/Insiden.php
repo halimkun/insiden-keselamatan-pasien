@@ -2,16 +2,17 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Blade;
+use App\Models\Insiden as InsidenModel;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
-use App\Models\JenisInsiden as JenisInsidenModel;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class JenisInsiden extends DataTable
+class Insiden extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -21,10 +22,43 @@ class JenisInsiden extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn("action", function ($jenisInsiden) {
+            ->addColumn('waktu__insiden', function ($insiden) {
+                return '
+                    <p class="font-medium">' . $insiden->tanggal_insiden->translatedFormat("D, d M Y") . '</p>
+                    <p class="text-xs">' . $insiden->waktu_insiden . '</p>
+                ';
+            })
+
+            ->addColumn('grading', function ($insiden) {
+                if (Str::lower($insiden->grading->grading_risiko) == 'merah') {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        ' . $insiden->grading->grading_risiko . '
+                    </span>';
+                }
+
+                if (Str::lower($insiden->grading->grading_risiko) == 'kuning') {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        ' . $insiden->grading->grading_risiko . '
+                    </span>';
+                }
+
+                if (Str::lower($insiden->grading->grading_risiko) == 'hijau') {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        ' . $insiden->grading->grading_risiko . '
+                    </span>';
+                }
+
+                if (Str::lower($insiden->grading->grading_risiko) == 'biru') {
+                    return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                        ' . $insiden->grading->grading_risiko . '
+                    </span>';
+                }
+            })
+
+            ->addColumn("action", function ($insiden) {
                 // Menggunakan URL route untuk Show, Edit, dan Delete
-                $showUrl = route('jenis-insiden.show', $jenisInsiden->id);
-                $editUrl = route('jenis-insiden.edit', $jenisInsiden->id);
+                $showUrl = route('insiden.show', $insiden->id);
+                $editUrl = route('insiden.edit', $insiden->id);
 
                 return '
                     <div class="dropdown dropdown-left">
@@ -49,12 +83,12 @@ class JenisInsiden extends DataTable
                                     </a>
                                 </li>
                                 <li>
-                                    ' . ($jenisInsiden->deleted_at
-                                        ? '<button class="text-green-600 hover:text-green-900 restore-jenis-insiden" data-id="' . $jenisInsiden->id . '" data-jenis_insiden="' . $jenisInsiden->nama_jenis_insiden . '" onclick="confirmRestore.showModal()">
+                                    ' . ($insiden->deleted_at
+                                        ? '<button class="text-green-600 hover:text-green-900 restore-insiden" data-id="' . $insiden->id . '" data-insiden="' . $insiden->nama_insiden . '" onclick="confirmRestore.showModal()">
                                             ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
                                             Restore
                                         </button>'
-                                        : '<button class="text-red-600 hover:text-red-900 delete-jenis-insiden" data-id="' . $jenisInsiden->id . '" data-jenis_insiden="' . $jenisInsiden->nama_jenis_insiden . '" onclick="confirmDelete.showModal()">
+                                        : '<button class="text-red-600 hover:text-red-900 delete-insiden" data-id="' . $insiden->id . '" data-insiden="' . $insiden->nama_insiden . '" onclick="confirmDelete.showModal()">
                                             ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
                                             Delete
                                         </button>'
@@ -65,15 +99,23 @@ class JenisInsiden extends DataTable
                     </div>
                 ';
             })
+            
+
+            ->rawColumns(['waktu__insiden', 'grading', 'action'])
+
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(JenisInsidenModel $model): QueryBuilder
+    public function query(InsidenModel $model): QueryBuilder
     {
-        return $model->newQuery();
+        $model = $model->newQuery();
+
+        $model->with(['jenisInsiden']);
+
+        return $model;
     }
 
     /**
@@ -82,13 +124,14 @@ class JenisInsiden extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('jenisinsiden-table')
+            ->setTableId('insiden-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
             ->orderBy(1)
             ->selectStyleSingle()
             ->buttons([
+                Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
             ]);
@@ -101,7 +144,7 @@ class JenisInsiden extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('nama_jenis_insiden'),
+            Column::make('created_at'),
             Column::make('updated_at'),
         ];
     }
@@ -111,6 +154,6 @@ class JenisInsiden extends DataTable
      */
     protected function filename(): string
     {
-        return 'JenisInsiden_' . date('YmdHis');
+        return 'Insiden_' . date('YmdHis');
     }
 }

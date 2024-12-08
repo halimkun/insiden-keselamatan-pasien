@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tindakan', function (Blueprint $table) {
+        Schema::create('grading', function (Blueprint $table) {
             $table->id();
-            $table->string('tindakan');
-            $table->enum('oleh', ['dokter', 'perawat', 'tim', 'petugas']);
-            $table->string('detail')->nullable();
+            $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']);
+            $table->foreignId('created_by')->constrained('users');
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tindakan');
+        Schema::dropIfExists('grading');
     }
 };

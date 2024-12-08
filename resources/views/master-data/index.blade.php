@@ -13,7 +13,7 @@
     <div class="py-6">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-indigo-500 shadow-lg shadow-indigo-400 rounded-xl">
-                <div class="flex flex-col-reverse md:flex-row items-start lg:items-center lg:justify-between gap-6 p-6">
+                <div class="flex flex-col-reverse md:flex-row items-start md:items-center md:justify-between gap-6 p-6">
                     <div class="text-white">
                         {{-- Master Data Title --}}
                         <h1 class="text-2xl font-semibold text-white">Master Data</h1>
@@ -21,7 +21,7 @@
                         {{-- subtitle with short description about master data --}}
                         <p class="text-sm text-white">Portal awal untuk mengelola master data berikut:</p>
                         
-                        <div class="mt-5">
+                        <div class="mt-5 hidden md:block">
                             <x-master-data.navigation-boxed />
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 
     <div>
         <x-input-label for="tindakan" value="Tindakan" />
-        <textarea id="tindakan" name="tindakan" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" autocomplete="tindakan" placeholder="Detail tindakan pasca insiden dan hasilnya">{{ old('tindakan', $insiden?->tindakan?->deskripsi_tindakan) }}</textarea>
+        <textarea id="tindakan" name="tindakan" class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" autocomplete="tindakan" placeholder="Detail tindakan pasca insiden dan hasilnya">{{ old('tindakan', $insiden?->tindakan?->tindakan) }}</textarea>
 
         <x-input-error class="mt-2" :messages="$errors->get('tindakan')" />
     </div>
@@ -27,7 +27,7 @@
             <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                 <label class="label cursor-pointer justify-start gap-2 p-0.5 m-0">
                     <input type="radio" value="tim" {{ old('oleh', $insiden?->tindakan?->oleh) == 'tim' ? 'checked' : '' }} name="oleh" class="radio radio-xs checked:bg-red-500" />
-                    Tim <x-text-input id="oleh_tim" name="oleh_tim" type="text" class="input-sm w-full" :value="old('oleh_tim', $insiden?->tindakan?->oleh_tim)" autocomplete="oleh_tim" placeholder="Tim Terdiri dari" />
+                    Tim <x-text-input id="oleh_tim" name="oleh_tim" type="text" class="input-sm w-full" :value="old('oleh_tim', $insiden?->tindakan?->detail)" autocomplete="oleh_tim" placeholder="Tim Terdiri dari" />
                 </label>
                 <x-input-error class="mt-1 ml-6" :messages="$errors->get('oleh_tim')" />
             </div>
@@ -35,7 +35,7 @@
             <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                 <label class="label cursor-pointer justify-start gap-2 p-0.5 m-0">
                     <input type="radio" value="petugas" {{ old('oleh', $insiden?->tindakan?->oleh) == 'petugas' ? 'checked' : '' }} name="oleh" class="radio radio-xs checked:bg-red-500" />
-                    <x-text-input id="oleh_petugas" name="oleh_petugas" type="text" class="input-sm w-full" :value="old('oleh_petugas', $insiden?->tindakan?->oleh_petugas)" autocomplete="oleh_petugas" placeholder="Petugas Lainnya" />
+                    <x-text-input id="oleh_petugas" name="oleh_petugas" type="text" class="input-sm w-full" :value="old('oleh_petugas', $insiden?->tindakan?->detail)" autocomplete="oleh_petugas" placeholder="Petugas Lainnya" />
                 </label>
                 <x-input-error class="mt-1 ml-6" :messages="$errors->get('oleh_petugas')" />
             </div>

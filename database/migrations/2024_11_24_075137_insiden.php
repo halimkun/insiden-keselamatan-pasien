@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pasien_id')->nullable()->constrained('pasien');
             $table->foreignId('jenis_insiden_id')->constrained('jenis_insiden');
+
+            $table->date('tgl_pasien_masuk');
+
             $table->date('tanggal_insiden');
             $table->time('waktu_insiden');
             $table->string('insiden');
             $table->text('kronologi');
+
             $table->string('jenis_pelapor');
             $table->string('jenis_pelapor_lainnya')->nullable()->default(null);
             $table->string('korban_insiden');
@@ -28,14 +32,17 @@ return new class extends Migration
             $table->string('kasus_insiden');
             $table->string('kasus_insiden_lainnya')->nullable()->default(null);
             $table->string('tempat_kejadian');
+
             $table->foreignId('unit_id')->constrained('unit');
             $table->string('dampak_insiden');
             $table->foreignId('tindakan_id')->nullable()->default(null)->constrained('tindakan');
             $table->tinyInteger('pernah_terjadi')->default(0);
             $table->string('status_pelapor');
-            $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']); // Input manually
-            
-            // $table->foreignId('pelapor_id')->constrained('pelapor');
+
+            // $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']); // Input manually
+            $table->foreignId('grading_id')->nullable()->default(null)->constrained('grading');
+
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -50,7 +50,7 @@ class JenisInsiden extends DataTable
                                 </li>
                                 <li>
                                     ' . ($jenisInsiden->deleted_at
-                                        ? '<button class="text-green-600 hover:text-green-900 restore-jenis-insiden" data-id="' . $jenisInsiden->id . '" data-="' . $jenisInsiden->nama_jenis_insiden . '" onclick="confirmRestore.showModal()">
+                                        ? '<button class="text-green-600 hover:text-green-900 restore-jenis-insiden" data-id="' . $jenisInsiden->id . '" data-jenis_insiden="' . $jenisInsiden->nama_jenis_insiden . '" onclick="confirmRestore.showModal()">
                                             ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
                                             Restore
                                         </button>'

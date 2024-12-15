@@ -13,71 +13,55 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // call other seeders
+        // ===== ===== ===== ===== =====  Permission and Roles
         $this->call(PermissionAndRoles::class);
+
+        // ===== ===== ===== ===== =====  Master Data
         $this->call(MasterData::class);
-        $this->call(PasienData::class);
+        
+
 
         // ===== ===== ===== ===== =====  Administrator  User 
-        // Administrator user
-        $adm = User::factory()->create([
+        $admin = User::factory()->create([
             'name'     => 'Administrator',
             'username' => 'admin',
             'email'    => 'admin@mail.com'
         ]);
 
-        // assign role
-        $adm->assignRole('administrator');
+        $admin->assignRole('administrator');
 
         // ===== ===== ===== ===== =====  Komite Mutu User
-        $kmtu = [
-            [
-                'name'     => 'Komite Mutu 1',
-                'username' => 'komitemutu1',
-                'email'    => 'komitemutu1@mail.com'
-            ],
-            [
-                'name'     => 'Komite Mutu 2',
-                'username' => 'komitemutu2',
-                'email'    => 'komitemutu2@mail.com'
-            ],
-        ];
+        $mutu = User::factory(5)->create();
+        $mutu->each(function ($user) {
+            $user->assignRole('komite-mutu');
+        });
 
-        foreach ($kmtu as $user) {
-            $u = User::factory()->create($user);
-            $u->assignRole('komite-mutu');
-        }
-
-        // ===== ===== ===== ===== =====  Direksi User
-        $drksi = [
-            [
-                'name'     => 'Direksi 1',
-                'username' => 'direksi1',
-                'email'    => 'direksi1@mail.com'
-            ],
-            [
-                'name' => 'Direksi 2',
-                'username' => 'direksi2',
-                'email' => 'direksi2@mail.com',
-            ],
-        ];
-
-        foreach ($drksi as $user) {
-            $u = User::factory()->create($user);
-            $u->assignRole('direksi');
-        }
+        // ===== ===== ===== ===== =====  Tim IKP User
+        $ikp = User::factory(5)->create();
+        $ikp->each(function ($user) {
+            $user->assignRole('tim-ikp');
+        });
 
         // ===== ===== ===== ===== =====  Pelapor User
+        $pelapor = User::factory(5)->create();
+        $pelapor->each(function ($user) {
+            $user->assignRole('pelapor');
+        });
+
+        // ===== ===== ===== ===== =====  Pelapor Lainnya
         $me = User::factory()->create([
             'name'     => 'Pelapor',
             'username' => 'pelapor',
             'email'    => 'pelapor@mail.com'
         ]);
+
         $me->assignRole('pelapor');
 
-        $u = User::factory(5)->create();
-        $u->each(function ($user) {
-            $user->assignRole('pelapor');
-        });
+
+        // ===== ===== ===== ===== =====  Pasien Data
+        // $this->call(PasienData::class);
+
+        // ===== ===== ===== ===== =====  Insiden Data
+        $this->call(DummyInsiden::class);
     }
 }

@@ -30,6 +30,10 @@ class Insiden extends DataTable
             })
 
             ->addColumn('grading', function ($insiden) {
+                if (!$insiden->grading) {
+                    return '-';
+                }
+
                 if (Str::lower($insiden->grading->grading_risiko) == 'merah') {
                     return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                         ' . $insiden->grading->grading_risiko . '

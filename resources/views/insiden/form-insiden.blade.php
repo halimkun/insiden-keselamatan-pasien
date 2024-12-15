@@ -211,11 +211,11 @@
         <x-input-label for="dampak_insiden" value="Dampak Insiden Terhadap Pasien" />
         <div class="mt-1 grid grid-cols-2 gap-3 lg:grid-cols-3">
             @foreach ([
-                'kematian' => 'Kematian',
-                'cedera berat' => 'Cedera Irriversibel / Berat',
-                'cedera sedang' => 'Cedera Reversibel / Sedang',
-                'cedera ringan' => 'Cedera Ringan',
-                'tidak cedera' => 'Tidak Cedera',
+                'katastropik'      => 'Kematian',
+                'mayor'            => 'Cedera Irriversibel / Berat',
+                'moderat'          => 'Cedera Reversibel / Sedang',
+                'minor'            => 'Cedera Ringan',
+                'tidak signifikan' => 'Tidak Cedera',
             ] as $value => $label)
                 <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                     <label class="label cursor-pointer items-center justify-start gap-2">

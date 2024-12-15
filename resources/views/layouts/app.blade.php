@@ -48,7 +48,7 @@
 
             {{-- ===== Main Content Start ===== --}}
             <main>
-                <div class="mx-auto max-w-screen-3xl px-4 md:px-6 2xl:px-10 2xl:py-5">
+                <div class="mx-auto max-w-screen-3xl px-4 md:px-6 2xl:px-10 2xl:py-3">
                     {{ $slot }}
                 </div>
             </main>

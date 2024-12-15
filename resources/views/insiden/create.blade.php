@@ -7,7 +7,7 @@
         </h2>
     </x-slot>
 
-    <form method="POST" action="{{ route('insiden.store') }}" role="form" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('insiden.store') }}" role="form" enctype="multipart/form-data" class="flex flex-col gap-4 lg:gap-8">
         @csrf
         <div
             class="bg-white p-4 shadow sm:rounded-lg sm:p-8 {{ request('act') == 'tambah' ? 'border border-amber-500' : '' }}">

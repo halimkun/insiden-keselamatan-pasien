@@ -277,24 +277,28 @@
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Hasil Grading</dt>
                                     <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                         <div class="flex gap-2 items-center justify-start">
-                                            @if (\Str::lower($insiden->grading->grading_risiko) == 'hijau')
+                                            @if (!$insiden?->grading)
+                                            -
+                                            @endif
+
+                                            @if (\Str::lower($insiden?->grading?->grading_risiko) == 'hijau')
                                             <div class="h-3 w-3 bg-emerald-400 rounded-full"></div>
-                                            {{ $insiden->grading->grading_risiko }}
+                                            {{ $insiden?->grading?->grading_risiko }}
                                             @endif
 
-                                            @if (\Str::lower($insiden->grading->grading_risiko) == 'biru')
+                                            @if (\Str::lower($insiden?->grading?->grading_risiko) == 'biru')
                                             <div class="h-3 w-3 bg-blue-400 rounded-full"></div>
-                                            {{ $insiden->grading->grading_risiko }}
+                                            {{ $insiden?->grading?->grading_risiko }}
                                             @endif
 
-                                            @if (\Str::lower($insiden->grading->grading_risiko) == 'kuning')
+                                            @if (\Str::lower($insiden?->grading?->grading_risiko) == 'kuning')
                                             <div class="h-3 w-3 bg-amber-400 rounded-full"></div>
-                                            {{ $insiden->grading->grading_risiko }}
+                                            {{ $insiden?->grading?->grading_risiko }}
                                             @endif
 
-                                            @if (\Str::lower($insiden->grading->grading_risiko) == 'merah')
+                                            @if (\Str::lower($insiden?->grading?->grading_risiko) == 'merah')
                                             <div class="h-3 w-3 bg-rose-400 rounded-full"></div>
-                                            {{ $insiden->grading->grading_risiko }}
+                                            {{ $insiden?->grading?->grading_risiko }}
                                             @endif
 
                                         </div>
@@ -302,8 +306,7 @@
                                 </div>
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                     <dt class="text-sm font-medium leading-6 text-gray-900">Dilakukan Oleh</dt>
-                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{
-                                        $insiden->grading->user->name }}</dd>
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{{ $insiden?->grading?->user?->name ?? '-' }}</dd>
                                 </div>
 
                             </dl>

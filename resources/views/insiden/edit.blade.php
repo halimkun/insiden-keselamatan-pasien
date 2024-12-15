@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <form method="POST" action="{{ route('insiden.update', $insiden->id) }}" role="form" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('insiden.update', $insiden->id) }}" role="form" enctype="multipart/form-data" class=" flex flex-col gap-4 lg:gap-8">
         @csrf
         @method('PATCH')
         <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">

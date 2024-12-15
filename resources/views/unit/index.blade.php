@@ -20,8 +20,6 @@
                 <x-icons.database class="h-5 w-5" />
                 Master Data {{ request()->segment(2) ? '- ' . \Str::headline(\Str::replace('-', ' ', request()->segment(2))) : '' }}
             </h2>
-
-            <x-master-data.navigation-boxed />
         </div>
     </x-slot>
 

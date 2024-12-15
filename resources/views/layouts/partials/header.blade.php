@@ -29,7 +29,11 @@
             </button>
         </div>
 
-        <div class="hidden sm:block"></div>
+        <div class="hidden md:block">
+            @isset($header)
+                {{ $header }}
+            @endisset
+        </div>
 
         <div class="flex items-center gap-3 2xsm:gap-7">
             <ul class="flex items-center gap-2 2xsm:gap-4">

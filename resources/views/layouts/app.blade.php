@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light" data-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -8,64 +8,60 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
+    {{-- ===== Fonts ===== --}}
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
+    {{-- ===== Vite Scripts ===== --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- JQuery --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {{-- ===== JQuery ===== --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
+    {{-- ===== Styles ===== --}}
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+<body
+    x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': true, 'stickyMenu': false, 'sidebarToggle': false, 'scrollTop': false }"
+    x-init="darkMode = JSON.parse(localStorage.getItem('darkMode')); $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(value)))"
+    :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    {{ $header }}
+    {{-- ===== Preloader Start ===== --}}
+    <x-preloader />
+    {{-- ===== Preloader End ===== --}}
+
+    {{-- ===== Page Wrapper Start ===== --}}
+    <div class="flex h-screen overflow-hidden lg:p-3">
+
+        {{-- ===== Sidebar Start ===== --}}
+        @include('layouts.partials.sidebar')
+        {{-- ===== Sidebar End ===== --}}
+
+        {{-- ===== Content Area Start ===== --}}
+        <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+ 
+            {{-- ===== Header Start ===== --}}
+            @include('layouts.partials.header')
+            {{-- ===== Header End ===== --}}
+
+            {{-- ===== Main Content Start ===== --}}
+            <main>
+                <div class="mx-auto max-w-screen-3xl px-4 md:px-6 2xl:px-10 2xl:py-5">
+                    {{ $slot }}
                 </div>
-            </header>
-        @endisset
+            </main>
+            {{-- ===== Main Content End ===== --}}
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
+        </div>
+        {{-- ===== Content Area End ===== --}}
+
     </div>
+    {{-- ===== Page Wrapper End ===== --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- ===== Scripts ===== --}}
     @stack('scripts')
-
-    <script>
-        $(document).ready(function() {
-            @if (session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: '{{ session('success') }}',
-                    showConfirmButton: false,
-                    timer: 2500
-                });
-            @endif
-
-            @if (session('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ session('error') }}',
-                    showConfirmButton: false,
-                    timer: 2500
-                });
-            @endif
-        });
-    </script>
 </body>
 
 </html>

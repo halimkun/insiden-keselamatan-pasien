@@ -25,49 +25,45 @@
         </div>
     </x-slot>
 
-    <div class="py-6">
-        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-            <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                <div class="w-full">
-                    <header class="sm:flex sm:items-center">
-                        <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">Unit Kerja</h2>
-                            <p class="mt-1 text-sm text-gray-600">Data Unit Kerja Rumah Sakit.</p>
-                        </div>
-                        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('unit.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                <x-icons.circle-plus class="h-5 w-5" />
-                                Tambah Data
-                            </a>
-                        </div>
-                    </header>
+    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+        <div class="w-full">
+            <header class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-semibold text-gray-900">Unit Kerja</h2>
+                    <p class="mt-1 text-sm text-gray-600">Data Unit Kerja Rumah Sakit.</p>
+                </div>
+                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    <a type="button" href="{{ route('unit.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <x-icons.circle-plus class="h-5 w-5" />
+                        Tambah Data
+                    </a>
+                </div>
+            </header>
 
-                    <div class="flow-root">
-                        <div class="mt-8">
-                            <div class="inline-block min-w-full py-2 align-middle">
-                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
-                                    {{-- search box --}}
-                                    <div class="flex items-center space-x-2">
-                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
-                                    </div>
-                                </div>
-                                
-                                <div class="w-full overflow-x-auto lg:overflow-visible">
-                                    <table class="w-full divide-y divide-gray-300" id="tableData">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
-
-                                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama Unit</th>
-
-                                                <th scope="col" class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    <span class="text-lg">#</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
+            <div class="flow-root">
+                <div class="mt-8">
+                    <div class="inline-block min-w-full py-2 align-middle">
+                        <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                            {{-- search box --}}
+                            <div class="flex items-center space-x-2">
+                                <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
                             </div>
+                        </div>
+                        
+                        <div class="w-full overflow-x-auto lg:overflow-visible">
+                            <table class="w-full divide-y divide-gray-300" id="tableData">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
+
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama Unit</th>
+
+                                        <th scope="col" class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            <span class="text-lg">#</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -101,60 +97,60 @@
     </dialog>
 
     @push('scripts')
-        <script>
-            $(document).ready(function() {
-                // delete-user on click get data-id
-                $(document).on('click', '.delete-unit', function() {
-                    $('#confirmDelete #unit').text($(this).data('unit'));
-                    var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
-                    confirmDelete.showModal();
-                    $('#confirmDelete form').attr('action', url);
-                });
-
-                var table = $('#tableData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    lengthChange: false,
-
-                    pageLength: 10,
-
-                    ajax: {
-                        url: "{{ route('datatables.units') }}",
-                        data: function(d) {
-                            d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
-                        },
-                        type: 'GET',
-                    },
-
-                    columns: [
-                        {
-                            data: 'id',
-                            name: 'id',
-                            orderable: false,
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        {
-                            data: 'nama_unit',
-                            name: 'nama_unit'
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                        }
-                    ],
-
-                    createdRow: function(row, data, dataIndex) {
-                        $(row).find('td').eq(2).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
-                    }
-                });
-
-                // search
-                $('#search').on('keyup', function() {
-                    table.search($(this).val()).draw();
-                });
+    <script>
+        $(document).ready(function() {
+            // delete-user on click get data-id
+            $(document).on('click', '.delete-unit', function() {
+                $('#confirmDelete #unit').text($(this).data('unit'));
+                var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
+                confirmDelete.showModal();
+                $('#confirmDelete form').attr('action', url);
             });
-        </script>
+
+            var table = $('#tableData').DataTable({
+                processing: true,
+                serverSide: true,
+                lengthChange: false,
+
+                pageLength: 10,
+
+                ajax: {
+                    url: "{{ route('datatables.units') }}",
+                    data: function(d) {
+                        d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
+                    },
+                    type: 'GET',
+                },
+
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'nama_unit',
+                        name: 'nama_unit'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                    }
+                ],
+
+                createdRow: function(row, data, dataIndex) {
+                    $(row).find('td').eq(2).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
+                }
+            });
+
+            // search
+            $('#search').on('keyup', function() {
+                table.search($(this).val()).draw();
+            });
+        });
+    </script>
     @endpush
 </x-app-layout>

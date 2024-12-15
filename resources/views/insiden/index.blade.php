@@ -1,17 +1,17 @@
 <x-app-layout>
     @push('styles')
-        {{-- using public url --}}
-        <link rel="stylesheet" href="{{ asset('static/css/dataTables.tailwindcss.css') }}">
+    {{-- using public url --}}
+    <link rel="stylesheet" href="{{ asset('static/css/dataTables.tailwindcss.css') }}">
 
-        <script src="{{ asset('static/js/dataTables.js') }}"></script>
-        <script src="{{ asset('static/js/dataTables.tailwindcss.js') }}"></script>
+    <script src="{{ asset('static/js/dataTables.js') }}"></script>
+    <script src="{{ asset('static/js/dataTables.tailwindcss.js') }}"></script>
 
-        <style>
-            .dt-search {
-                display: none;
-                visibility: hidden;
-            }
-        </style>
+    <style>
+        .dt-search {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
     @endpush
 
     <x-slot name="header">
@@ -21,75 +21,71 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-            <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-                <div class="w-full">
-                    <header class="sm:flex sm:items-center">
-                        <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-gray-900">Data Insiden Pasien</h2>
-                            <p class="mt-1 text-sm text-gray-600">Data insiden pasien yang terjadi di rumah sakit.</p>
-                        </div>
-                        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                            <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}"
-                                class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                <x-icons.circle-plus class="h-5 w-5" />
-                                Add New
-                            </a>
-                        </div>
-                    </header>
+    <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+        <div class="w-full">
+            <header class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h2 class="text-lg font-semibold text-gray-900">Data Insiden Pasien</h2>
+                    <p class="mt-1 text-sm text-gray-600">Data insiden pasien yang terjadi di rumah sakit.</p>
+                </div>
+                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}"
+                        class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <x-icons.circle-plus class="h-5 w-5" />
+                        Add New
+                    </a>
+                </div>
+            </header>
 
-                    <div class="flow-root">
-                        <div class="mt-8">
-                            <div class="inline-block min-w-full py-2 align-middle">
-                                <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
-                                    {{-- search box --}}
-                                    <div class="flex items-center space-x-2">
-                                        <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
-                                    </div>
-                                </div>
-
-                                <div class="w-full overflow-x-auto lg:overflow-visible">
-                                    <table class="w-full divide-y divide-gray-300" id="tableData">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    No</th>
-
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Insiden</th>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Jenis</th>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Tgl Kejadian</th>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Dampak</th>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Korban</th>
-                                                <th scope="col"
-                                                    class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    Grading</th>
-
-                                                <th scope="col"
-                                                    class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                                    #</th>
-                                            </tr>
-                                        </thead>
-                                        
-                                    </table>
-                                </div>
-
-                                {{-- <div class="mt-4 px-4">
-                                    {!! $insidens->withQueryString()->links() !!}
-                                </div> --}}
+            <div class="flow-root">
+                <div class="mt-8">
+                    <div class="inline-block min-w-full py-2 align-middle">
+                        <div class="flex w-full flex-col items-center gap-2 md:flex-row md:justify-end">
+                            {{-- search box --}}
+                            <div class="flex items-center space-x-2">
+                                <x-text-input id="search" placeholder="Search" class="input input-sm w-64" />
                             </div>
                         </div>
+
+                        <div class="w-full overflow-x-auto lg:overflow-visible">
+                            <table class="w-full divide-y divide-gray-300" id="tableData">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            No</th>
+
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Insiden</th>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Jenis</th>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Tgl Kejadian</th>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Dampak</th>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Korban</th>
+                                        <th scope="col"
+                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            Grading</th>
+
+                                        <th scope="col"
+                                            class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            #</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+
+                        {{-- <div class="mt-4 px-4">
+                            {!! $insidens->withQueryString()->links() !!}
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -110,7 +106,8 @@
                     <x-danger-button onclick="confirmDelete.close()">Delete</x-danger-button>
 
                     <form method="dialog">
-                        <x-secondary-button class="bg-red-500" onclick="confirmDelete.close()">Close</x-secondary-button>
+                        <x-secondary-button class="bg-red-500" onclick="confirmDelete.close()">Close
+                        </x-secondary-button>
                     </form>
                 </div>
             </form>

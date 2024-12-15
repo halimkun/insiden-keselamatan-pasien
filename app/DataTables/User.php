@@ -49,26 +49,30 @@ class User extends DataTable
                 $showUrl = route('users.show', $user->id);
                 $editUrl = route('users.edit', $user->id);
 
-                return '
+                $html = '<div class="flex items-center justify-center gap-3">';
+
+                $html .= '
+                        <a href="' . $showUrl . '" class="text-gray-600 hover:text-indigo-600" title="Lihat detail">
+                            ' . Blade::render('<x-icons.user-search class="h-[1rem] w-[1rem]" />') . '
+                        </a>
+                        <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-600" title="Edit data">
+                            ' . Blade::render('<x-icons.user-edit class="h-[1rem] w-[1rem]" />') . '
+                        </a>
+                ';
+
+                $html .= '
                     <div class="dropdown dropdown-left">
-                        <div tabindex="0" role="button" class="inline-flex items-center rounded-lg border px-2 py-1 text-right transition duration-150 ease-in-out hover:bg-indigo-600 hover:text-white">
-                            Aksi
-                            <div class="ms-1">
-                                ' . Blade::render('<x-icons.chevron-down class="h-[0.9rem] w-[0.9rem]" />') . '
+                        <div tabindex="0" role="button" class="inline-flex items-center rounded-lg border px-1 py-1 text-center transition duration-150 ease-in-out hover:bg-indigo-600 hover:text-white">
+                            <div>
+                                ' . Blade::render('<x-icons.dots-vertical class="h-[0.9rem] w-[0.9rem]" />') . '
                             </div>
                         </div>
                         <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
                             <ul>
                                 <li>
-                                    <a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">
+                                    <a href="' . $showUrl . '" class="text-gray-600 hover:text-indigo-600">
                                         ' . Blade::render('<x-icons.user-search class="h-[1rem] w-[1rem]" />') . '
-                                        Show
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">
-                                        ' . Blade::render('<x-icons.user-edit class="h-[1rem] w-[1rem]" />') . '
-                                        Edit
+                                        Role & Permission
                                     </a>
                                 </li>
                                 <li>
@@ -87,6 +91,10 @@ class User extends DataTable
                         </div>
                     </div>
                 ';
+
+                $html .= '</div>';
+
+                return $html;
             })
 
             ->orderColumn('roles', function ($query, $order) {

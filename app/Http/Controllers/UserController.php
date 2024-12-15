@@ -26,6 +26,9 @@ class UserController extends Controller
 
     /**
      * Display a listing of the resource.
+     * 
+     * @param Request $request
+     * @return View
      */
     public function index(Request $request): View
     {
@@ -34,6 +37,8 @@ class UserController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * 
+     * @return View
      */
     public function create(): View
     {
@@ -45,6 +50,9 @@ class UserController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param UserRequest $request
+     * @return RedirectResponse
      */
     public function store(UserRequest $request): RedirectResponse
     {
@@ -52,7 +60,7 @@ class UserController extends Controller
         $d['email_verified_at'] = now();
         $d['password']          = \Illuminate\Support\Facades\Hash::make('password');
         $d['remember_token']    = \Illuminate\Support\Str::random(10);
-        
+
         $user = User::create($d);
 
         $detail = [
@@ -75,6 +83,9 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
+     * 
+     * @param int $id
+     * @return View
      */
     public function show($id): View
     {
@@ -85,6 +96,9 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * 
+     * @param int $id
+     * @return View
      */
     public function edit($id): View
     {
@@ -95,7 +109,28 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     * 
+     * @param int $user
+     * @return View
+     */
+    public function roles(int $userId) 
+    {
+        $roles       = \Spatie\Permission\Models\Role::with('permissions')->get();
+        $permissions = \Spatie\Permission\Models\Permission::all();
+
+        $user       = User::with(['roles', 'permissions'])->find($userId);
+        
+        return view('user.set-roles', compact('user', 'roles', 'permissions'));
+    }
+
+    /**
      * Update the specified resource in storage.
+     * 
+     * @param UserRequest $request
+     * @param User $user
+     * 
+     * @return RedirectResponse
      */
     public function update(UserRequest $request, User $user): RedirectResponse
     {
@@ -121,6 +156,9 @@ class UserController extends Controller
 
     /**
      * Restore the specified resource from storage.
+     * 
+     * @param string $id
+     * @param Request $request
      */
     public function restore(string $id, Request $request): RedirectResponse
     {
@@ -128,16 +166,17 @@ class UserController extends Controller
         $user = User::onlyTrashed()->find($id);
         if ($user) {
             $user->restore();
-            return Redirect::route('users.index')
-                ->with('success', 'User restored successfully');
+            return Redirect::route('users.index')->with('success', 'User restored successfully');
         }
 
-        return Redirect::route('users.index')
-            ->with('error', 'User not found');
+        return Redirect::route('users.index')->with('error', 'User not found');
     }
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param int $id
+     * @return RedirectResponse
      */
     public function destroy($id): RedirectResponse
     {
@@ -150,14 +189,12 @@ class UserController extends Controller
             })->where('id', '!=', $id)->count();
 
             if ($anotherAdmin < 1) {
-                return Redirect::route('users.index')
-                    ->with('error', 'Cannot delete ' . $user->name . ' (Administator), Because there is no another admin');
+                return Redirect::route('users.index')->with('error', 'Cannot delete ' . $user->name . ' (Administator), Because there is no another admin');
             }
         }
 
         User::find($id)->delete();
 
-        return Redirect::route('users.index')
-            ->with('success', 'User deleted successfully');
+        return Redirect::route('users.index')->with('success', 'User deleted successfully');
     }
 }

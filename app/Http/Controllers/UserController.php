@@ -48,7 +48,12 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $user = User::create($request->only('name', 'user', 'username', 'email'));
+        $d                      = $request->only('name', 'user', 'username', 'email');
+        $d['email_verified_at'] = now();
+        $d['password']          = \Illuminate\Support\Facades\Hash::make('password');
+        $d['remember_token']    = \Illuminate\Support\Str::random(10);
+        
+        $user = User::create($d);
 
         $detail = [
             'user_id'    => $user->id,

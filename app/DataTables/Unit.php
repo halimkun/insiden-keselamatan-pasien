@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Models\Unit as UnitModel;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -26,68 +27,44 @@ class Unit extends DataTable
                 $showUrl = route('unit.show', $unit->id);
                 $editUrl = route('unit.edit', $unit->id);
 
-                $html = '
-                    <div class="flex items-center justify-center gap-3">
-                        <a href="' . $showUrl . '" class="hover:text-indigo-900" title="Show ' . $unit->nama_unit . '">
-                            ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
-                        </a>
+                $html = '<div class="flex items-center justify-end gap-3">';
 
+                $html .= '
+                    <a href="' . $showUrl . '" class="hover:text-indigo-900" title="Show ' . $unit->nama_unit . '">
+                        ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
+                    </a>
+                ';
+                
+                if (Gate::allows('edit_master_data')) {
+                    $html .= '
                         <a href="' . $editUrl . '" class="hover:text-indigo-900" title="Edit ' . $unit->nama_unit . '">
                             ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
                         </a>
+                    ';  
+                }
 
-                        ' . ($unit->deleted_at
-                            ? '<button class="text-green-600 hover:text-green-900 restore-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmRestore.showModal()" title="Restore ' . $unit->nama_unit . '">
+                if (Gate::allows('hapus_master_data')) {
+                    if ($unit->deleted_at) {
+                        $html .= '
+                            <button class="text-green-600 hover:text-green-900 restore-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmRestore.showModal()" title="Restore ' . $unit->nama_unit . '">
                                 ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
-                            </button>'
-                            : '<button class="text-red-600 hover:text-red-900 delete-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmDelete.showModal()" title="Delete ' . $unit->nama_unit . '">
+                            </button>
+                        ';
+                    } else {
+                        $html .= '
+                            <button class="text-red-600 hover:text-red-900 delete-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmDelete.showModal()" title="Delete ' . $unit->nama_unit . '">
                                 ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
-                            </button>'
-                        ) . '
-                    </div>
-                ';
+                            </button>
+                        ';
+                    }
+                }
+
+                $html .= '</div>';
 
                 return $html;
-
-                // return '
-                //     <div class="dropdown dropdown-left">
-                //         <div tabindex="0" role="button" class="inline-flex items-center rounded-lg border px-2 py-1 text-right transition duration-150 ease-in-out hover:bg-indigo-600 hover:text-white">
-                //             Aksi
-                //             <div class="ms-1">
-                //                 ' . Blade::render('<x-icons.chevron-down class="h-[0.9rem] w-[0.9rem]" />') . '
-                //             </div>
-                //         </div>
-                //         <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
-                //             <ul>
-                //                 <li>
-                //                     <a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">
-                //                         ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
-                //                         Show
-                //                     </a>
-                //                 </li>
-                //                 <li>
-                //                     <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">
-                //                         ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
-                //                         Edit
-                //                     </a>
-                //                 </li>
-                //                 <li>
-                //                     ' . ($unit->deleted_at
-                //                         ? '<button class="text-green-600 hover:text-green-900 restore-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmRestore.showModal()">
-                //                             ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
-                //                             Restore
-                //                         </button>'
-                //                         : '<button class="text-red-600 hover:text-red-900 delete-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmDelete.showModal()">
-                //                             ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
-                //                             Delete
-                //                         </button>'
-                //                     ) . '
-                //                 </li>
-                //             </ul>
-                //         </div>
-                //     </div>
-                // ';
             })
+
+            ->rawColumns(['action'])
             ->setRowId('id');
     }
 

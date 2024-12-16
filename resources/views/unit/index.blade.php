@@ -31,10 +31,12 @@
                     <p class="mt-1 text-sm text-gray-600">Data Unit Kerja Rumah Sakit.</p>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    @can('tambah_master_data')
                     <a type="button" href="{{ route('unit.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                         <x-icons.circle-plus class="h-5 w-5" />
                         Tambah Data
                     </a>
+                    @endcan
                 </div>
             </header>
 
@@ -56,8 +58,8 @@
 
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama Unit</th>
 
-                                        <th scope="col" class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            <span class="text-lg">#</span>
+                                        <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                            <span class="text-base">#</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -136,11 +138,13 @@
                     {
                         data: 'action',
                         name: 'action',
+                        orderable: false,
+                        searchable: false
                     }
                 ],
 
                 createdRow: function(row, data, dataIndex) {
-                    $(row).find('td').eq(2).addClass('whitespace-nowrap text-center py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(2).addClass('whitespace-nowrap text-right py-3 pl-4 pr-3 text-sm text-gray-500');
                 }
             });
 

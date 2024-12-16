@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
@@ -26,19 +27,31 @@ class PenanggungBiaya extends DataTable
                 $showUrl = route('penanggung-biaya.show', $penanggungBiaya->id);
                 $editUrl = route('penanggung-biaya.edit', $penanggungBiaya->id);
 
-                $html = '
-                    <div class="flex items-center justify-center gap-3">
-                        <a href="' . $showUrl . '" class="hover:text-indigo-900" title="Lihat Detail Penanggung Biaya">
-                            ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
-                        </a>
+                $html = '<div class="flex items-center justify-end gap-3">';
+
+                $html .= '
+                    <a href="' . $showUrl . '" class="hover:text-indigo-900" title="Lihat Detail Penanggung Biaya">
+                        ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
+                    </a>
+                ';
+
+                if (Gate::allows('edit_master_data')) {
+                    $html .= '
                         <a href="' . $editUrl . '" class="hover:text-indigo-900" title="Edit Penanggung Biaya">
                             ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
                         </a>
+                    ';
+                }
+
+                if (Gate::allows('hapus_master_data')) {
+                    $html .= '
                         <button class="text-red-600 hover:text-red-900 delete-penanggung-biaya" data-id="' . $penanggungBiaya->id . '" data-penanggung_biaya="' . $penanggungBiaya->jenis_penanggung . '" onclick="confirmDelete.showModal()" title="Hapus Penanggung Biaya">
                             ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
                         </button>
-                    </div>
-                ';
+                    ';
+                }
+
+                $html .= '</div>';
 
                 return $html;
             })

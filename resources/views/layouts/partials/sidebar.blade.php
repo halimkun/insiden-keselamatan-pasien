@@ -74,6 +74,7 @@
                 </ul>
             </div>
 
+            @can('lihat_master_data')
             <div>
                 <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">MASTER DATA</h3>
 
@@ -112,6 +113,7 @@
                     <!-- Menu Item Penanggung Biaya -->
                 </ul>
             </div>
+            @endcan
         </nav>
         <!-- Sidebar Menu -->
     </div>

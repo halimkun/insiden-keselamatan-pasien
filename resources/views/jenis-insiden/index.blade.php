@@ -31,6 +31,7 @@
                     <h2 class="text-lg font-semibold text-gray-900">Jenis Insiden</h2>
                     <p class="mt-1 text-sm text-gray-600">Data jenis insiden keselaamatan pasien.</p>
                 </div>
+                @can('tambah_master_data')
                 {{-- <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <a type="button" href="{{ route('jenis-insiden.create') }}"
                         class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
@@ -38,6 +39,7 @@
                         Tambah Data
                     </a>
                 </div> --}}
+                @endcan
             </header>
 
             <div class="flow-root">
@@ -54,19 +56,12 @@
                             <table class="w-full divide-y divide-gray-300" id="tableData">
                                 <thead>
                                     <tr>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            No</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Alias</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Nama Jenis Insiden</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Alias</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Nama Jenis Insiden</th>
 
-                                        <th scope="col"
-                                            class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
                                             <span class="text-lg">#</span>
                                         </th>
                                     </tr>

@@ -39,10 +39,12 @@
                     <p class="mt-1 text-sm text-gray-600">Data penanggung biaya yang digunakan.</p>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    @can('tambah_master_data')
                     <a type="button" href="{{ route('penanggung-biaya.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                         <x-icons.circle-plus class="h-5 w-5" />
                         Tambah Data
                     </a>
+                    @endcan
                 </div>
             </header>
 
@@ -64,7 +66,7 @@
 
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Jenis Penanggung</th>
 
-                                        <th scope="col" class="px-3 py-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
                                             <span class="text-lg">#</span>
                                         </th>
                                     </tr>

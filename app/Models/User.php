@@ -71,6 +71,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function isAdmin()
+    {
+        return $this->hasRole(['admin', 'administrator']);
+    }
+
     /**
      * Get the user detail associated with the user.
      */

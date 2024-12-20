@@ -114,6 +114,25 @@
                 </ul>
             </div>
             @endcan
+
+            {{-- only admin --}}
+            @if (auth()->user()->isAdmin())
+            <div>
+                <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">ROLES & PERMISSION</h3>
+                <ul class="mb-6 flex flex-col gap-1.5">
+                    {{-- manage menu --}}
+                    <li>
+                        <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('roles.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
+                            href="{{ route('roles.index') }}">
+                            <x-icons.shield class="h-5 w-5" />
+
+                            Roles & Permission
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            @endif
+
         </nav>
         <!-- Sidebar Menu -->
     </div>

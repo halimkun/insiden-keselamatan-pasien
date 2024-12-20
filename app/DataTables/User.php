@@ -70,8 +70,8 @@ class User extends DataTable
                         <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
                             <ul>
                                 <li>
-                                    <a href="' . $showUrl . '" class="text-gray-600 hover:text-indigo-600">
-                                        ' . Blade::render('<x-icons.user-search class="h-[1rem] w-[1rem]" />') . '
+                                    <a href="' . route('users.roles', $user->id) . '" class="text-gray-600 hover:text-indigo-600">
+                                        ' . Blade::render('<x-icons.user-shild class="h-[1rem] w-[1rem]" />') . '
                                         Role & Permission
                                     </a>
                                 </li>

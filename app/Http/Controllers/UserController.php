@@ -125,6 +125,34 @@ class UserController extends Controller
     }
 
     /**
+     * Set permission to user
+     * 
+     * @param Request $request
+     * @param int $userId
+     * 
+     * @return RedirectResponse
+     */
+    public function setRoles(Request $request, int $userId)
+    {
+        $user = User::find($userId);
+        
+        $roles = \Spatie\Permission\Models\Role::whereIn('id', $request->roles)->get();
+        $user->syncRoles($roles->pluck('name')->toArray());
+
+        return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
+    }
+
+    public function setPermission(Request $request, int $userId)
+    {
+        $user = User::find($userId);
+        
+        $permissions = \Spatie\Permission\Models\Permission::whereIn('id', $request->permissions)->get();
+        $user->syncPermissions($permissions->pluck('name')->toArray());
+
+        return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
+    }
+
+    /**
      * Update the specified resource in storage.
      * 
      * @param UserRequest $request

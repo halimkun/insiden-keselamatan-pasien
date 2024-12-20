@@ -24,8 +24,12 @@ Route::middleware('auth')->group(function () {
     })->name('data.master');
     
     Route::resource('users', \App\Http\Controllers\UserController::class);
+    Route::get('users/{id}/roles', [\App\Http\Controllers\UserController::class, 'roles'])->name('users.roles');
     Route::post('users/{id}/restore', [\App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
-    
+
+    Route::post('users/{id}/set-role', [\App\Http\Controllers\UserController::class, 'setRoles'])->name('users.set-roles');
+    Route::post('users/{id}/set-permission', [\App\Http\Controllers\UserController::class, 'setPermission'])->name('users.set-permissions');
+
     Route::group(['prefix'=> 'master'], function () {
         Route::resource('unit', \App\Http\Controllers\UnitController::class);
         Route::resource('jenis-insiden', \App\Http\Controllers\JenisInsidenController::class);

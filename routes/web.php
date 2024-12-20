@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('pasien/{id}/restore', [\App\Http\Controllers\PasienController::class, 'restore'])->name('pasien.restore');
 
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
+    Route::resource('roles', \App\Http\Controllers\RoleAndPermissionController::class);
 });
 
 

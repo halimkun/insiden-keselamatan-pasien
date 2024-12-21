@@ -60,25 +60,14 @@
                             <table class="w-full divide-y divide-gray-300" id="tableData">
                                 <thead>
                                     <tr>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            No</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Name</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Username</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Roles</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Email</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Name</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Username</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Roles</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Email</th>
 
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-center text-xs font-semibold uppercase tracking-wide text-gray-500">
                                             <span class="text-lg">#</span>
                                         </th>
                                     </tr>
@@ -91,59 +80,27 @@
         </div>
     </div>
 
-    {{-- Delete Confirmation --}}
-    <dialog id="confirmDelete" class="modal">
-        <div class="modal-box">
-            <form method="POST">
-                @csrf
-                @method('DELETE')
+    <x-daisy-modal.confirmation 
+        id="confirmDelete" 
+        title="Delete Confirmation !" 
+        confirmText="Delete"
+        method="DELETE" 
+        actionUrl="#"
+    />
 
-                <h3 class="text-lg font-bold">Delete Confirmation !</h3>
-                <p class="text-sm">Are you sure you want to delete <span class="font-semibold" id="name"></span> user?</p>
+    <x-daisy-modal.confirmation 
+        id="confirmRestore" 
+        title="Restore Confirmation !" 
+        confirmText="Restore"
+        method="POST" 
+        actionUrl="#"
+    />
 
-                <div class="modal-action mt-10 flex justify-end space-x-4">
-                    <x-danger-button onclick="confirmDelete.close()">Delete</x-danger-button>
-
-                    <form method="dialog">
-                        <x-secondary-button class="bg-red-500" onclick="confirmDelete.close()">Close
-                        </x-secondary-button>
-                    </form>
-                </div>
-            </form>
-        </div>
-
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-
-    {{-- Restore Confirmation --}}
-    <dialog id="confirmRestore" class="modal">
-        <div class="modal-box">
-            <form method="POST">
-                @csrf
-
-                <input type="hidden" name="deleted_at" value="">
-
-                <h3 class="text-lg font-bold">Restore Confirmation !</h3>
-                <p class="text-sm">Are you sure you want to restore <span class="font-semibold" id="restoreName"></span>
-                    user?</p>
-
-                <div class="modal-action mt-10 flex justify-end space-x-4">
-                    <x-primary-button>Restore</x-primary-button>
-
-                    <form method="dialog">
-                        <x-secondary-button class="bg-red-500" onclick="confirmRestore.close()">Close
-                        </x-secondary-button>
-                    </form>
-                </div>
-            </form>
-        </div>
-
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
+    <x-daisy-modal.set-password
+        id="setPassword"
+        title="Set Password"
+        actionUrl="#"
+    />
 
     @push('scripts')
     @if ($errors->has('password'))
@@ -151,15 +108,28 @@
         setPassword.showModal();
     </script>
     @endif
-        $(document).ready(function() {
-                // delete-user on click get data-id
-                $(document).on('click', '.delete-user', function() {
-                    $('#confirmDelete #name').text($(this).data('name'));
-                    var url = "{{ route('users.destroy', ':id') }}".replace(':id', $(this).data('id'));
-                    confirmDelete.showModal();
-                    $('#confirmDelete form').attr('action', url);
-                });
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // delete-user on click get data-id
+            $(document).on('click', '.delete-user', function() {
+                confirmDelete.showModal();
+
+                $('#confirmDelete form .description').html('Are you sure you want to delete <span class="font-semibold">' + $(this).data('name') + '</span> user?');
+                
+                var url = "{{ route('users.destroy', ':id') }}".replace(':id', $(this).data('id'));
+                $('#confirmDelete form').attr('action', url);
+            });
+
+            // restore-user on click get data-id
+            $(document).on('click', '.restore-user', function() {
+                confirmRestore.showModal();
+
+                $('#confirmRestore form .description').html('Are you sure you want to restore <span class="font-semibold">' + $(this).data('name') + '</span> user?');
+
+                var url = "{{ route('users.restore', ':id') }}".replace(':id', $(this).data('id'));
+                $('#confirmRestore form').attr('action', url);
+            });
 
             $(document).on('click', '.set-password', function() {
                 setPassword.showModal();
@@ -168,73 +138,73 @@
                 $('#setPassword form').attr('action', "{{ route('users.set-password', ':id') }}".replace(':id', $(this).data('id')));
             });
 
-                var table = $('#tableData').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    lengthChange: false,
+            var table = $('#tableData').DataTable({
+                processing: true,
+                serverSide: true,
+                lengthChange: false,
 
-                    pageLength: 10,
+                pageLength: 10,
 
-                    ajax: {
-                        url: "{{ route('datatables.users') }}",
-                        data: function(d) {
-                            d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
-                        },
-                        type: 'GET'
+                ajax: {
+                    url: "{{ route('datatables.users') }}",
+                    data: function(d) {
+                        d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
                     },
+                    type: 'GET'
+                },
 
-                    columns: [
-                        {
-                            data: 'id',
-                            name: 'id',
-                            orderable: false,
-                            render: function(data, type, row, meta) {
-                                return meta.row + meta.settings._iDisplayStart + 1;
-                            }
-                        },
-                        {
-                            data: 'name',
-                            name: 'name'
-                        },
-                        {
-                            data: 'username',
-                            name: 'username'
-                        },
-                        {
-                            data: 'roles',
-                            name: 'roles',
-                            searchable: true
-                        },
-                        {
-                            data: 'email',
-                            name: 'email',
-                            render: (data) => `<a href="mailto:${data}" class="hover:underline">${data}</a>`
-                        },
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id',
+                        orderable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
                         }
-                    ],
-
-                    createdRow: function(row, data, dataIndex) {
-                        $(row).find('td').eq(0).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
-                        $(row).find('td').eq(1).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
-                        $(row).find('td').eq(2).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
-                        $(row).find('td').eq(3).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
-                        $(row).find('td').eq(4).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
-                        $(row).find('td').eq(5).addClass('py-3 pl-4 pr-3 text-center text-sm text-gray-500');
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'username',
+                        name: 'username'
+                    },
+                    {
+                        data: 'roles',
+                        name: 'roles',
+                        searchable: true
+                    },
+                    {
+                        data: 'email',
+                        name: 'email',
+                        render: (data) => `<a href="mailto:${data}" class="hover:underline">${data}</a>`
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false
                     }
-                });
+                ],
 
-                $('#search').on('keyup', function() {
-                    table.search(this.value).draw();
-                });
-
-                $('#show_deleted').change(function() {
-                    table.ajax.reload();
-                });
+                createdRow: function(row, data, dataIndex) {
+                    $(row).find('td').eq(0).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(1).addClass('py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(2).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(3).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(4).addClass('whitespace-nowrap py-3 pl-4 pr-3 text-sm text-gray-500');
+                    $(row).find('td').eq(5).addClass('py-3 pl-4 pr-3 text-center text-sm text-gray-500');
+                }
             });
+
+            $('#search').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            $('#show_deleted').change(function() {
+                table.ajax.reload();
+            });
+        });
     </script>
     @endpush
 </x-app-layout>

@@ -48,7 +48,19 @@
 
             {{-- ===== Main Content Start ===== --}}
             <main>
+                
                 <div class="mx-auto max-w-screen-3xl px-4 md:px-6 2xl:px-10 2xl:py-3">
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5" role="alert">
+                            <strong class="font-bold">Something went wrong!</strong>
+                            <ul class="mt-1 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     {{ $slot }}
                 </div>
             </main>
@@ -60,8 +72,21 @@
     </div>
     {{-- ===== Page Wrapper End ===== --}}
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {{-- ===== Scripts ===== --}}
     @stack('scripts')
+
+    <script>
+        $(document).ready(function() {
+            @if (session('success'))
+                Swal.fire({icon: 'success',title: 'Success',text: '{{ session('success') }}',showConfirmButton: false,timer: 2500});
+            @endif
+            @if (session('error'))
+                Swal.fire({icon: 'error',title: 'Error',text: '{{ session('error') }}',showConfirmButton: false,timer: 2500});
+            @endif
+        });
+    </script>
 </body>
 
 </html>

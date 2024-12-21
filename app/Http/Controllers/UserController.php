@@ -14,17 +14,6 @@ use Illuminate\Support\Facades\Redirect;
 class UserController extends Controller
 {
     /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        // $this->middleware("permission:view_karyawan")->only(["index", "show"]);
-        // $this->middleware("permission:create_karyawan")->only(["create", "store"]);
-        // $this->middleware("permission:edit_karyawan")->only(["edit", "update", "restore"]);
-        // $this->middleware("permission:delete_karyawan")->only(["destroy"]);
-    }
-
-    /**
      * Display a listing of the resource.
      * 
      * @param Request $request
@@ -142,6 +131,14 @@ class UserController extends Controller
         return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
     }
 
+    /**
+     * Set permission to user
+     * 
+     * @param Request $request
+     * @param int $userId
+     * 
+     * @return RedirectResponse
+     */
     public function setPermission(Request $request, int $userId)
     {
         $user = User::find($userId);
@@ -151,6 +148,34 @@ class UserController extends Controller
 
         return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
     }
+
+    /**
+     * Set password to user
+     * 
+     * @param Request $request
+     * @param int $userId
+     * 
+     * @return RedirectResponse
+     */
+    public function setPassword(Request $request, int $userId)
+    {
+        $request->validate([
+            'password'              => 'required|confirmed|min:8',
+            'password_confirmation' => 'required|min:8',
+        ]);
+
+        $user = User::find($userId);
+
+        if (!$user) {
+            return Redirect::route('users.index')->with('error', 'User not found');
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+        $user->save();
+
+        return Redirect::route('users.index')->with('success', 'Password updated and user logged out successfully');
+    }
+
 
     /**
      * Update the specified resource in storage.

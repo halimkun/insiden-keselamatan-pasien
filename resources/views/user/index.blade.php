@@ -146,7 +146,11 @@
     </dialog>
 
     @push('scripts')
-    <script>
+    @if ($errors->has('password'))
+    <script type="text/javascript">
+        setPassword.showModal();
+    </script>
+    @endif
         $(document).ready(function() {
                 // delete-user on click get data-id
                 $(document).on('click', '.delete-user', function() {
@@ -156,13 +160,13 @@
                     $('#confirmDelete form').attr('action', url);
                 });
 
-                // restore-user on click get data-id
-                $(document).on('click', '.restore-user', function() {
-                    $('#confirmRestore #restoreName').text($(this).data('name'));
-                    var url = "{{ route('users.restore', ':id') }}".replace(':id', $(this).data('id'));
-                    confirmRestore.showModal();
-                    $('#confirmRestore form').attr('action', url);
-                });
+
+            $(document).on('click', '.set-password', function() {
+                setPassword.showModal();
+
+                $('#setPassword form .description').html('Please enter your password to set a new password for <span class="font-semibold">' + $(this).data('name') + '</span> user.');
+                $('#setPassword form').attr('action', "{{ route('users.set-password', ':id') }}".replace(':id', $(this).data('id')));
+            });
 
                 var table = $('#tableData').DataTable({
                     processing: true,

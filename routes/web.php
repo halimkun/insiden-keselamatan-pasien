@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::post('users/{id}/restore', [\App\Http\Controllers\UserController::class, 'restore'])->name('users.restore');
 
     Route::post('users/{id}/set-role', [\App\Http\Controllers\UserController::class, 'setRoles'])->name('users.set-roles');
+    Route::patch('users/{id}/set-password', [\App\Http\Controllers\UserController::class, 'setPassword'])->name('users.set-password');
     Route::post('users/{id}/set-permission', [\App\Http\Controllers\UserController::class, 'setPermission'])->name('users.set-permissions');
 
     Route::group(['prefix'=> 'master'], function () {

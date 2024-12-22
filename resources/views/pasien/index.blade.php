@@ -28,6 +28,8 @@
                     <h2 class="text-lg font-semibold text-gray-900">Data Pasien</h2>
                     <p class="mt-1 text-sm text-gray-600">Data pasien yang terdaftar di rumah sakit.</p>
                 </div>
+                
+                @can('tambah_pasien')
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <a type="button" href="{{ route('pasien.create') }}"
                         class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
@@ -35,6 +37,7 @@
                         Tambah Pasien
                     </a>
                 </div>
+                @endcan
             </header>
 
             <div class="flow-root">
@@ -85,77 +88,42 @@
         </div>
     </div>
 
-    {{-- Delete Confirmation --}}
-    <dialog id="confirmDelete" class="modal">
-        <div class="modal-box">
-            <form method="POST">
-                @csrf
-                @method('DELETE')
+    <x-daisy-modal.confirmation 
+        id="confirmDelete" 
+        title="Delete Confirmation !" 
+        confirmText="Delete"
+        method="DELETE" 
+        actionUrl="#"
+    />
 
-                <h3 class="text-lg font-bold">Delete Confirmation !</h3>
-                <p class="text-sm">Are you sure you want to delete <span class="font-semibold" id="name"></span> data?
-                </p>
-
-                <div class="modal-action mt-10 flex justify-end space-x-4">
-                    <x-danger-button onclick="confirmDelete.close()">Delete</x-danger-button>
-
-                    <form method="dialog">
-                        <x-secondary-button class="bg-red-500" onclick="confirmDelete.close()">Close
-                        </x-secondary-button>
-                    </form>
-                </div>
-            </form>
-        </div>
-
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
-
-    {{-- Restore Confirmation --}}
-    <dialog id="confirmRestore" class="modal">
-        <div class="modal-box">
-            <form method="POST">
-                @csrf
-
-                <input type="hidden" name="deleted_at" value="">
-
-                <h3 class="text-lg font-bold">Restore Confirmation !</h3>
-                <p class="text-sm">Are you sure you want to restore <span class="font-semibold" id="nama"></span> data?
-                </p>
-
-                <div class="modal-action mt-10 flex justify-end space-x-4">
-                    <x-primary-button>Restore</x-primary-button>
-
-                    <form method="dialog">
-                        <x-secondary-button class="bg-red-500" onclick="confirmRestore.close()">Close
-                        </x-secondary-button>
-                    </form>
-                </div>
-            </form>
-        </div>
-
-        <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-        </form>
-    </dialog>
+    <x-daisy-modal.confirmation 
+        id="confirmRestore" 
+        title="Restore Confirmation !" 
+        confirmText="Restore"
+        method="POST" 
+        actionUrl="#"
+    />
 
     @push('scripts')
     <script>
         $(document).ready(function() {
-            // delete-user on click get data-id
-            $(document).on('click', '.delete-pasien', function() {
-                $('#confirmDelete #name').text($(this).data('nama'));
-                var url = "{{ route('pasien.destroy', ':id') }}".replace(':id', $(this).data('id'));
+            // delete-button on click get data-id
+            $(document).on('click', '.delete-button', function() {
                 confirmDelete.showModal();
+
+                $('#confirmDelete form .description').html('Apakah anda yakin ingin menghapus pasien <span class="font-semibold">' + $(this).data('nama') + '</span> ?');
+
+                var url = "{{ route('pasien.destroy', ':id') }}".replace(':id', $(this).data('id'));
                 $('#confirmDelete form').attr('action', url);
             });
 
-            // restore-user on click get data-id
-            $(document).on('click', '.restore-pasien', function() {
-                $('#confirmRestore #nama').text($(this).data('nama'));
-                var url = "{{ route('pasien.restore', ':id') }}".replace(':id', $(this).data('id'));
+            // restore-button on click get data-id
+            $(document).on('click', '.restore-button', function() {
                 confirmRestore.showModal();
+
+                $('#confirmRestore form .description').html('Apakah anda yakin ingin merestore pasien <span class="font-semibold">' + $(this).data('nama') + '</span> ?');
+                
+                var url = "{{ route('pasien.restore', ':id') }}".replace(':id', $(this).data('id'));
                 $('#confirmRestore form').attr('action', url);
             });
 

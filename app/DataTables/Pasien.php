@@ -26,7 +26,6 @@ class Pasien extends DataTable
                     <kbd class="px-1.5 py-0.5 bg-black text-white rounded-md text-xs leading-none tracking-wider">' . $pasien->no_rekam_medis . '</kbd>
                 ';
             })
-
             ->addColumn("nama", function ($pasien) {
                 return '
                     <div class="flex lg:items-center gap-2 lg:gap-3 w-full">
@@ -43,8 +42,6 @@ class Pasien extends DataTable
                     </div>
                 ';
             })
-
-            // buat format taggal, Tahun, Bulan, Hari
             ->addColumn("tanggal_lahir", function ($pasien) {
                 return '
                     <p class="flex items-center gap-2">
@@ -53,32 +50,25 @@ class Pasien extends DataTable
                     <p class="text-xs font-semibold">' . $pasien->tanggal_lahir->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari') . '</p>
                 ';
             })
-
             ->addColumn("action", function ($pasien) {
                 // Menggunakan URL route untuk Show, Edit, dan Delete
                 $showUrl = route('pasien.show', $pasien->id);
                 $editUrl = route('pasien.edit', $pasien->id);
 
-                $html = '
-                    <div class="flex items-center justify-center gap-3">
-                        <a href="' . $showUrl . '" class="hover:text-indigo-900">
-                            ' . Blade::render('<x-icons.search class="h-[1.1rem] w-[1.1rem]" />') . '
-                        </a>
-                        <a href="' . $editUrl . '" class="hover:text-indigo-900">
-                            ' . Blade::render('<x-icons.edit-circle class="h-[1.1rem] w-[1.1rem]" />') . '
-                        </a>
-                        ' . ($pasien->deleted_at
-                            ? '<button class="text-green-600 hover:text-green-900 restore-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmRestore.showModal()">
-                                ' . Blade::render('<x-icons.restore class="h-[1.1rem] w-[1.1rem]" />') . '
-                            </button>'
-                            : '<button class="text-red-600 hover:text-red-900 delete-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmDelete.showModal()">
-                                ' . Blade::render('<x-icons.trash class="h-[1.1rem] w-[1.1rem]" />') . '
-                            </button>'
-                        ) . '
-                    </div>
-                ';
+                return view('components.actions.default', [
+                    'showUrl' => $showUrl,
+                    'editUrl' => $editUrl,
+                    
+                    'permission_edit' => 'edit_pasien',
+                    'permission_delete' => 'hapus_pasien',
 
-                return $html;
+                    'data' => $pasien,
+
+                    'attributeData' => [
+                        'nama' => $pasien->nama,
+                        'id'   => $pasien->id,
+                    ]
+                ])->render();
             })
 
             ->orderColumn('no_rekam_medis', function ($query, $order) {

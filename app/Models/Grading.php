@@ -34,6 +34,13 @@ class Grading extends Model
     protected $perPage = 20;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'grading';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -48,7 +55,7 @@ class Grading extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -56,5 +63,4 @@ class Grading extends Model
     {
         return $this->hasMany(\App\Models\Insiden::class, 'id', 'grading_id');
     }
-    
 }

@@ -28,6 +28,13 @@ class Tindakan extends Model
     protected $perPage = 20;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'tindakan';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

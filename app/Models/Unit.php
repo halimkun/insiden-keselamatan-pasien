@@ -12,9 +12,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property $nama_unit
  * @property $created_at
  * @property $updated_at
- *
  * @property Insiden[] $insidens
  * @package App
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read int|null $insidens_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereNamaUnit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Unit withoutTrashed()
+ * @mixin \Eloquent
  */
 class Unit extends Model
 {

@@ -10,16 +10,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property $id
  * @property $tindakan
  * @property $oleh
+ * @property $detail
  * @property $created_at
  * @property $updated_at
- *
  * @property Insiden[] $insidens
  * @package App
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @property-read int|null $insidens_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tindakan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tindakan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Tindakan query()
+ * @mixin \Eloquent
  */
 class Tindakan extends Model
 {
-    protected $table = 'tindakan';
-
+    
     protected $perPage = 20;
 
     /**

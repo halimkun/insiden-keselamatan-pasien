@@ -5,6 +5,35 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * 
+ *
+ * @property int $user_id
+ * @property string $jabatan
+ * @property int $unit_id
+ * @property string $departemen
+ * @property string|null $no_hp
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\Unit $unit
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereDepartemen($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereJabatan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereNoHp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereUnitId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserDetail withoutTrashed()
+ * @mixin \Eloquent
+ */
 class UserDetail extends Model
 {
     use SoftDeletes;

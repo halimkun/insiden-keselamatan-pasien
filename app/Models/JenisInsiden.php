@@ -12,9 +12,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property $nama_jenis_insiden
  * @property $created_at
  * @property $updated_at
- *
  * @property Insiden[] $insidens
  * @package App
+ * @property string $alias
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read int|null $insidens_count
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereAlias($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereNamaJenisInsiden($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|JenisInsiden withoutTrashed()
+ * @mixin \Eloquent
  */
 class JenisInsiden extends Model
 {

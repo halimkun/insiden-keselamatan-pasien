@@ -20,7 +20,7 @@ class InsidenController extends Controller
      */
     public function index(Request $request): View
     {
-        $insidens = Insiden::paginate();
+        $insidens = Insiden::orderBy('tanggal_insiden', 'desc')->paginate(10);
 
         return view('insiden.index', compact('insidens'))
             ->with('i', ($request->input('page', 1) - 1) * $insidens->perPage());
@@ -140,8 +140,13 @@ class InsidenController extends Controller
     public function show($id): View
     {
         $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($id);
+        
+        $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
+        $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
 
-        return view('insiden.show', compact('insiden'));
+        $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+
+        return view('insiden.show', compact('insiden', 'probability', 'impact', 'riskGrading'));
     }
 
     /**
@@ -174,12 +179,24 @@ class InsidenController extends Controller
         
         $insiden->update($request->except('tindakan', 'oleh', 'oleh_tim', 'oleh_petugas', 'grading_risiko'));
 
-        $insiden->grading->update($request->only('grading_risiko', 'created_by'));
-        
-        $insiden->tindakan->update($tindakanData);
+        if (!$insiden->grading) {
+            $grading = Grading::create($request->only('grading_risiko', 'created_by'));
+            $insiden->grading_id = $grading->id;
+            $insiden->save();
+        } else {
+            $insiden->grading->update($request->only('grading_risiko', 'created_by'));
+        }
 
-        return Redirect::route('insiden.index')
-            ->with('success', 'Insiden updated successfully');
+        if (!$insiden->tindakan) {
+            $tindakan = Tindakan::create($tindakanData);
+            $insiden->tindakan_id = $tindakan->id;
+            $insiden->save();
+        } else {
+            $insiden->tindakan->update($tindakanData);
+        }
+        
+
+        return Redirect::route('insiden.index')->with('success', 'Insiden updated successfully');
     }
 
     public function destroy($id): RedirectResponse

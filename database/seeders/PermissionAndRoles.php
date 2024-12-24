@@ -24,7 +24,7 @@ class PermissionAndRoles extends Seeder
                 'hapus_karyawan',
                 'tambah_karyawan',
                 'ubah_password_karyawan',
-                'set_role_permission',
+                'set_permission_karyawan',
 
                 'lihat_master_data',
                 'edit_master_data',

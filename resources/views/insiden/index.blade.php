@@ -1,6 +1,5 @@
 <x-app-layout>
     @push('styles')
-    {{-- using public url --}}
     <link rel="stylesheet" href="{{ asset('static/css/dataTables.tailwindcss.css') }}">
 
     <script src="{{ asset('static/js/dataTables.js') }}"></script>
@@ -51,41 +50,21 @@
                             <table class="w-full divide-y divide-gray-300" id="tableData">
                                 <thead>
                                     <tr>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            No</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">No</th>
 
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Insiden</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Jenis</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Tgl Kejadian</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Dampak</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Korban</th>
-                                        <th scope="col"
-                                            class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            Grading</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Insiden</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Jenis</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tgl Kejadian</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Dampak</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Korban</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Grading</th>
 
-                                        <th scope="col"
-                                            class="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                                            #</th>
+                                        <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">#</th>
                                     </tr>
                                 </thead>
 
                             </table>
                         </div>
-
-                        {{-- <div class="mt-4 px-4">
-                            {!! $insidens->withQueryString()->links() !!}
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -150,9 +129,6 @@
                         d.show_deleted = $('#show_deleted').is(':checked') ? 1 : 0;
                     },
                     type: 'GET',
-                    // success: function(response) {
-                    //     console.log(response);
-                    // }
                 },
 
                 columns: [
@@ -167,6 +143,9 @@
                     {
                         data: 'insiden',
                         name: 'insiden',
+                        render: function(data, type, row) {
+                            return `<div class="max-w-sm truncate">${data}</div>`;
+                        }
                     },
                     {
                         data: 'jenis_insiden.alias',
@@ -179,10 +158,16 @@
                     {
                         data: 'dampak_insiden',
                         name: 'dampak_insiden',
+                        render: function(data, type, row) {
+                            return `<div class="capitalize">${data}</div>`;
+                        }
                     },
                     {
                         data: 'korban_insiden',
-                        name: 'korban_insiden'
+                        name: 'korban_insiden',
+                        render: function(data, type, row) {
+                            return `<div class="capitalize">${data}</div>`;
+                        }
                     },
                     {
                         data: 'grading',

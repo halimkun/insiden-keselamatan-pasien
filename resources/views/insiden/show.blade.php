@@ -285,6 +285,17 @@
                                 </div>
 
                             </dl>
+
+                            @if (!$insiden?->grading)
+                                @can('grading_insiden')
+                                    {{-- button open modal --}}
+                                    <div class="mt-4 flex justify-end">
+                                        <button type="button" class="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 grading-modal-button">
+                                            Grading Insiden
+                                        </button>
+                                    </div>
+                                @endcan
+                            @endif
                         </div>
 
                         <x-separator text="Detail Laporan" color="text-gray-500" />
@@ -312,4 +323,98 @@
             </div>
         </div>
     </div>
+
+    @can('grading_insiden')
+        @php
+            $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
+            $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
+
+            $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+        @endphp
+
+        <dialog class="modal" id="grading-modal">
+            <div class="modal-box max-w-4xl">
+                <form method="dialog">
+                    <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                </form>
+
+                <h3 class="text-lg font-bold text-gray-700">Grading Insiden</h3>
+                <p class="mt-1"> Pilih grading risiko insiden ini. Grading risiko adalah penilaian tingkat risiko insiden yang terjadi berdasarkan dampak dan keparahan insiden.</p>
+                
+                <div class="my-5">
+                    <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading">
+                        <p class="text-sm font-base">Berdasarkan data yang telah diinput, sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">{{ \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) }}</span>.</p>
+                    </x-grading-info> 
+                </div>
+
+                <div class="mt-5">
+                    <form action="{{ route('grading.store') }}" method="post" id="grading-form">
+                        @csrf
+
+                        <x-text-input type="hidden" readonly name="insiden_id" :value="$insiden->id" />
+
+                        @include('insiden.form-grading')
+
+                        <div class="mt-5 flex justify-end">
+                            <button type="submit" class="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                Simpan Grading
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+        
+        @push('scripts')
+            <script>
+                $(document).ready(function() {
+                    $('.grading-modal-button').on('click', function() {
+                        document.getElementById('grading-modal').showModal();
+                    });
+    
+                    const autoGrading = $('.grading-text').text().toLowerCase();
+                    const gradingRisiko = $('input[name="grading_risiko"]');
+
+    
+                    gradingRisiko.each(function() {
+                        if ($(this).val() === autoGrading) {
+                            $(this).prop('checked', true);
+                        }
+                    });
+
+                    // grading-form on submit
+                    $('#grading-form').on('submit', function(e) {
+                        e.preventDefault();
+                        const form = $(this);
+                        const selectedGrading = form.find('input[name="grading_risiko"]:checked').val();
+
+                        if (selectedGrading != autoGrading) {
+                            document.getElementById('grading-modal').close();
+                            
+                            Swal.fire({
+                                title: 'Konfirmasi Grading Insiden',
+                                text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading ?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Ya, Kirim Laporan',
+                                cancelButtonText: 'Batal',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form[0].submit();
+                                } else {
+                                    document.getElementById('grading-modal').showModal();
+                                }
+                            });
+                        } else {
+                            form[0].submit();
+                        }
+                    });
+                });
+            </script>
+        @endpush
+    @endcan
 </x-app-layout>

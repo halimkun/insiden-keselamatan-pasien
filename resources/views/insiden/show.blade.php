@@ -25,7 +25,7 @@
                     <div class="w-full">
                         <x-separator text="pasien" color="text-gray-500" />
 
-                        <div class="mt-3">
+                        <div class="mt-3" id="pasien-detail">
                             <dl class="divide-y divide-gray-100">
 
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -99,7 +99,7 @@
 
                         <x-separator text="insiden" color="text-gray-500" />
 
-                        <div class="mt-3 mb-5">
+                        <div class="mt-3 mb-5" id="insiden-detail">
                             <dl class="divide-y divide-gray-200">
 
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -210,7 +210,7 @@
 
                         <x-separator text="Tindakan Pasca Insiden" color="text-gray-500" />
 
-                        <div class="mt-3 mb-5">
+                        <div class="mt-3 mb-5" id="tindakan-pasca-insiden">
                             <dl class="divide-y divide-gray-100">
 
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -245,7 +245,7 @@
 
                         <x-separator text="Grading" color="text-gray-500" />
 
-                        <div class="mt-3 mb-5">
+                        <div class="mt-3 mb-5" id="grading-insiden">
                             <dl class="divide-y divide-gray-100">
 
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -291,6 +291,7 @@
                                     {{-- button open modal --}}
                                     <div class="mt-4 flex justify-end">
                                         <button type="button" class="inline-flex items-center gap-2 rounded-md bg-blue-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 grading-modal-button">
+                                            <x-icons.label class="h-5 w-5" />
                                             Grading Insiden
                                         </button>
                                     </div>
@@ -300,7 +301,7 @@
 
                         <x-separator text="Detail Laporan" color="text-gray-500" />
 
-                        <div class="mt-3">
+                        <div class="mt-3" id="detail-laporan">
                             <dl class="divide-y divide-gray-100">
 
                                 <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

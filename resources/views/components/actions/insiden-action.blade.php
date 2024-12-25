@@ -19,6 +19,33 @@
         </div>
         <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
             <ul>
+                @can('grading_insiden')
+                    @if ($insiden->grading)
+                        @can('edit_insiden')
+                            <li>
+                                <a href="{{ $editUrl }}#grading-insiden" class="text-gray-600 hover:text-indigo-600">
+                                    <x-icons.label-filled class="h-[1rem] w-[1rem]" />
+                                    Ubah Grading
+                                </a>
+                            </li>
+                        @elsecan('lihat_insiden')
+                            <li>
+                                <a href="{{ $showUrl }}#grading-insiden" class="text-gray-600 hover:text-indigo-600">
+                                    <x-icons.label-filled class="h-[1rem] w-[1rem]" />
+                                    Lihat Grading
+                                </a>
+                            </li>
+                        @endcan
+                    @else
+                        <li>
+                            <a href="{{ $showUrl }}#grading-insiden" class="text-gray-600 hover:text-indigo-600">
+                                <x-icons.label class="h-[1rem] w-[1rem]" />
+                                Grading Insiden
+                            </a>
+                        </li>
+                    @endif
+                @endcan
+
                 @can('hapus_insiden')
                     @if ($insiden->created_by == Auth::id() || (Auth::user()->can('hapus_unit_insiden') && Auth::user()->detail?->unit_id == $insiden->unit_id) || Auth::user()->can('hapus_semua_insiden'))
                         @if($insiden->deleted_at)

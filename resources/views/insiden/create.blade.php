@@ -186,7 +186,7 @@
             </div>
         </div>
 
-        <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+        <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8" id="grading-insiden">
             <div class="w-full">
                 <header class="flex flex-col items-center justify-between gap-4 lg:flex-row">
                     <div class="flex w-full items-center justify-start gap-4 lg:justify-center">

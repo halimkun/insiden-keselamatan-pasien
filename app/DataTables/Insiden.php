@@ -97,7 +97,7 @@ class Insiden extends DataTable
             }
         }
 
-        return $model->with(['jenisInsiden']);
+        return $model->with(['jenisInsiden', 'grading']);
     }
 
     /**

@@ -26,10 +26,10 @@
                 <div class="mt-6">
                     <input type="hidden" class="mb-4" readonly name="pasien_id" value="{{ old('pasien_id', $insiden?->pasien?->id) }}" />
 
-                    <div class="flex gap-4">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
                         <x-text-input 
                             readonly
-                            class="flex-2" 
+                            class="w-full flex-2" 
                             id="no_rekam_medis" 
                             type="text" 
                             name="no_rekam_medis"
@@ -39,7 +39,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="flex-1" 
+                            class="w-full flex-1" 
                             id="nama" 
                             type="text" 
                             name="nama" 
@@ -50,10 +50,10 @@
 
                         <x-input-error class="mt-2" :messages="$errors->get('no_rekam_medis')" />
                     </div>
-                    <div class="flex gap-4 mt-4">
+                    <div class="flex flex-col md:flex-row items-start gap-4 mt-4">
                         <x-text-input 
                             readonly 
-                            class="flex-2" 
+                            class="w-full flex-2" 
                             id="dob" 
                             type="text" 
                             name="dob" 
@@ -63,7 +63,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="flex-1" 
+                            class="w-full flex-1" 
                             id="dob" 
                             type="text" 
                             name="dob" 
@@ -73,7 +73,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="flex-1" 
+                            class="w-full flex-1" 
                             id="gender" 
                             type="text" 
                             name="gender" 

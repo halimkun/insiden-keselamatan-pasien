@@ -33,7 +33,7 @@
     {{-- ===== Preloader End ===== --}}
 
     {{-- ===== Page Wrapper Start ===== --}}
-    <div class="flex h-screen overflow-hidden lg:p-3">
+    <div class="flex h-screen overflow-hidden pb-3 lg:p-3">
 
         {{-- ===== Sidebar Start ===== --}}
         @include('layouts.partials.sidebar')

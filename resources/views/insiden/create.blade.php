@@ -65,7 +65,6 @@
                                 <option value="P" {{ old('jenis_kelamin', $pasien?->jenis_kelamin) == 'P' ? 'selected' : '' }}>Perempuan</option>
                             </select>
 
-
                             <x-input-error class="mt-2" :messages="$errors->get('jenis_kelamin')" />
                         </div>
                     </div>
@@ -116,7 +115,7 @@
                         <x-input-error class="mt-2" :messages="$errors->get('alamat')" />
                     </div>
                     @else
-                    <div class="flex items-start gap-4">
+                    <div class="flex flex-col md:flex-row items-start gap-4">
                         <div class="w-full max-w-xs">
                             <x-input-label for="no_rekam_medis" :value="__('No Rekam Medis')" />
                             <x-combobox-pasien-async @pasien-selected="handleSelectedResult" rm="{{ request('step') > 1 ? old('no_rekam_medis', $pasien?->no_rekam_medis) : null }}" />

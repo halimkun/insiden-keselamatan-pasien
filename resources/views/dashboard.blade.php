@@ -7,13 +7,13 @@
 
     <div class="mb-6">
         <div class="bg-white dark:bg-boxdark overflow-hidden w-full sm:rounded-lg">
-            <div class="p-3 flex justify-between items-center">
+            <div class="p-3 flex flex-col md:flex-row gap-3 justify-between lg:items-center">
                 <div class="px-2">
                     <h2 class="text-lg font-semibold text-gray-800">Dashboard</h2>
                     <p class="text-sm text-gray-500">Selamat datang di dashboard aplikasi insiden</p>
                 </div>
 
-                <div>
+                <div class="self-end">
                     <form action="" method="get">
                         <input type="number" class="border border-gray-300 dark:border-gray-700 rounded-md px-2 py-1 w-[100px] text-sm" id="year" name="year" value="{{ $year ?? date('Y') }}" min="2021" max="{{ date('Y') }}" oninput="this.value = Math.abs(this.value)">
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-md ml-2">Filter</button>
@@ -42,8 +42,8 @@
         </div>
     </div>
 
-    <div class="flex items-stretch gap-4">
-        <div class="bg-white dark:bg-boxdark overflow-hidden shadow-lg shadow-gray-300/25 sm:rounded-2xl w-2/3" id="chart-container">
+    <div class="flex flex-col xl:flex-row items-stretch gap-4">
+        <div class="bg-white dark:bg-boxdark overflow-hidden shadow-lg shadow-gray-300/25 sm:rounded-2xl w-full xl:w-2/3" id="chart-container">
             <div class="p-6 text-gray-800 dark:text-bodydark1">
                 {{-- title and subtitle --}}
                 <h2 class="text-lg font-semibold">Trend Insiden Tahun {{ $year ?? date('Y') }}</h2>
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="flex gap-4 flex-col w-1/3" id="grading-container">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-1 gap-4 w-full xl:w-1/3" id="grading-container">
             @foreach ($gradingCount as $key => $val)
             <x-cards.grading-count
                 title="{{ $key }}"

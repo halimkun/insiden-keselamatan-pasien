@@ -58,24 +58,4 @@
 
         <x-input-error class="mt-2" :messages="$errors->get('status_pelapor')" />
     </div>
-
-    <div>
-        <x-input-label for="pernah_terjadi" value="Apakah kejadian yang sama pernah terjadi di Unit Kerja lain?" />
-        <div class="mt-1 grid grid-cols-2 gap-3">
-            <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
-                <label class="label cursor-pointer justify-start gap-2">
-                    <input type="radio" value="1" {{ old('pernah_terjadi', $insiden?->pernah_terjadi) == '1' ? 'checked' : '' }} name="pernah_terjadi" class="radio radio-xs checked:bg-red-500" />
-                    <span class="label-text">Ya</span>
-                </label>
-            </div>
-            <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
-                <label class="label cursor-pointer justify-start gap-2">
-                    <input type="radio" value="0" {{ old('pernah_terjadi', $insiden?->pernah_terjadi) == '0' ? 'checked' : '' }} name="pernah_terjadi" class="radio radio-xs checked:bg-red-500" />
-                    <span class="label-text">Tidak</span>
-                </label>
-            </div>
-        </div>
-
-        <x-input-error class="mt-2" :messages="$errors->get('pernah_terjadi')" />
-    </div>
 </div>

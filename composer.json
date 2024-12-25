@@ -12,6 +12,7 @@
         "yajra/laravel-datatables": "^11.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^3.3",
         "fakerphp/faker": "^1.23",
         "ibex/crud-generator": "^2.1",
         "laravel/breeze": "^2.2",

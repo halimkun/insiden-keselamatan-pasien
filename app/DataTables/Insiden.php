@@ -30,6 +30,10 @@ class Insiden extends DataTable
             })
 
             ->addColumn('grading', function ($insiden) {
+                if (!$insiden->grading) {
+                    return '-';
+                }
+
                 if (Str::lower($insiden->grading->grading_risiko) == 'merah') {
                     return '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                         ' . $insiden->grading->grading_risiko . '
@@ -60,46 +64,15 @@ class Insiden extends DataTable
                 $showUrl = route('insiden.show', $insiden->id);
                 $editUrl = route('insiden.edit', $insiden->id);
 
-                return '
-                    <div class="dropdown dropdown-left">
-                        <div tabindex="0" role="button" class="inline-flex items-center rounded-lg border px-2 py-1 text-right transition duration-150 ease-in-out hover:bg-indigo-600 hover:text-white">
-                            Aksi
-                            <div class="ms-1">
-                                ' . Blade::render('<x-icons.chevron-down class="h-[0.9rem] w-[0.9rem]" />') . '
-                            </div>
-                        </div>
-                        <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
-                            <ul>
-                                <li>
-                                    <a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">
-                                        ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
-                                        Show
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">
-                                        ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
-                                        Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    ' . ($insiden->deleted_at
-                                        ? '<button class="text-green-600 hover:text-green-900 restore-insiden" data-id="' . $insiden->id . '" data-insiden="' . $insiden->nama_insiden . '" onclick="confirmRestore.showModal()">
-                                            ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
-                                            Restore
-                                        </button>'
-                                        : '<button class="text-red-600 hover:text-red-900 delete-insiden" data-id="' . $insiden->id . '" data-insiden="' . $insiden->nama_insiden . '" onclick="confirmDelete.showModal()">
-                                            ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
-                                            Delete
-                                        </button>'
-                                    ) . '
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                ';
+                $html = view('components.actions.insiden-action', [
+                    'showUrl' => $showUrl,
+                    'editUrl' => $editUrl,
+
+                    'insiden' => $insiden,
+                ])->render();
+
+                return $html;
             })
-            
 
             ->rawColumns(['waktu__insiden', 'grading', 'action'])
 
@@ -111,11 +84,20 @@ class Insiden extends DataTable
      */
     public function query(InsidenModel $model): QueryBuilder
     {
+        $user = auth()->user()->load('detail');
+
         $model = $model->newQuery();
 
-        $model->with(['jenisInsiden']);
+        if (!$user->can('lihat_semua_insiden')) {
+            if ($user->can('lihat_unit_insiden')) {
+                $unitId = $user->detail?->unit_id ?? 0;
+                $model->where('unit_id', $unitId)->orWhere('created_by', $user->id);
+            } else { // Jika bukan unit, maka hanya bisa melihat insiden yang dibuat oleh dirinya
+                $model->where('created_by', $user->id);
+            }
+        }
 
-        return $model;
+        return $model->with(['jenisInsiden', 'grading']);
     }
 
     /**

@@ -59,9 +59,9 @@ class InsidenRequest extends FormRequest
             'oleh_tim'                => 'required_if:oleh,tim|nullable|string|max:255',
             'oleh_petugas'            => 'required_if:oleh,petugas|nullable|string|max:255',
             
-            'pernah_terjadi'          => 'required|boolean',
+            'pernah_terjadi'          => 'nullable|boolean',
             'status_pelapor'          => 'required|string|max:255',
-            'grading_risiko'          => 'required|in:biru,hijau,kuning,merah',
+            'grading_risiko'          => 'nullable|in:biru,hijau,kuning,merah',
         ];
     }
 

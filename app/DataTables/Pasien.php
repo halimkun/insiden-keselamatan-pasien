@@ -26,7 +26,6 @@ class Pasien extends DataTable
                     <kbd class="px-1.5 py-0.5 bg-black text-white rounded-md text-xs leading-none tracking-wider">' . $pasien->no_rekam_medis . '</kbd>
                 ';
             })
-
             ->addColumn("nama", function ($pasien) {
                 return '
                     <div class="flex lg:items-center gap-2 lg:gap-3 w-full">
@@ -43,8 +42,6 @@ class Pasien extends DataTable
                     </div>
                 ';
             })
-
-            // buat format taggal, Tahun, Bulan, Hari
             ->addColumn("tanggal_lahir", function ($pasien) {
                 return '
                     <p class="flex items-center gap-2">
@@ -53,50 +50,25 @@ class Pasien extends DataTable
                     <p class="text-xs font-semibold">' . $pasien->tanggal_lahir->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari') . '</p>
                 ';
             })
-
             ->addColumn("action", function ($pasien) {
                 // Menggunakan URL route untuk Show, Edit, dan Delete
                 $showUrl = route('pasien.show', $pasien->id);
                 $editUrl = route('pasien.edit', $pasien->id);
 
-                return '
-                    <div class="dropdown dropdown-left">
-                        <div tabindex="0" role="button" class="inline-flex items-center rounded-lg border px-2 py-1 text-right transition duration-150 ease-in-out hover:bg-indigo-600 hover:text-white">
-                            Aksi
-                            <div class="ms-1">
-                                ' . Blade::render('<x-icons.chevron-down class="h-[0.9rem] w-[0.9rem]" />') . '
-                            </div>
-                        </div>
-                        <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
-                            <ul>
-                                <li>
-                                    <a href="' . $showUrl . '" class="text-gray-600 hover:text-gray-900">
-                                        ' . Blade::render('<x-icons.search class="h-[1rem] w-[1rem]" />') . '
-                                        Show
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="' . $editUrl . '" class="text-gray-600 hover:text-indigo-900">
-                                        ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
-                                        Edit
-                                    </a>
-                                </li>
-                                <li>
-                                    ' . ($pasien->deleted_at
-                                        ? '<button class="text-green-600 hover:text-green-900 restore-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmRestore.showModal()">
-                                            ' . Blade::render('<x-icons.restore class="h-[1rem] w-[1rem]" />') . '
-                                            Restore
-                                        </button>'
-                                        : '<button class="text-red-600 hover:text-red-900 delete-pasien" data-id="' . $pasien->id . '" data-nama="' . $pasien->nama . '" onclick="confirmDelete.showModal()">
-                                            ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '
-                                            Delete
-                                        </button>'
-                                    ) . '
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                ';
+                return view('components.actions.default', [
+                    'showUrl' => $showUrl,
+                    'editUrl' => $editUrl,
+                    
+                    'permission_edit' => 'edit_pasien',
+                    'permission_delete' => 'hapus_pasien',
+
+                    'data' => $pasien,
+
+                    'attributeData' => [
+                        'nama' => $pasien->nama,
+                        'id'   => $pasien->id,
+                    ]
+                ])->render();
             })
 
             ->orderColumn('no_rekam_medis', function ($query, $order) {

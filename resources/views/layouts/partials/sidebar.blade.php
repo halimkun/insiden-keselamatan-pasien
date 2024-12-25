@@ -38,6 +38,7 @@
                     </li>
                     <!-- Menu Item Dashboard -->
 
+                    @canany(['lihat_insiden', 'lihat_insiden_pribadi', 'lihat_unit_insiden', 'lihat_semua_insiden'])
                     <!-- Menu Item Insiden -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('insiden.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -48,7 +49,9 @@
                         </a>
                     </li>
                     <!-- Menu Item Insiden -->
+                    @endcanany
 
+                    @can('lihat_pasien')
                     <!-- Menu Item Pasien -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('pasien.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -59,7 +62,9 @@
                         </a>
                     </li>
                     <!-- Menu Item Pasien -->
+                    @endcan
 
+                    @can('lihat_karyawan')
                     <!-- Menu Item Karyawan -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('users.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -70,7 +75,7 @@
                         </a>
                     </li>
                     <!-- Menu Item Karyawan -->
-
+                    @endcan
                 </ul>
             </div>
 

@@ -19,17 +19,19 @@
             <ul>
                 @can('ubah_password_karyawan')
                     <li>
-                        <a href="{{ route('users.roles', $user->id) }}" class="text-gray-600 hover:text-indigo-600">
-                            <x-icons.user-shild class="h-[1rem] w-[1rem]" />
-                            Role & Permission
-                        </a>
-                    </li>
-
-                    <li>
                         <button class="text-gray-600 hover:text-indigo-600 set-password" data-id="{{ $user->id }}" data-name="{{ $user->name }}">
                             <x-icons.user-shild class="h-[1rem] w-[1rem]" />
                             Set Password
                         </button>
+                    </li>
+                @endcan
+                
+                @can('set_permission_karyawan')
+                    <li>
+                        <a href="{{ route('users.roles', $user->id) }}" class="text-gray-600 hover:text-indigo-600">
+                            <x-icons.user-shild class="h-[1rem] w-[1rem]" />
+                            Role & Permission
+                        </a>
                     </li>
                 @endcan
 

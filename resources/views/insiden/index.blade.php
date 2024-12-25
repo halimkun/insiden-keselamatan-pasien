@@ -20,6 +20,12 @@
         </h2>
     </x-slot>
 
+    @if (!Auth::user()->hasRole(['admin', 'superadmin', 'administrator']) && !Auth::user()->detail?->unit_id)
+        <x-alert title="Warning !" type="warning">
+            <p>Sepertinya Anda belum memiliki unit terkait. Silahkan hubungi <span class="font-bold">Administrator</span> untuk menambahkan unit terkait, dengan demikian anda dapat mengakses data insiden.</p>
+        </x-alert>
+    @endif
+
     <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
         <div class="w-full">
             <header class="sm:flex sm:items-center">
@@ -27,13 +33,16 @@
                     <h2 class="text-lg font-semibold text-gray-900">Data Insiden Pasien</h2>
                     <p class="mt-1 text-sm text-gray-600">Data insiden pasien yang terjadi di rumah sakit.</p>
                 </div>
-                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                    <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}"
-                        class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                        <x-icons.circle-plus class="h-5 w-5" />
-                        Add New
-                    </a>
-                </div>
+
+                @can('tambah_insiden')
+                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}"
+                            class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <x-icons.circle-plus class="h-5 w-5" />
+                            Add New
+                        </a>
+                    </div>
+                @endcan
             </header>
 
             <div class="flow-root">

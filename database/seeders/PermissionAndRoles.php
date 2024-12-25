@@ -40,8 +40,15 @@ class PermissionAndRoles extends Seeder
                 'lihat_unit_insiden',           // Insiden yang terkait dengan unit tertentu
                 'lihat_insiden_pribadi',        // Insiden yang dibuat oleh dirinya
                 'lihat_insiden',                // Detail Insiden
+                
+                'edit_unit_insiden',
+                'edit_semua_insiden',
                 'edit_insiden',
+
                 'hapus_insiden',
+                'hapus_unit_insiden',
+                'hapus_semua_insiden',
+                
                 'tambah_insiden',
                 'grading_insiden',
             ],
@@ -71,8 +78,13 @@ class PermissionAndRoles extends Seeder
                 'lihat_unit_insiden',           // Semua insiden
                 'lihat_insiden_pribadi',        // Insiden yang dibuat oleh dirinya
                 'lihat_insiden',                // Detail Insiden
+                
                 'edit_insiden',
+                'edit_unit_insiden',
+
                 'hapus_insiden',
+                'hapus_unit_insiden',
+                
                 'tambah_insiden',
                 'tambah_pasien',
             ],

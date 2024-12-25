@@ -64,18 +64,11 @@ class Insiden extends DataTable
                 $showUrl = route('insiden.show', $insiden->id);
                 $editUrl = route('insiden.edit', $insiden->id);
 
-                $html = view('components.actions.default', [
+                $html = view('components.actions.insiden-action', [
                     'showUrl' => $showUrl,
                     'editUrl' => $editUrl,
 
-                    'permission_edit'   => "edit_insiden",
-                    'permission_delete' => "hapus_insiden",
-
-                    'data' => $insiden,
-                    'attributeData' => [
-                        'id' => $insiden->id,
-                        'insiden' => $insiden->nama_insiden,
-                    ]
+                    'insiden' => $insiden,
                 ])->render();
 
                 return $html;
@@ -91,11 +84,20 @@ class Insiden extends DataTable
      */
     public function query(InsidenModel $model): QueryBuilder
     {
+        $user = auth()->user()->load('detail');
+
         $model = $model->newQuery();
 
-        $model->with(['jenisInsiden']);
+        if (!$user->can('lihat_semua_insiden')) {
+            if ($user->can('lihat_unit_insiden')) {
+                $unitId = $user->detail?->unit_id ?? 0;
+                $model->where('unit_id', $unitId)->orWhere('created_by', $user->id);
+            } else { // Jika bukan unit, maka hanya bisa melihat insiden yang dibuat oleh dirinya
+                $model->where('created_by', $user->id);
+            }
+        }
 
-        return $model;
+        return $model->with(['jenisInsiden']);
     }
 
     /**

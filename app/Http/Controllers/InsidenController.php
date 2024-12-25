@@ -20,7 +20,21 @@ class InsidenController extends Controller
      */
     public function index(Request $request): View
     {
-        $insidens = Insiden::orderBy('tanggal_insiden', 'desc')->paginate(10);
+        $user = auth()->user()->load('detail'); // Load relasi 'detail' dengan lazy eager loading.
+
+        // Inisialisasi query insiden.
+        $insidenQuery = Insiden::query();
+
+        // Cek permission pengguna untuk membatasi data insiden berdasarkan unit.
+        if ($user->can('lihat_unit_insiden')) {
+            $unitId = $user->detail?->unit_id ?? 0; // Default ke 0 jika unit_id null.
+            $insidenQuery->where('unit_id', $unitId);
+        } else {
+            $insidenQuery->orderBy('created_at', 'desc');
+        }
+
+        // Paginate hasil query.
+        $insidens = $insidenQuery->paginate(10);
 
         return view('insiden.index', compact('insidens'))
             ->with('i', ($request->input('page', 1) - 1) * $insidens->perPage());
@@ -101,7 +115,7 @@ class InsidenController extends Controller
                 'alamat'         => $request->alamat ?? null,
             ];
         }
-        
+
         $tindakanData = [
             'tindakan' => $request->tindakan ?? '',
             'oleh'     => $request->oleh,
@@ -118,7 +132,7 @@ class InsidenController extends Controller
                 } else {
                     $insiden['pasien_id'] = $request->pasien_id;
                 }
-                
+
                 $tindakan = Tindakan::create($tindakanData);
                 $insiden['tindakan_id'] = $tindakan->id;
 
@@ -126,7 +140,7 @@ class InsidenController extends Controller
                 $insiden['grading_id'] = $grading->id;
 
                 Insiden::create($insiden);
-            },5 );
+            }, 5);
         } catch (\Throwable $th) {
             return Redirect::back()->with('error', 'Gagal menyimpan data insiden : ' . $th->getMessage())->withInput();
         }
@@ -140,7 +154,7 @@ class InsidenController extends Controller
     public function show($id): View
     {
         $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($id);
-        
+
         $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
         $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
 
@@ -170,13 +184,13 @@ class InsidenController extends Controller
             'kasus_insiden' => implode(', ', $request->kasus_insiden),
             'created_by'    => auth()->user()->id,
         ]);
-        
+
         $tindakanData = [
             'tindakan' => $request->tindakan ?? '',
             'oleh'     => $request->oleh,
             'detail'   => $request->oleh == 'tim' ? $request->oleh_tim : ($request->oleh == 'petugas' ? $request->oleh_petugas : null),
         ];
-        
+
         $insiden->update($request->except('tindakan', 'oleh', 'oleh_tim', 'oleh_petugas', 'grading_risiko'));
 
         if (!$insiden->grading) {
@@ -194,7 +208,7 @@ class InsidenController extends Controller
         } else {
             $insiden->tindakan->update($tindakanData);
         }
-        
+
 
         return Redirect::route('insiden.index')->with('success', 'Insiden updated successfully');
     }

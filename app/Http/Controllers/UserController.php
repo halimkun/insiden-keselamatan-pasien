@@ -124,6 +124,9 @@ class UserController extends Controller
     public function setRoles(Request $request, int $userId)
     {
         $user = User::find($userId);
+
+        // remove all permissions from user
+        $user->syncPermissions([]);
         
         $roles = \Spatie\Permission\Models\Role::whereIn('id', $request->roles)->get();
         $user->syncRoles($roles->pluck('name')->toArray());
@@ -142,6 +145,9 @@ class UserController extends Controller
     public function setPermission(Request $request, int $userId)
     {
         $user = User::find($userId);
+
+        // remove all roles from user 
+        $user->syncRoles([]);
         
         $permissions = \Spatie\Permission\Models\Permission::whereIn('id', $request->permissions)->get();
         $user->syncPermissions($permissions->pluck('name')->toArray());

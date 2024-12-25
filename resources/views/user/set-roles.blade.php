@@ -4,7 +4,7 @@
             <header class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h2 class="text-lg font-semibold text-gray-900">Set User Role & Permission</h2>
-                    <p class="mt-1 text-sm text-gray-600">Atur role dan permission untuk user <span class="font-bold">{{$user->name }}</span>.</p>
+                    <p class="text-sm text-gray-600">Atur role dan permission untuk user <span class="font-bold">{{$user->name }}</span>.</p>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <a type="button" href="{{ route('users.index') }}"
@@ -21,11 +21,15 @@
                 <header class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
                         <h2 class="text-sm font-semibold text-gray-900">Anda dapat menambahkan lebih dari satu role untuk user ini.</h2>
-                        <p class="text-xs text-gray-600">Setiap role yang dipilih akan memberikan user akses ke permission yang terkait dengan role tersebut.</p>
+                        <p class="mt-1 text-xs text-gray-600">Setiap role yang dipilih akan memberikan user akses ke permission yang terkait dengan role tersebut.</p>
                     </div>
                 </header>
 
                 <hr class="my-4">
+
+                <x-alert title="Warning !" type="warning">
+                    <p class="text-xs">Jika memilih role untuk user, maka <u>semua permission custom akan dihapus</u>, dan disesuaikan dengan permission yang terkait dengan role yang dipilih.</p>
+                </x-alert>
 
                 <form action="{{ route('users.set-roles', $user) }}" method="POST">
                     <div class="grid grid-cols-2 gap-4">
@@ -60,21 +64,27 @@
                 <header class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
                         <h2 class="text-sm font-semibold text-gray-900">Anda juga dapat menambahkan permission secara langsung.</h2>
-                        <p class="text-xs text-gray-600">Permission yang dipilih akan memberikan user akses ke fitur yang terkait dengan permission tersebut, walau user tidak memiliki role yang terkait.</p>
+                        <p class="mt-1 text-xs text-gray-600">Permission yang dipilih akan memberikan user akses ke fitur yang terkait dengan permission tersebut, walau user tidak memiliki role yang terkait.</p>
                     </div>
                 </header>
 
                 <hr class="my-4">
 
+                <x-alert title="Warning !" type="warning">
+                    <p class="text-xs">Jika memilih permission untuk user, maka <u>semua role yang dipilih akan dihapus</u>, dan disesuaikan dengan permission yang dipilih.</p>
+                </x-alert>
+
                 <form action="{{ route('users.set-permissions', $user) }}" method="POST">
-                    @foreach ($permissions as $permission)
-                    <div class="flex items-center py-1">
-                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $user->hasPermissionTo($permission->name) ? 'checked' : '' }} class="checkbox checkbox-xs checked:checkbox-primary" id="permission-{{$permission->id}}">
-                        <label class="ml-2 text-xs capitalize" for="permission-{{ $permission->id }}">
-                            {{ \Str::replace('_', ' ', $permission->name) }}
-                        </label>
+                    <div class="grid grid-cols-2 gap-2 lg:grid-cols-3">
+                        @foreach ($permissions as $permission)
+                            <label class="flex items-center border rounded-lg px-3 py-2" for="permission-{{ $permission->id }}">
+                                <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $user->hasPermissionTo($permission->name) ? 'checked' : '' }} class="checkbox checkbox-xs checked:checkbox-primary" id="permission-{{$permission->id}}">
+                                <label class="ml-2 text-xs capitalize" for="permission-{{ $permission->id }}">
+                                    {{ \Str::replace('_', ' ', $permission->name) }}
+                                </label>
+                            </label>
+                        @endforeach
                     </div>
-                    @endforeach
 
                     @csrf
                     <div class="mt-4 flex justify-end">

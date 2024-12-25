@@ -26,6 +26,10 @@ class User extends DataTable
                 // Create a badge for each role with color
                 $roles = $user->roles->pluck('name'); // Get the list of roles
 
+                if ($roles->isEmpty()) {
+                    return '<span class="badge badge-ghost lowercase font-semibold">custom permission</span>';
+                }
+
                 $badges = $roles->map(function($role) {
                     // Assign a color to each role
                     switch($role) {

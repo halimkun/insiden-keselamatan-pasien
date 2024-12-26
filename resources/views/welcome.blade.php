@@ -82,7 +82,7 @@
     
                 {{-- Illustration --}}
                 <div class="flex items-center justify-center xl:justify-end flex-1">
-                    <img src="{{ asset("images/hero-illustrator.png") }}" alt="Hero" class="w-full md:w-[90%] xl:w-[80%] 2xl:w-[90%]" />
+                    <img src="{{ asset("images/hero-illustrator.png") }}" alt="Hero" class="w-full md:w-[90%] xl:w-[80%]" />
                 </div>
             </div>
 

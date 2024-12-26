@@ -58,46 +58,48 @@
     {{-- HERO --}}
     <div class="w-full bg-[#F2F7FF]">
         <div class="max-w-7xl mx-auto relative py-7">
-            <div class="flex flex-col md:flex-row gap-6 h-[calc(100svh-16rem)]">
+            <div class="flex flex-col md:flex-row-reverse xl:flex-row gap-6 xl:h-[calc(100svh-16rem)]">
                 {{-- Hero text --}}
-                <div class="flex flex-col items-start justify-center gap-6 flex-1 max-w-xl">
-                    <p class="text-[22px] font-semibold text-[#00BFA5]">RSIA Aisyiyah Pekajangan.</p>
-                    <h1 class="text-5xl font-bold text-black">Insiden Keselamatan Pasien</h1>
+                <div class="flex flex-col items-start justify-center gap-3 xl:gap-6 flex-1 max-w-xl px-5 xl:pl-10 2xl:px-0">
+                    <p class="text-base xl:text-[22px] font-semibold text-[#00BFA5]">RSIA Aisyiyah Pekajangan.</p>
+                    <h1 class="text-4xl xl:text-5xl font-bold text-black">Insiden Keselamatan Pasien</h1>
                     <p class="text-base text-[#6C87AE]">Solusi praktis untuk mencatat dan menilai risiko insiden demi meningkatkan keselamatan pasien.</p>
 
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="text-lg leading-none text-white rounded-full px-5 py-3 flex items-center justify-center gap-3 bg-gradient-to-br from-[#3A8EF6] to-[#6F3AFA] shadow-lg shadow-gray-400/50 hover:-translate-y-1 cursor-pointer transition-all ease-in-out duration-300">
-                            <x-icons.health-recognition class="w-6 h-6 text-white" />
-                            <span class="mb-0.5">Manage Your Risk</span>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-lg leading-none text-white rounded-full px-5 py-3 flex items-center justify-center gap-3 bg-gradient-to-br from-[#3A8EF6] to-[#6F3AFA] shadow-lg shadow-gray-400/50 hover:-translate-y-1 cursor-pointer transition-all ease-in-out duration-300">
-                            <x-icons.health-recognition class="w-6 h-6 text-white" />
-                            <span class="mb-0.5">Manage Your Risk</span>
-                        </a>
-                    @endauth
+                    <div class="mt-7 xl:mt-0">
+                        @auth
+                            <a href="{{ route('dashboard') }}" class="text-lg leading-none text-white rounded-full px-5 py-3 flex items-center justify-center gap-3 bg-gradient-to-br from-[#3A8EF6] to-[#6F3AFA] shadow-lg shadow-gray-400/50 hover:-translate-y-1 cursor-pointer transition-all ease-in-out duration-300">
+                                <x-icons.health-recognition class="w-6 h-6 text-white" />
+                                <span class="mb-0.5">Manage Your Risk</span>
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-lg leading-none text-white rounded-full px-5 py-3 flex items-center justify-center gap-3 bg-gradient-to-br from-[#3A8EF6] to-[#6F3AFA] shadow-lg shadow-gray-400/50 hover:-translate-y-1 cursor-pointer transition-all ease-in-out duration-300">
+                                <x-icons.health-recognition class="w-6 h-6 text-white" />
+                                <span class="mb-0.5">Manage Your Risk</span>
+                            </a>
+                        @endauth
+                    </div>
                 </div>
     
                 {{-- Illustration --}}
-                <div class="flex items-center justify-end flex-1">
-                    <img src="{{ asset("images/hero-illustrator.png") }}" alt="Hero" class="w-[90%]" />
+                <div class="flex items-center justify-center xl:justify-end flex-1">
+                    <img src="{{ asset("images/hero-illustrator.png") }}" alt="Hero" class="w-full md:w-[90%] xl:w-[80%] 2xl:w-[90%]" />
                 </div>
             </div>
 
-            <div class="w-full flex items-center gap-6 justify-center">
-                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
+            <div class="w-full flex flex-col md:flex-row items-center gap-3 xl:gap-6 px-5 xl:px-0 justify-center mt-12 xl:mt-0">
+                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[340px] md:w-[305px] xl:w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
                     <div class="w-full flex gap-3 text-white">
                         <div class="mt-0.5">
                             <x-icons.refresh class="w-6 h-6 text-white" />
                         </div>
                         <div class="flex flex-col gap-2">
                             <h3 class="font-semibold text-lg">Penilaian Risiko Otomatis</h3>
-                            <p class="text-xs">Otomatis mengidentifikasi tingkat risiko insiden dengan cepat dan akurat.</p>
+                            <p class="text-xs">Otomatis mengidentifikasi tingkat risiko dengan cepat dan akurat.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
+                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[340px] md:w-[305px] xl:w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
                     <div class="w-full flex gap-3 text-white">
                         <div class="mt-0.5">
                             <x-icons.git-branch class="w-6 h-6 text-white" />
@@ -109,14 +111,14 @@
                     </div>
                 </div>
 
-                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
+                <div class="rounded-xl shadow-lg shadow-gray-400/50 bg-gradient-to-br from-[#1678F2] to-[#65A8FB] p-4 px-5 w-[340px] md:w-[305px] xl:w-[350px] hover:-translate-y-2 cursor-pointer transition-all ease-in-out duration-300">
                     <div class="w-full flex gap-3 text-white">
                         <div class="mt-0.5">
                             <x-icons.rosette-discount-check class="w-[26px] h-[26px] text-white" />
                         </div>
                         <div class="flex flex-col gap-2">
                             <h3 class="font-semibold text-lg">Meningkatkan Keselamatan</h3>
-                            <p class="text-xs">Manajemen insiden yang efisien dan meningkatkan keselamatan pasien.</p>
+                            <p class="text-xs">Manajemen yang efisien dan meningkatkan keselamatan pasien.</p>
                         </div>
                     </div>
                 </div>

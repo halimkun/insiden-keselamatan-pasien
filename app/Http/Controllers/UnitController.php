@@ -50,7 +50,7 @@ class UnitController extends Controller
                 return Redirect::route('unit.index')->with('success', 'Unit created successfully.');
             }
         } catch (\Exception $e) {
-            TelegramHelper::sendMessage('⚠️', 'UNIT CREATE', ['request' => $request->validated(), 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'UNIT CREATE FAILED', ['request' => $request->validated(), 'error' => $e->getMessage()]);
             return Redirect::route('unit.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
@@ -85,7 +85,7 @@ class UnitController extends Controller
             TelegramHelper::sendMessage('✅', 'UNIT UPDATED', $unit->toArray());
             return Redirect::route('unit.index')->with('success', 'Unit updated successfully');
         } catch (\Exception $e) {
-            TelegramHelper::sendMessage('⚠️', 'UNIT UPDATE', ['id' => $unit->id, 'request' => $request->validated(), 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'UNIT UPDATE FAILED', ['id' => $unit->id, 'request' => $request->validated(), 'error' => $e->getMessage()]);
             return Redirect::route('unit.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
@@ -98,7 +98,7 @@ class UnitController extends Controller
             TelegramHelper::sendMessage('✅', 'UNIT DELETED', ['id' => $id, 'unit' => $unit]);
             return Redirect::route('unit.index')->with('success', 'Unit deleted successfully');
         } catch (\Exception $e) {
-            TelegramHelper::sendMessage('⚠️', 'UNIT DELETE', ['id' => $id, 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'UNIT DELETE FAILED', ['id' => $id, 'error' => $e->getMessage()]);
             return Redirect::route('unit.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }

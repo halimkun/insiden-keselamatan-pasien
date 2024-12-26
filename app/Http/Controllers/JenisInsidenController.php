@@ -45,7 +45,7 @@ class JenisInsidenController extends Controller
             TelegramHelper::sendMessage('✅', 'JENIS INSIDEN CREATED', $jenisInsiden->toArray());
             return Redirect::route('jenis-insiden.index')->with('success', 'Jenis Insiden created successfully.');
         } catch (\Exception $e) {
-            TelegramHelper::sendMessage('⚠️', 'JENIS INSIDEN CREATE', ['request' => $request->validated(), 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'JENIS INSIDEN CREATE FAILED', ['request' => $request->validated(), 'error' => $e->getMessage()]);
             return Redirect::route('jenis-insiden.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
@@ -82,7 +82,7 @@ class JenisInsidenController extends Controller
             TelegramHelper::sendMessage('✅', 'JENIS INSIDEN UPDATED', $jenisInsiden->toArray());
             return Redirect::route('jenis-insiden.index')->with('success', 'Jenis Insiden updated successfully');
         } catch (\Exception $e) {
-            TelegramHelper::sendMessage('⚠️', 'JENIS INSIDEN UPDATE', ['id' => $jenisInsiden->id, 'request' => $request->validated(), 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'JENIS INSIDEN UPDATE FAILED', ['id' => $jenisInsiden->id, 'request' => $request->validated(), 'error' => $e->getMessage()]);
             return Redirect::route('jenis-insiden.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
@@ -94,8 +94,7 @@ class JenisInsidenController extends Controller
     {
         try {
             // Prevent deletion as per the logic you mentioned
-            // return redirect()->back()->with('error', 'Jenis Insiden tidak bisa untuk dihapus');
-            throw new \Exception('Jenis Insiden tidak bisa untuk dihapus');
+            throw new \Exception('Jenis Insiden tidak bisa dihapus');
 
             // Optional, if you plan to implement the deletion logic in the future
             // JenisInsiden::find($id)->delete();
@@ -105,7 +104,7 @@ class JenisInsidenController extends Controller
             return Redirect::route('jenis-insiden.index')->with('success', 'Jenis Insiden deleted successfully');
         } catch (\Exception $e) {
             // Send error message to Telegram
-            TelegramHelper::sendMessage('⚠️', 'JENIS INSIDEN DELETE', ['id' => $id, 'error' => $e->getMessage()]);
+            TelegramHelper::sendMessage('❌', 'JENIS INSIDEN DELETE FAILED', ['id' => $id, 'error' => $e->getMessage()]);
             return Redirect::route('jenis-insiden.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Models\Pasien;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,8 +19,7 @@ class PasienController extends Controller
     {
         $pasiens = Pasien::paginate();
 
-        return view('pasien.index', compact('pasiens'))
-            ->with('i', ($request->input('page', 1) - 1) * $pasiens->perPage());
+        return view('pasien.index', compact('pasiens'))->with('i', ($request->input('page', 1) - 1) * $pasiens->perPage());
     }
 
     /**
@@ -38,10 +38,20 @@ class PasienController extends Controller
      */
     public function store(PasienRequest $request): RedirectResponse
     {
-        Pasien::create($request->validated());
+        try {
+            $pasien = Pasien::create($request->validated());
 
-        return Redirect::route('pasien.index')
-            ->with('success', 'Pasien created successfully.');
+            TelegramHelper::sendMessage('✅', 'PASIEN CREATED', $pasien->toArray());
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage('❌', 'PASIEN CREATE FAILED', [
+                'request' => $request->validated(),
+                'error'   => $th->getMessage()
+            ]);
+
+            return Redirect::route('pasien.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
+
+        return Redirect::route('pasien.index')->with('success', 'Pasien created successfully.');
     }
 
     /**
@@ -70,7 +80,18 @@ class PasienController extends Controller
      */
     public function update(PasienRequest $request, Pasien $pasien): RedirectResponse
     {
-        $pasien->update($request->validated());
+        try {
+            $pasien->update($request->validated());
+
+            TelegramHelper::sendMessage('✅', 'PASIEN UPDATED', $pasien->toArray());
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage('❌', 'PASIEN UPDATE FAILED', [
+                'request' => $request->validated(),
+                'error'   => $th->getMessage()
+            ]);
+
+            return Redirect::route('pasien.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
 
         return Redirect::route('pasien.index')
             ->with('success', 'Pasien updated successfully');
@@ -81,16 +102,21 @@ class PasienController extends Controller
      */
     public function restore(string $id, Request $request): RedirectResponse
     {
-        // validate the request
-        $user = Pasien::onlyTrashed()->find($id);
-        if ($user) {
-            $user->restore();
-            return Redirect::route('pasien.index')
-                ->with('success', 'User restored successfully');
-        }
+        try {
+            $pasien = Pasien::onlyTrashed()->find($id);
+            $pasien->restore();
 
-        return Redirect::route('pasien.index')
-            ->with('error', 'User not found');
+            TelegramHelper::sendMessage('✅', 'PASIEN RESTORED', $pasien->toArray());
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage('❌', 'PASIEN RESTORE FAILED', [
+                'request' => $request->all(),
+                'error'   => $th->getMessage()
+            ]);
+
+            return Redirect::route('pasien.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
+        
+        return Redirect::route('pasien.index')->with('error', 'User not found');
     }
 
     /**
@@ -98,7 +124,16 @@ class PasienController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        Pasien::find($id)->delete();
+        try {
+            $pasien = Pasien::find($id);
+            $pasien->delete();
+
+            TelegramHelper::sendMessage('✅', 'PASIEN DELETED', ['id' => $id, 'pasien' => $pasien]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage('❌', 'PASIEN DELETE FAILED', ['id' => $id, 'error' => $th->getMessage()]);
+
+            return Redirect::route('pasien.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
 
         return Redirect::route('pasien.index')
             ->with('success', 'Pasien deleted successfully');

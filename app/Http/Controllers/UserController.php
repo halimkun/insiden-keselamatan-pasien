@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\View\View;
@@ -45,29 +46,44 @@ class UserController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $d                      = $request->only('name', 'user', 'username', 'email');
-        $d['email_verified_at'] = now();
-        $d['password']          = \Illuminate\Support\Facades\Hash::make('password');
-        $d['remember_token']    = \Illuminate\Support\Str::random(10);
-
-        $user = User::create($d);
+        $data                      = $request->only('name', 'user', 'username', 'email');
+        $data['email_verified_at'] = now();
+        $data['password']          = \Illuminate\Support\Facades\Hash::make('password');
+        $data['remember_token']    = \Illuminate\Support\Str::random(10);
 
         $detail = [
-            'user_id'    => $user->id,
             'jabatan'    => $request->jabatan,
             'unit_id'    => $request->unit,
             'departemen' => $request->departemen,
             'no_hp'      => $request->no_hp,
         ];
 
-        // update or create user detail
-        \App\Models\UserDetail::updateOrCreate(
-            ['user_id' => $user->id],
-            $detail
-        );
+        try {
+            $user = User::create($data);
+            $user->assignRole('pelapor');
 
-        return Redirect::route('users.index')
-            ->with('success', 'User created successfully.');
+            $detail['user_id'] = $user->id;
+
+            $detail = \App\Models\UserDetail::updateOrCreate(
+                ['user_id' => $user->id],
+                $detail
+            );
+
+            TelegramHelper::sendMessage("✅", "USER CREATED", [
+                "user"   => $user->makeHidden('id')->toArray(),
+                "detail" => $detail->makeHidden(['id', 'user_id'])->toArray()
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "USER CREATED FAILED", [
+                "user"   => $data,
+                "detail" => $detail,
+                "error"  => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'User created failed');
+        }
+
+        return Redirect::route('users.index')->with('success', 'User created successfully.');
     }
 
     /**
@@ -103,13 +119,13 @@ class UserController extends Controller
      * @param int $user
      * @return View
      */
-    public function roles(int $userId) 
+    public function roles(int $userId)
     {
         $roles       = \Spatie\Permission\Models\Role::with('permissions')->get();
         $permissions = \Spatie\Permission\Models\Permission::all();
 
         $user       = User::with(['roles', 'permissions'])->find($userId);
-        
+
         return view('user.set-roles', compact('user', 'roles', 'permissions'));
     }
 
@@ -124,12 +140,29 @@ class UserController extends Controller
     public function setRoles(Request $request, int $userId)
     {
         $user = User::find($userId);
-
-        // remove all permissions from user
-        $user->syncPermissions([]);
-        
         $roles = \Spatie\Permission\Models\Role::whereIn('id', $request->roles)->get();
-        $user->syncRoles($roles->pluck('name')->toArray());
+
+        try {
+            $user->syncPermissions([]);
+            $user->syncRoles($roles->pluck('name')->toArray());
+
+            TelegramHelper::sendMessage("✅", "ROLES AND PERMISSIONS UPDATED", [
+                "user"  => $user->makeHidden('id')->toArray(),
+                "roles" => $roles->makeHidden('id')->toArray()
+            ], [
+                "Aksi ini akan menghapus semua permission yang sudah ada sebelumnya",
+                "Permission yang dihapus akan di gantikan dengan permission baru",
+                "Permission baru sesuai dengan role yang di pilih"
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "ROLES AND PERMISSIONS UPDATED FAILED", [
+                "user"  => $user->makeHidden('id')->toArray(),
+                "roles" => $roles->makeHidden('id')->toArray(),
+                "error" => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'Roles and permissions updated failed');
+        }
 
         return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
     }
@@ -145,12 +178,30 @@ class UserController extends Controller
     public function setPermission(Request $request, int $userId)
     {
         $user = User::find($userId);
-
-        // remove all roles from user 
-        $user->syncRoles([]);
-        
         $permissions = \Spatie\Permission\Models\Permission::whereIn('id', $request->permissions)->get();
-        $user->syncPermissions($permissions->pluck('name')->toArray());
+
+        try {
+            $user->syncRoles([]);
+
+            $user->syncPermissions($request->permissions);
+
+            TelegramHelper::sendMessage("✅", "PERMISSIONS UPDATED", [
+                "user"        => $user->makeHidden('id')->toArray(),
+                "permissions" => $permissions->makeHidden('id')->toArray()
+            ], [
+                "Aksi ini akan menghapus semua role yang sudah ada sebelumnya",
+                "Pengguna akan kehilangan semua role yang sudah di berikan sebelumnya",
+                "Role yang dihapus akan di gantikan dengan permission yang di pilih",
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "PERMISSIONS UPDATED FAILED", [
+                "user"        => $user->makeHidden('id')->toArray(),
+                "permissions" => $permissions->makeHidden('id')->toArray(),
+                "error"       => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'Roles and permissions updated failed');
+        }
 
         return Redirect::route('users.index')->with('success', 'Roles and permissions updated successfully');
     }
@@ -176,8 +227,22 @@ class UserController extends Controller
             return Redirect::route('users.index')->with('error', 'User not found');
         }
 
-        $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
-        $user->save();
+        try {
+            $user->update([
+                'password' => \Illuminate\Support\Facades\Hash::make($request->password)
+            ]);
+
+            TelegramHelper::sendMessage("✅", "PASSWORD UPDATED", [
+                "user" => $user->only('name', 'username', 'email')
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "PASSWORD UPDATED FAILED", [
+                "user"  => $user->only('name', 'username', 'email'),
+                "error" => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'Password updated failed');
+        }
 
         return Redirect::route('users.index')->with('success', 'Password updated and user logged out successfully');
     }
@@ -203,11 +268,22 @@ class UserController extends Controller
             'no_hp'      => $request->no_hp,
         ];
 
-        // update or create user detail
-        \App\Models\UserDetail::updateOrCreate(
-            ['user_id' => $user->id],
-            $detail
-        );
+        try {
+            $user->detail()->update($detail);
+
+            TelegramHelper::sendMessage("✅", "USER UPDATED", [
+                "user"   => $user->only('name', 'username', 'email'),
+                "detail" => $detail
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "USER UPDATED FAILED", [
+                "user"   => $user->only('name', 'username', 'email'),
+                "detail" => $detail,
+                "error"  => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'User updated failed');
+        }
 
         return Redirect::route('users.index')
             ->with('success', 'User updated successfully');
@@ -223,9 +299,21 @@ class UserController extends Controller
     {
         // validate the request
         $user = User::onlyTrashed()->find($id);
+
         if ($user) {
-            $user->restore();
-            return Redirect::route('users.index')->with('success', 'User restored successfully');
+            try {
+                $user->restore();
+                TelegramHelper::sendMessage("✅", "USER RESTORED", [
+                    "user" => $user->only('name', 'username', 'email')
+                ]);
+            } catch (\Throwable $th) {
+                TelegramHelper::sendMessage("❌", "USER RESTORED FAILED", [
+                    "user"  => $user->only('name', 'username', 'email'),
+                    "error" => $th->getMessage()
+                ]);
+
+                return Redirect::route('users.index')->with('error', 'User restored failed');
+            }
         }
 
         return Redirect::route('users.index')->with('error', 'User not found');
@@ -248,11 +336,29 @@ class UserController extends Controller
             })->where('id', '!=', $id)->count();
 
             if ($anotherAdmin < 1) {
+                TelegramHelper::sendMessage("❌", "USER DELETED FAILED", [
+                    "user"  => $user->only('name', 'username', 'email'),
+                    "error" => "Cannot delete " . $user->name . " (Administator), Because there is no another admin"
+                ]);
+                
                 return Redirect::route('users.index')->with('error', 'Cannot delete ' . $user->name . ' (Administator), Because there is no another admin');
             }
         }
 
-        User::find($id)->delete();
+        try {
+            $user->delete();
+
+            TelegramHelper::sendMessage("✅", "USER DELETED", [
+                "user" => $user->only('name', 'username', 'email')
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "USER DELETED FAILED", [
+                "user"  => $user->only('name', 'username', 'email'),
+                "error" => $th->getMessage()
+            ]);
+
+            return Redirect::route('users.index')->with('error', 'User deleted failed');
+        }
 
         return Redirect::route('users.index')->with('success', 'User deleted successfully');
     }

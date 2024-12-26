@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Grading;
 use App\Models\Insiden;
 use Illuminate\Http\Request;
+use App\Helpers\TelegramHelper;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class GradingController extends Controller
@@ -48,12 +50,12 @@ class GradingController extends Controller
             if ($insiden->grading) {
                 $insiden->grading->update([
                     'grading_risiko' => $request->grading_risiko,
-                    'created_by'     => auth()->id(),
+                    'created_by'     => Auth::id(),
                 ]);
             } else {
                 $grading = Grading::create([
                     'grading_risiko' => $request->grading_risiko,
-                    'created_by'     => auth()->id(),
+                    'created_by'     => Auth::id(),
                 ]);
 
                 $insiden->grading_id = $grading->id;
@@ -65,9 +67,19 @@ class GradingController extends Controller
 
             DB::commit();
 
+            TelegramHelper::sendMessage('✅', $insiden->grading ? 'GRADING UPDATED' : 'GRADING CREATED', [
+                'insiden' => $insiden->toArray(),
+                'grading' => $insiden->grading ? $insiden->grading->toArray() : $request->except("_token"), 
+            ]);
+
             return redirect()->back()->with('success', 'Grading berhasil disimpan');
         } catch (\Exception $e) {
             DB::rollBack();
+
+            TelegramHelper::sendMessage('❌', 'GRADING ACTION FAILED', [
+                'request' => $request->except("_token"),
+                'error'   => $e->getMessage(),
+            ]);
 
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan grading: ' . $e->getMessage());
         }

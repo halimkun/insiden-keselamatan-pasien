@@ -67,7 +67,7 @@
     </div>
 
     @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ asset('static/js/chart.js') }}"></script>
     <script>
         $(document).ready(function() {
                 const trendData = @json($trendData);

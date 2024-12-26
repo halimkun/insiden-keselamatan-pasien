@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -51,11 +52,16 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = $request->user();
+        try {
+            $user = $request->user()->load('detail');
+            Auth::logout();
+            $user->delete();
 
-        Auth::logout();
-
-        $user->delete();
+            TelegramHelper::sendMessage('✅', 'USER DELETED', $user->toArray());
+        } catch (\Exception $e) {
+            TelegramHelper::sendMessage('❌', 'USER DELETE FAILED', ['id' => $request->user()->id, 'error' => $e->getMessage()]);
+            return Redirect::route('profile.edit')->with('status', 'profile-deletion-failed')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

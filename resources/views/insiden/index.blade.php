@@ -20,7 +20,7 @@
         </h2>
     </x-slot>
 
-    @if (!Auth::user()->hasRole(['admin', 'superadmin', 'administrator']) && !Auth::user()->detail?->unit_id)
+    @if (!Auth::user()->hasRole(['admin', 'superadmin', 'administrator', 'komite-mutu']) && !Auth::user()->detail?->unit_id)
         <x-alert title="Warning !" type="warning">
             <p>Sepertinya Anda belum memiliki unit terkait. Silahkan hubungi <span class="font-bold">Administrator</span> untuk menambahkan unit terkait, dengan demikian anda dapat mengakses data insiden.</p>
         </x-alert>

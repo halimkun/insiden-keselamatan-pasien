@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use App\Models\Unit;
 use App\Models\Grading;
 use App\Models\Insiden;
@@ -9,6 +10,7 @@ use App\Models\Tindakan;
 use Illuminate\View\View;
 use App\Models\JenisInsiden;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\InsidenRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -20,7 +22,7 @@ class InsidenController extends Controller
      */
     public function index(Request $request): View
     {
-        $user = auth()->user()->load('detail'); // Load relasi 'detail' dengan lazy eager loading.
+        $user = Auth::user()->load('detail'); // Load relasi 'detail' dengan lazy eager loading.
 
         // Inisialisasi query insiden.
         $insidenQuery = Insiden::query();
@@ -36,8 +38,7 @@ class InsidenController extends Controller
         // Paginate hasil query.
         $insidens = $insidenQuery->paginate(10);
 
-        return view('insiden.index', compact('insidens'))
-            ->with('i', ($request->input('page', 1) - 1) * $insidens->perPage());
+        return view('insiden.index', compact('insidens'))->with('i', ($request->input('page', 1) - 1) * $insidens->perPage());
     }
 
     /**
@@ -94,7 +95,7 @@ class InsidenController extends Controller
     {
         $request->merge([
             'kasus_insiden' => implode(', ', $request->kasus_insiden),
-            'created_by'    => auth()->user()->id,
+            'created_by'    => Auth::id(),
         ]);
 
         $pasienData = [];
@@ -139,9 +140,31 @@ class InsidenController extends Controller
                 $grading = Grading::create($request->only('grading_risiko', 'created_by'));
                 $insiden['grading_id'] = $grading->id;
 
+                TelegramHelper::sendMessage("✅", "INSIDEN CREATED", array_merge(
+                    $request->has('act') && $request->act == 'tambah' ? [
+                        "Pasien"          => $pasienData['nama'] ?? 'N/A',
+                        "No. Rekam Medis" => $pasienData['no_rekam_medis'] ?? 'N/A',
+                    ] : [],
+                    [
+                        "Tindakan"        => $tindakanData,
+                        "Insiden"         => $insiden,
+                    ]
+                ));
+
                 Insiden::create($insiden);
             }, 5);
         } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "INSIDEN FAILED", array_merge(
+                $request->has('act') && $request->act == 'tambah' ? [
+                    "Pasien"          => $pasienData['nama'] ?? 'N/A',
+                    "No. Rekam Medis" => $pasienData['no_rekam_medis'] ?? 'N/A',
+                ] : [],
+                [
+                    "Tindakan"        => $tindakanData,
+                    "Insiden"         => $insiden,
+                ]
+            ));
+
             return Redirect::back()->with('error', 'Gagal menyimpan data insiden : ' . $th->getMessage())->withInput();
         }
 
@@ -182,7 +205,7 @@ class InsidenController extends Controller
     {
         $request->merge([
             'kasus_insiden' => implode(', ', $request->kasus_insiden),
-            'created_by'    => auth()->user()->id,
+            'created_by'    => Auth::id(),
         ]);
 
         $tindakanData = [
@@ -191,33 +214,65 @@ class InsidenController extends Controller
             'detail'   => $request->oleh == 'tim' ? $request->oleh_tim : ($request->oleh == 'petugas' ? $request->oleh_petugas : null),
         ];
 
-        $insiden->update($request->except('tindakan', 'oleh', 'oleh_tim', 'oleh_petugas', 'grading_risiko'));
+        try {
 
-        if (!$insiden->grading) {
-            $grading = Grading::create($request->only('grading_risiko', 'created_by'));
-            $insiden->grading_id = $grading->id;
-            $insiden->save();
-        } else {
-            $insiden->grading->update($request->only('grading_risiko', 'created_by'));
+            $insiden->update($request->except('tindakan', 'oleh', 'oleh_tim', 'oleh_petugas', 'grading_risiko'));
+
+            if (!$insiden->grading) {
+                $grading = Grading::create($request->only('grading_risiko', 'created_by'));
+                $insiden->grading_id = $grading->id;
+                $insiden->save();
+            } else {
+                $insiden->grading->update($request->only('grading_risiko', 'created_by'));
+            }
+
+            if (!$insiden->tindakan) {
+                $tindakan = Tindakan::create($tindakanData);
+                $insiden->tindakan_id = $tindakan->id;
+                $insiden->save();
+            } else {
+                $insiden->tindakan->update($tindakanData);
+            }
+
+            // Kirim log keberhasilan ke Telegram
+            TelegramHelper::sendMessage("✅", "INSIDEN UPDATED", [
+                "insiden"  => $insiden->toArray(),
+                "grading"  => !$insiden->grading ? $grading->toArray() : $insiden->grading->toArray(),
+                "tindakan" => !$insiden->tindakan ? $tindakan->toArray() : $insiden->tindakan->toArray(),
+            ]);
+
+            return Redirect::route('insiden.index')->with('success', 'Insiden updated successfully');
+        } catch (\Exception $e) {
+            TelegramHelper::sendMessage("⚠️", "INSIDEN UPDATE FAILED", [
+                "insiden"  => $insiden->toArray(),
+                "grading"  => !$insiden->grading ? $request->only('grading_risiko', 'created_by') : $insiden->grading->toArray(),
+                "tindakan" => !$insiden->tindakan ? $tindakanData : $insiden->tindakan->toArray(),
+                "error"    => $e->getMessage(),
+            ]);
+
+            return Redirect::route('insiden.index')->with('error', 'An error occurred: ' . $e->getMessage());
         }
-
-        if (!$insiden->tindakan) {
-            $tindakan = Tindakan::create($tindakanData);
-            $insiden->tindakan_id = $tindakan->id;
-            $insiden->save();
-        } else {
-            $insiden->tindakan->update($tindakanData);
-        }
-
-
-        return Redirect::route('insiden.index')->with('success', 'Insiden updated successfully');
     }
+
 
     public function destroy($id): RedirectResponse
     {
-        Insiden::find($id)->delete();
+        try {
+            $insiden = Insiden::find($id);
+            $insiden->delete();
 
-        return Redirect::route('insiden.index')
-            ->with('success', 'Insiden deleted successfully');
+            TelegramHelper::sendMessage("❌", "INSIDEN DELETED", [
+                "insiden" => $insiden->toArray(),
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "INSIDEN DELETE FAILED", [
+                "insiden" => $insiden->toArray(),
+                "error"   => $th->getMessage(),
+            ]);
+
+            return Redirect::route('insiden.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
+
+        return Redirect::route('insiden.index')->with('success', 'Insiden deleted successfully');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\TelegramHelper;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -46,8 +47,20 @@ class RoleAndPermissionController extends Controller
                 $role->syncPermissions($data[$name]);
             }
 
+            TelegramHelper::sendMessage("✅", "ROLE AND PERMISSIONS UPDATED", [
+                "Roles"       => $roles_name,
+                "Permissions" => $data
+            ]);
+
             return redirect()->route('roles.index')->with('success', 'Role and Permission updated successfully');
         } catch (\Throwable $th) {
+
+            TelegramHelper::sendMessage("❌", "ROLE AND PERMISSIONS UPDATED FAILED", [
+                "Roles"       => $roles_name,
+                "Permissions" => $data,
+                "Error"       => $th->getMessage()
+            ]);
+            
             throw $th;
         }
     }

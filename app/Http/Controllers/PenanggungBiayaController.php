@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Helpers\TelegramHelper;
 use App\Models\PenanggungBiaya;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Http\Requests\PenanggungBiayaRequest;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Http\Requests\PenanggungBiayaRequest;
 
 class PenanggungBiayaController extends Controller
 {
@@ -18,8 +19,7 @@ class PenanggungBiayaController extends Controller
     {
         $penanggungBiayas = PenanggungBiaya::paginate();
 
-        return view('penanggung-biaya.index', compact('penanggungBiayas'))
-            ->with('i', ($request->input('page', 1) - 1) * $penanggungBiayas->perPage());
+        return view('penanggung-biaya.index', compact('penanggungBiayas'))->with('i', ($request->input('page', 1) - 1) * $penanggungBiayas->perPage());
     }
 
     /**
@@ -37,10 +37,16 @@ class PenanggungBiayaController extends Controller
      */
     public function store(PenanggungBiayaRequest $request): RedirectResponse
     {
-        PenanggungBiaya::create($request->validated());
+        try {
+            $penanggungBiaya = PenanggungBiaya::create($request->validated());
 
-        return Redirect::route('penanggung-biaya.index')
-            ->with('success', 'PenanggungBiaya created successfully.');
+            // Send Telegram message
+            TelegramHelper::sendMessage('✅', 'PENANGGUNG BIAYA CREATED', $penanggungBiaya->toArray());
+            return Redirect::route('penanggung-biaya.index')->with('success', 'Penanggung Biaya created successfully.');
+        } catch (\Exception $e) {
+            TelegramHelper::sendMessage('❌', 'PENANGGUNG BIAYA CREATE FAILED', ['request' => $request->validated(), 'error' => $e->getMessage()]);
+            return Redirect::route('penanggung-biaya.index')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -68,17 +74,33 @@ class PenanggungBiayaController extends Controller
      */
     public function update(PenanggungBiayaRequest $request, PenanggungBiaya $penanggungBiaya): RedirectResponse
     {
-        $penanggungBiaya->update($request->validated());
+        try {
+            $penanggungBiaya->update($request->validated());
 
-        return Redirect::route('penanggung-biaya.index')
-            ->with('success', 'PenanggungBiaya updated successfully');
+            // Send Telegram message
+            TelegramHelper::sendMessage('✅', 'PENANGGUNG BIAYA UPDATED', $penanggungBiaya->toArray());
+            return Redirect::route('penanggung-biaya.index')->with('success', 'Penanggung Biaya updated successfully');
+        } catch (\Exception $e) {
+            TelegramHelper::sendMessage('❌', 'PENANGGUNG BIAYA UPDATE FAILED', ['id' => $penanggungBiaya->id, 'request' => $request->validated(), 'error' => $e->getMessage()]);
+            return Redirect::route('penanggung-biaya.index')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id): RedirectResponse
     {
-        PenanggungBiaya::find($id)->delete();
+        try {
+            $pb = PenanggungBiaya::find($id);
+            $pb->delete();
 
-        return Redirect::route('penanggung-biaya.index')
-            ->with('success', 'PenanggungBiaya deleted successfully');
+            // Send Telegram message
+            TelegramHelper::sendMessage('✅', 'PENANGGUNG BIAYA DELETED', ['id' => $id, 'penanggung_biaya' => $pb->toArray()]);
+            return Redirect::route('penanggung-biaya.index')->with('success', 'Penanggung Biaya deleted successfully');
+        } catch (\Exception $e) {
+            TelegramHelper::sendMessage('❌', 'PENANGGUNG BIAYA DELETE FAILED', ['id' => $id, 'error' => $e->getMessage()]);
+            return Redirect::route('penanggung-biaya.index')->with('error', 'An error occurred: ' . $e->getMessage());
+        }
     }
 }

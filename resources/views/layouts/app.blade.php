@@ -16,8 +16,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- ===== JQuery ===== --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{{ asset('static/js/jquery-3.7.1.min.js') }}"></script>
 
     {{-- ===== Styles ===== --}}
     @stack('styles')
@@ -72,7 +71,7 @@
     </div>
     {{-- ===== Page Wrapper End ===== --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('static/js/sweetalert2@11.js') }}"></script>
 
     {{-- ===== Scripts ===== --}}
     @stack('scripts')

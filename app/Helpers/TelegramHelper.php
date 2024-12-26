@@ -14,9 +14,9 @@ class TelegramHelper
      * @param array $data
      * @param string $chatId
      */
-    public static function sendMessage(string $status, string $action, array $data)
+    public static function sendMessage(string $status, string $action, array $data, array $notes = []): void
     {
-        $message = self::generateMessage($status, $action, $data);
+        $message = self::generateMessage($status, $action, $data, $notes);
 
         $mandatory = [
             'chat_id'       => env('TELEGRAM_CHAT_ID'),
@@ -27,7 +27,23 @@ class TelegramHelper
             $mandatory['message_thread_id'] = env('TELEGRAM_THREAD_ID');
         }
 
-        Telegram::sendMessage(array_merge($mandatory, ['text' => $message]));
+        try {
+            self::writeMessageToLog('info', $action, [
+                'status' => $status,
+                'data'   => $data,
+                'notes'  => $notes,
+            ]);
+            
+            Telegram::sendMessage(array_merge($mandatory, ['text' => $message]));
+        } catch (\Throwable $th) {
+            self::writeMessageToLog('warning', 'TELEGRAM LOG -- FAILED TO SEND MESSAGE', [
+                'status' => $status,
+                'action' => $action,
+                'data'   => $data,
+                'notes'  => $notes,
+                'error'  => $th->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -38,16 +54,30 @@ class TelegramHelper
      * @param array $data
      * @return string
      */
-    private static function generateMessage(string $status, string $action, array $data): string
+    private static function generateMessage(string $status, string $action, array $data, array $notes): string
     {
         $formattedData = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        return
-            "*$status  $action*\n\n" .
-            "*Action by:* `" . addslashes(auth()->user()->name ?? 'System') . "`\n" .
-            "*Action on:* `" . addslashes(now()->locale('id')->isoFormat('dddd, D MMM YYYY HH:mm:ss')) . "`\n\n" .
-            "```\n" .
-                $formattedData .
-            "\n```";
+        $text = "*$status  $action*\n\n";
+        $text .= "*Action by:* `" . addslashes(auth()->user()->name ?? 'System') . "`\n";
+        $text .= "*Action on:* `" . addslashes(now()->locale('id')->isoFormat('dddd, D MMM YYYY HH:mm:ss')) . "`\n\n";
+        $text .= "```\n";
+        $text .=    $formattedData;
+        $text .= "\n```";
+        $text .= "\n";
+        
+        if (count($notes) > 0) {
+            $text .= "**> *Notes:*\n";
+            foreach ($notes as $key => $value) {
+                $text .= "> • $value\n";
+            }
+        }
+
+        return $text;
+    }
+
+    private static function writeMessageToLog(string $level, string $action, array $data): void
+    {
+        \Illuminate\Support\Facades\Log::channel('ikp')->log($level, $action, $data);
     }
 }

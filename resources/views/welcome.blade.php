@@ -32,10 +32,10 @@
 
             {{-- menu center --}}
             <ul class="flex items-center gap-10">
-                <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">Home</a></li>
+                {{-- <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">Home</a></li>
                 <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">About</a></li>
                 <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">Services</a></li>
-                <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">Contact</a></li>
+                <li><a href="#" class="text-base font-medium text-[#6C87AE] hover:text-[#3A8EF6]">Contact</a></li> --}}
             </ul>
 
             {{-- login button --}}

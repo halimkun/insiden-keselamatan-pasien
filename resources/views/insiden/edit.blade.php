@@ -29,7 +29,7 @@
                     <div class="flex flex-col md:flex-row items-start gap-4">
                         <x-text-input 
                             readonly
-                            class="w-full flex-2" 
+                            class="w-full md:w-auto flex-2" 
                             id="no_rekam_medis" 
                             type="text" 
                             name="no_rekam_medis"
@@ -39,7 +39,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="w-full flex-1" 
+                            class="w-full md:w-auto flex-1" 
                             id="nama" 
                             type="text" 
                             name="nama" 
@@ -53,7 +53,7 @@
                     <div class="flex flex-col md:flex-row items-start gap-4 mt-4">
                         <x-text-input 
                             readonly 
-                            class="w-full flex-2" 
+                            class="w-full md:w-auto flex-2" 
                             id="dob" 
                             type="text" 
                             name="dob" 
@@ -63,7 +63,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="w-full flex-1" 
+                            class="w-full md:w-auto flex-1" 
                             id="dob" 
                             type="text" 
                             name="dob" 
@@ -73,7 +73,7 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="w-full flex-1" 
+                            class="w-full md:w-auto flex-1" 
                             id="gender" 
                             type="text" 
                             name="gender" 

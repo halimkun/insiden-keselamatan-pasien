@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <div class="w-full overflow-x-auto lg:overflow-visible">
+                        <div class="w-full overflow-x-auto xl:overflow-visible">
                             <table class="w-full divide-y divide-gray-300" id="tableData">
                                 <thead>
                                     <tr>

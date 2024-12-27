@@ -289,7 +289,12 @@
                         _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
                     },
                     success: function (response) {
-                        $('#auto-grading').html("<div class='mt-6'>" + response + "</div>");
+                        $('#auto-grading').html("<div class='mt-6'>" + response.html + "</div>");
+                        $('input[name="grading_risiko"]').each(function() {
+                            if ($(this).val() == response.color) {
+                                $(this).prop('checked', true);
+                            }
+                        });
                     },
                     error: function (xhr) {
                         console.error('Request gagal:', xhr);
@@ -311,6 +316,34 @@
 
             // Event listener ketika nilai input berubah
             $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
+
+            $('form').submit(function(e) {
+                e.preventDefault();
+                const form = $(this);
+                const gradingText = form.find('.grading-text').text();
+                
+                // if gradingText available and not empty
+                if (gradingText && gradingText.trim() !== '') {
+                    if ($('input[name="grading_risiko"]:checked').val() != gradingText) {
+                        Swal.fire({
+                            title: 'Konfirmasi Grading Insiden',
+                            text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading ?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya, Kirim Laporan',
+                            cancelButtonText: 'Batal',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form[0].submit();
+                            }
+                        });
+                    } else {
+                        form[0].submit();
+                    }
+                } else {
+                    form[0].submit();
+                }
+            });
         });
     </script>
     @endpush

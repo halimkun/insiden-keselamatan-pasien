@@ -20,9 +20,9 @@
             <div class="flow-root">
                 <div class="mt-8">
                     <div class="inline-block min-w-full py-2 align-middle">
-                        <form action="{{ route('roles.store') }}" method="POST">
+                        <form action="{{ route('roles.store') }}" method="POST" class="w-full overflow-x-auto">
                             @csrf
-                            <table class="table table-full">
+                            <table class="w-full table-role">
                                 <thead>
                                     <tr>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-sm font-semibold uppercase tracking-wide text-gray-500 bg-gray-100 dark:bg-gray-800">Permission</th>
@@ -67,4 +67,19 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="{{ asset('static/js/dataTables.js') }}"></script>
+        <script src="{{ asset('static/js/dataTables.tailwindcss.js') }}"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('.table-role').DataTable({
+                    // disable paging, select page lenth and search
+                    paging: false,
+                    lengthChange: false,
+                })
+            })
+        </script>
+    @endpush
 </x-app-layout>

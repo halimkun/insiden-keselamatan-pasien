@@ -13,7 +13,7 @@ class InsidenHelper
         $impactData = collect([
             'Tidak Signifikan' => 1,
             'Minor'            => 2,
-            'Moderat'         => 3,
+            'Moderat'          => 3,
             'Mayor'            => 4,
             'Katastropik'      => 5,
         ]);
@@ -70,11 +70,11 @@ class InsidenHelper
     {
         // Matriks Grading Risiko berdasarkan tabel
         $matrix = [
-            1 => ['Rendah', 'Rendah', 'Moderat', 'Tinggi', 'Ekstrim'],         // Probabilitas 1
-            2 => ['Rendah', 'Rendah', 'Moderat', 'Tinggi', 'Ekstrim'],         // Probabilitas 2
-            3 => ['Rendah', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],        // Probabilitas 3
-            4 => ['Moderat', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],      // Probabilitas 4
-            5 => ['Moderat', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],      // Probabilitas 5
+            1 => ['Rendah', 'Rendah', 'Moderat', 'Tinggi', 'Ekstrim'],     // Probabilitas 1
+            2 => ['Rendah', 'Rendah', 'Moderat', 'Tinggi', 'Ekstrim'],     // Probabilitas 2
+            3 => ['Rendah', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],    // Probabilitas 3
+            4 => ['Moderat', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],   // Probabilitas 4
+            5 => ['Moderat', 'Moderat', 'Tinggi', 'Ekstrim', 'Ekstrim'],   // Probabilitas 5
         ];
 
         // Ambil kategori berdasarkan matriks

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\InsidenHelper;
 use App\Models\Grading;
 use App\Models\Insiden;
 use Illuminate\Http\Request;
@@ -13,6 +14,8 @@ class GradingController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * 
+     * @param \Illuminate\Http\Request $request
      */
     public function index()
     {
@@ -21,6 +24,8 @@ class GradingController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * 
+     * @param \Illuminate\Http\Request $request
      */
     public function create()
     {
@@ -29,6 +34,8 @@ class GradingController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * 
+     * @param \Illuminate\Http\Request $request
      */
     public function store(Request $request)
     {
@@ -69,7 +76,7 @@ class GradingController extends Controller
 
             TelegramHelper::sendMessage('✅', $insiden->grading ? 'GRADING UPDATED' : 'GRADING CREATED', [
                 'insiden' => $insiden->toArray(),
-                'grading' => $insiden->grading ? $insiden->grading->toArray() : $request->except("_token"), 
+                'grading' => $insiden->grading ? $insiden->grading->toArray() : $request->except("_token"),
             ]);
 
             return redirect()->back()->with('success', 'Grading berhasil disimpan');
@@ -86,7 +93,34 @@ class GradingController extends Controller
     }
 
     /**
+     * Get grading component.
+     * 
+     * @param \Illuminate\Http\Request $request
+     */
+    public function getGradingByData(Request $request)
+    {
+        $request->validate([
+            'unit_id'     => 'required|exists:unit,id',
+            'jenis_id'    => 'required|exists:jenis_insiden,id',
+            'impact'      => 'required|string|in:tidak signifikan,minor,moderat,mayor,katastropik',
+        ]);
+
+        $probabilitas = InsidenHelper::getProbabilityLevel($request->jenis_id, $request->unit_id);
+        $impact       = InsidenHelper::getImpactLevel($request->impact);
+        $riskGrading  = InsidenHelper::getRiskGrading($probabilitas, $impact);
+
+        $html = view('components.grading-info', [
+            'title'      => 'Auto Grading System',
+            'riskGrading' => $riskGrading,
+        ])->with('slot', '<p class="text-sm font-base">Berdasarkan data yang telah diinput (jenis insiden, unit, dan dampak insiden). <br>Sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">' . \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) . '</span>.</p>')->render();
+
+        return $html;
+    }
+
+    /**
      * Display the specified resource.
+     * 
+     * @param string $id
      */
     public function show(string $id)
     {
@@ -95,6 +129,8 @@ class GradingController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * 
+     * @param string $id
      */
     public function edit(string $id)
     {
@@ -103,6 +139,8 @@ class GradingController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
+     * @param \Illuminate\Http\Request $request
      */
     public function update(Request $request, string $id)
     {
@@ -111,6 +149,8 @@ class GradingController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * 
+     * @param string $id
      */
     public function destroy(string $id)
     {

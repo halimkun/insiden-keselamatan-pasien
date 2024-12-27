@@ -51,7 +51,7 @@
             {{ $title }}
         </div>
         <div class="alert-description text-sm {{ $bodyColor }}">
-            {{ $slot }}
+            {!! $slot !!}
         </div>
     </div>
 </div>

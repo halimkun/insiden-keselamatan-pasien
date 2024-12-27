@@ -74,6 +74,23 @@ class Insiden extends DataTable
                 return $html;
             })
 
+            ->filterColumn('jenis_insiden.alias', function ($query, $keyword) {
+                $query->whereHas('jenisInsiden', function ($query) use ($keyword) {
+                    $query->where('alias', 'like', "%$keyword%");
+                });
+            })
+
+            ->filterColumn('grading', function ($query, $keyword) {
+                $query->whereHas('grading', function ($query) use ($keyword) {
+                    $query->where('grading_risiko', 'like', "%$keyword%");
+                });
+            })
+
+            ->filterColumn('waktu__insiden', function ($query, $keyword) {
+                $query->where('tanggal_insiden', 'like', "%$keyword%")
+                    ->orWhere('waktu_insiden', 'like', "%$keyword%");
+            })
+
             ->rawColumns(['waktu__insiden', 'grading', 'action'])
 
             ->setRowId('id');
@@ -97,7 +114,7 @@ class Insiden extends DataTable
             }
         }
 
-        return $model->with(['jenisInsiden', 'grading']);
+        return $model->with(['jenisInsiden', 'grading'])->orderBy('tanggal_insiden', 'desc');
     }
 
     /**

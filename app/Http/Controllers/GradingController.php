@@ -114,7 +114,10 @@ class GradingController extends Controller
             'riskGrading' => $riskGrading,
         ])->with('slot', '<p class="text-sm font-base">Berdasarkan data yang telah diinput (jenis insiden, unit, dan dampak insiden). <br>Sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">' . \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) . '</span>.</p>')->render();
 
-        return $html;
+        return response()->json([
+            'html'  => $html,
+            'color' => \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading),
+        ]);
     }
 
     /**

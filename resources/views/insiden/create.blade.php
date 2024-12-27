@@ -200,9 +200,33 @@
                     </div>
                 </header>
 
+                <div id="auto-grading">
+                    @if (old('jenis_insiden_id') && old('unit_id') && old('dampak_insiden'))
+                        @php
+                            $probability = \App\Helpers\InsidenHelper::getProbabilityLevel(old('jenis_insiden_id'), old('unit_id'));
+                            $impact      = \App\Helpers\InsidenHelper::getImpactLevel(old('dampak_insiden'));
+                            $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+                        @endphp
+
+                        <div class="mt-6">
+                            <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading">
+                                <p class="text-sm font-base">Berdasarkan data yang telah diinput (jenis insiden, unit, dan dampak insiden). <br>Sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">{{ \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) }}</span>.</p>
+                            </x-grading-info>
+                        </div>
+                    @else 
+                        @if (old('jenis_insiden_id') || old('unit_id') || old('dampak_insiden'))
+                            <div class="mt-6">
+                                <x-alert title="Autograding Info" type="warning">
+                                    <p class="text-sm font-base">Pastikan semua data terisi dengan benar (jenis insiden, unit, dan dampak insiden) untuk mendapatkan grading insiden.</p>
+                                </x-alert>
+                            </div>
+                        @endif
+                    @endif
+                </div>
+
                 @can('grading_insiden')
                     <div class="mt-6">
-                            @include('insiden.form-grading')
+                        @include('insiden.form-grading')
                     </div>
                 @endcan
             </div>
@@ -244,15 +268,50 @@
 
     <script>
         const oldValue = "{{ old('pasien_id') }}";
-            $(document).ready(function() {
-                // delete-user on click get data-id
-                $(document).on('click', '.delete-unit', function() {
-                    $('#confirmDelete #unit').text($(this).data('unit'));
-                    var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
-                    confirmDelete.showModal();
-                    $('#confirmDelete form').attr('action', url);
+        function checkAndSubmit() {
+            // Ambil semua nilai dari elemen input
+            const jenisInsiden = $('input[name="jenis_insiden_id"]:checked').val();
+            const unitId = $('select[name="unit_id"]').val();
+            const dampakInsiden = $('input[name="dampak_insiden"]:checked').val();
+
+            // Periksa apakah semua nilai sudah terisi
+            if (jenisInsiden && unitId && dampakInsiden) {
+                console.log('Semua nilai sudah terisi');
+                
+                // AJAX request
+                $.ajax({
+                    url: '{{ route("grading.by-data") }}', // Ganti dengan endpoint Anda
+                    method: 'POST',
+                    data: {
+                        jenis_id: jenisInsiden,
+                        unit_id: unitId,
+                        impact: dampakInsiden,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
+                    },
+                    success: function (response) {
+                        $('#auto-grading').html("<div class='mt-6'>" + response + "</div>");
+                    },
+                    error: function (xhr) {
+                        console.error('Request gagal:', xhr);
+                        // Tambahkan logika error di sini
+                    }
                 });
+            } else {
+                console.log('Tunggu, semua nilai belum terisi');
+            }
+        }
+
+        $(document).ready(function() {
+            $(document).on('click', '.delete-unit', function() {
+                $('#confirmDelete #unit').text($(this).data('unit'));
+                var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
+                confirmDelete.showModal();
+                $('#confirmDelete form').attr('action', url);
             });
+
+            // Event listener ketika nilai input berubah
+            $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
+        });
     </script>
     @endpush
 </x-app-layout>

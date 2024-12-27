@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
     Route::resource('grading', \App\Http\Controllers\GradingController::class)->only(['show', 'store']);
+    Route::post('grading/by-data', [\App\Http\Controllers\GradingController::class, 'getGradingByData'])->name('grading.by-data');
+    
     Route::resource('roles', \App\Http\Controllers\RoleAndPermissionController::class);
 });
 

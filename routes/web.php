@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::post('grading/by-data', [\App\Http\Controllers\GradingController::class, 'getGradingByData'])->name('grading.by-data');
     
     Route::resource('roles', \App\Http\Controllers\RoleAndPermissionController::class);
+    Route::resource('settings', \App\Http\Controllers\SettingController::class);
 });
 
 

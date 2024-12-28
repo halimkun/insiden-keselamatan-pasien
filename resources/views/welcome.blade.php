@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSIDEN KESELAMATAN PASIEN</title>
+    <title>{{ \App\Helpers\SettingHelper::get('site_name', 'Insiden Keselamatan Pasien') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -27,7 +27,7 @@
         <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
             {{-- logo --}}
             <a href="{{ route('login') }}" class="text-xl font-semibold text-black">
-                <img src="{{ asset("images/logo.png") }}" alt="Logo" class="w-[120px]" />
+                <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png')) }}" alt="Logo" class="w-[120px]" />
             </a>
 
             {{-- menu center --}}
@@ -61,9 +61,9 @@
             <div class="flex flex-col md:flex-row-reverse xl:flex-row gap-6 xl:h-[calc(100svh-16rem)]">
                 {{-- Hero text --}}
                 <div class="flex flex-col items-start justify-center gap-3 xl:gap-6 flex-1 max-w-xl px-5 xl:pl-10 2xl:px-0">
-                    <p class="text-base xl:text-[22px] font-semibold text-[#00BFA5]">RSIA Aisyiyah Pekajangan.</p>
-                    <h1 class="text-4xl xl:text-5xl font-bold text-black">Insiden Keselamatan Pasien</h1>
-                    <p class="text-base text-[#6C87AE]">Solusi praktis untuk mencatat dan menilai risiko insiden demi meningkatkan keselamatan pasien.</p>
+                    <p class="text-base xl:text-[22px] font-semibold text-[#00BFA5]">{{ \App\Helpers\SettingHelper::get('faskes_name') }}</p>
+                    <h1 class="text-4xl xl:text-5xl font-bold text-black">{{ \App\Helpers\SettingHelper::get('site_name', 'Insiden Keselamatan Pasien') }}</h1>
+                    <p class="text-base text-[#6C87AE]">{{ \App\Helpers\SettingHelper::get('site_description', 'lorem ipsum dolor') }}</p>
 
                     <div class="mt-7 xl:mt-0">
                         @auth

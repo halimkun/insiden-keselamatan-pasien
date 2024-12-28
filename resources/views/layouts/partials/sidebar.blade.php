@@ -3,9 +3,13 @@
     @click.outside="sidebarToggle = false">
     <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between gap-2 px-6 py-5">
+        @if (\App\Helpers\SettingHelper::get('site_logo'))
+            <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png')) }}" alt="Logo" class="w-[140px]" />
+        @else
         <div class="text-xl font-bold leading-none text-white">
-            Insiden <span class="text-primary">Keselamatan Pasien</span>
+            {{ \App\Helpers\SettingHelper::get('site_name', 'Site Name') }}
         </div>
+        @endif
 
         <button class="block lg:hidden" @click.stop="sidebarToggle = !sidebarToggle">
             <svg class="fill-current" width="20" height="18" viewBox="0 0 20 18" fill="none"
@@ -132,6 +136,21 @@
                             <x-icons.shield class="h-5 w-5" />
 
                             Roles & Permission
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">SETTINGS</h3>
+                <ul class="mb-6 flex flex-col gap-1.5">
+                    {{-- manage menu --}}
+                    <li>
+                        <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('settings.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
+                            href="{{ route('settings.index') }}">
+                            <x-icons.settings class="h-5 w-5" />
+
+                            Site Settings
                         </a>
                     </li>
                 </ul>

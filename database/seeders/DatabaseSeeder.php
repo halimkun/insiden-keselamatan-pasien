@@ -63,5 +63,8 @@ class DatabaseSeeder extends Seeder
 
         // ===== ===== ===== ===== =====  Insiden Data
         $this->call(DummyInsiden::class);
+
+        // ===== ===== ===== ===== =====  Setting Data
+        $this->call(SettingSeed::class);
     }
 }

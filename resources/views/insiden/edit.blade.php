@@ -244,6 +244,7 @@
                     method: 'POST',
                     data: {
                         jenis_insiden_id: $('input[name="jenis_insiden_id"]:checked').val(),
+                        unit_id: $('select[name="unit_id"]').val(),
                         _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
                     },
                     success: function (response) {
@@ -279,7 +280,7 @@
                     });
                 }
 
-                $('input[name="jenis_insiden_id"]').on('change', checkInsidenTerkait);
+                $('input[name="jenis_insiden_id"], select[name="unit_id"]').on('change', checkInsidenTerkait);
                 $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
                 // form submit prevent

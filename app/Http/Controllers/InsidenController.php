@@ -199,17 +199,18 @@ class InsidenController extends Controller
     public function getInsidenTerkait(Request $request) {
         $request->validate([
             'jenis_insiden_id' => 'required|exists:jenis_insiden,id',
+            'unit_id'          => 'nullable|exists:unit,id',
         ]);
 
-        $insiden = Insiden::where('jenis_insiden_id', $request->jenis_insiden_id)->get();
+        $insiden = \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id, true);
 
-        if ($insiden) {
+        if ($insiden > 0) {
             $html = "
                 <details class='collapse bg-base-200 collapse-arrow'>
                     <summary class='collapse-title text-lg font-medium px-6'>Insiden di unit lain dengan jenis insiden yang sama ( ". \App\Helpers\InsidenHelper::getJenisIncidenById($request->jenis_insiden_id) ." )</summary>
                     <div class='collapse-content'>
                         <div class='max-h-[250px] overflow-y-auto'>
-                            ". \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id) ."
+                            ". \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id) ."
                         </div>
                     </div>
                 </details>
@@ -219,7 +220,7 @@ class InsidenController extends Controller
         }
 
         return response()->json([
-            'pernah_terjadi_unit_lain' => $insiden->count() > 0,
+            'pernah_terjadi_unit_lain' => $insiden,
             'html'                     => $html,
         ]);
     }

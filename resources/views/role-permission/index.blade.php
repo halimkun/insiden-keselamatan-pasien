@@ -75,9 +75,9 @@
         <script>
             $(document).ready(function() {
                 $('.table-role').DataTable({
-                    // disable paging, select page lenth and search
                     paging: false,
                     lengthChange: false,
+                    searching: false,
                 })
             })
         </script>

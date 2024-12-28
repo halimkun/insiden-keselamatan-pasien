@@ -183,7 +183,7 @@ class UserController extends Controller
         try {
             $user->syncRoles([]);
 
-            $user->syncPermissions($request->permissions);
+            $user->syncPermissions($permissions->pluck('name')->toArray());
 
             TelegramHelper::sendMessage("✅", "PERMISSIONS UPDATED", [
                 "user"        => $user->makeHidden('id')->toArray(),
@@ -269,7 +269,10 @@ class UserController extends Controller
         ];
 
         try {
-            $user->detail()->update($detail);
+            \App\Models\UserDetail::updateOrCreate(
+                ['user_id' => $user->id],
+                $detail
+            );
 
             TelegramHelper::sendMessage("✅", "USER UPDATED", [
                 "user"   => $user->only('name', 'username', 'email'),

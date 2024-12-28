@@ -324,22 +324,26 @@
                 
                 // if gradingText available and not empty
                 if (gradingText && gradingText.trim() !== '') {
-                    if ($('input[name="grading_risiko"]:checked').val() != gradingText) {
-                        Swal.fire({
-                            title: 'Konfirmasi Grading Insiden',
-                            text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading ?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Ya, Kirim Laporan',
-                            cancelButtonText: 'Batal',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form[0].submit();
-                            }
-                        });
-                    } else {
+                    @can('grading_insiden')
+                        if ($('input[name="grading_risiko"]:checked').val() != gradingText) {
+                            Swal.fire({
+                                title: 'Konfirmasi Grading Insiden',
+                                text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading ?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Ya, Kirim Laporan',
+                                cancelButtonText: 'Batal',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form[0].submit();
+                                }
+                            });
+                        } else {
+                            form[0].submit();
+                        }
+                    @else
                         form[0].submit();
-                    }
+                    @endcan
                 } else {
                     form[0].submit();
                 }

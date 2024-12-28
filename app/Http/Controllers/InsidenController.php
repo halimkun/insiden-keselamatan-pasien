@@ -137,8 +137,16 @@ class InsidenController extends Controller
                 $tindakan = Tindakan::create($tindakanData);
                 $insiden['tindakan_id'] = $tindakan->id;
 
-                if ($request->grading_risiko) {
-                    $grading = Grading::create($request->only('grading_risiko', 'created_by'));
+                if (!$request->grading_risiko) {
+                    $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($request->jenis_insiden_id, $request->unit_id);
+                    $impact      = \App\Helpers\InsidenHelper::getImpactLevel($request->dampak_insiden);
+                    $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+
+                    $grading = Grading::create([
+                        'grading_risiko' => \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading),
+                        'created_by'     => null,
+                    ]);
+
                     $insiden['grading_id'] = $grading->id;
                 }
 

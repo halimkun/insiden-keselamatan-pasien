@@ -145,18 +145,20 @@
                     </div>
                 </header>
 
-                @php
-                    $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
-                    $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
-
-                    $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
-                @endphp
-
-                <div class="mt-6">
-                    <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading">
-                        <p class="text-sm font-base">Berdasarkan data yang telah diinput, sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">{{ \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) }}</span>.</p>
-                        <p class="text-xs font-base">Perhitungan grading insiden ini dilakukan dengan rumus: <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">SKOR RISIKO = DAMPAK x PROBABILITAS</kbd>. Dengan nilai <span class="font-bold">probabilitas</span> sebesar <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $probability }}</kbd> dan <span class="font-bold">dampak</span> sebesar <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $impact }}</kbd>, maka <span class="font-bold">skor risiko</span> adalah <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $probability * $impact }}</kbd>.</p>
-                    </x-grading-info>                    
+                <div id="auto-grading">
+                    @php
+                        $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
+                        $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
+    
+                        $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+                    @endphp
+    
+                    <div class="mt-6">
+                        <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading" :jenis_insiden_id="old('jenis_insiden_id', $insiden?->jenis_insiden_id)" :unit_id="old('unit_id', $insiden?->unit_id)">
+                            <p class="text-sm font-base">Berdasarkan data yang telah diinput, sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">{{ \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) }}</span>.</p>
+                            <p class="text-xs font-base">Perhitungan grading insiden ini dilakukan dengan rumus: <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">SKOR RISIKO = DAMPAK x PROBABILITAS</kbd>. Dengan nilai <span class="font-bold">probabilitas</span> sebesar <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $probability }}</kbd> dan <span class="font-bold">dampak</span> sebesar <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $impact }}</kbd>, maka <span class="font-bold">skor risiko</span> adalah <kbd class="bg-gray-800 rounded px-1.5 text-white font-semibold">{{ $probability * $impact }}</kbd>.</p>
+                        </x-grading-info>                    
+                    </div>
                 </div>
 
                 @can('grading_insiden')
@@ -196,18 +198,90 @@
 
     @push('scripts')
         <script>
+            function checkAndSubmit() {
+                // Ambil semua nilai dari elemen input
+                const jenisInsiden = $('input[name="jenis_insiden_id"]:checked').val();
+                const unitId = $('select[name="unit_id"]').val();
+                const dampakInsiden = $('input[name="dampak_insiden"]:checked').val();
+
+                // Periksa apakah semua nilai sudah terisi
+                if (jenisInsiden && unitId && dampakInsiden) {
+                    console.log('Semua nilai sudah terisi');
+                    
+                    // AJAX request
+                    $.ajax({
+                        url: '{{ route("grading.by-data") }}', // Ganti dengan endpoint Anda
+                        method: 'POST',
+                        data: {
+                            jenis_id: jenisInsiden,
+                            unit_id: unitId,
+                            impact: dampakInsiden,
+                            _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
+                        },
+                        success: function (response) {
+                            $('#auto-grading').html("<div class='mt-6'>" + response.html + "</div>");
+                            $('input[name="grading_risiko"]').each(function() {
+                                if ($(this).val() == response.color) {
+                                    $(this).prop('checked', true);
+                                }
+                            });
+                        },
+                        error: function (xhr) {
+                            console.error('Request gagal:', xhr);
+                        }
+                    });
+                } else {
+                    console.log('Tunggu, semua nilai belum terisi');
+                }
+            }
+            function checkInsidenTerkait() {
+                if (!$('input[name="jenis_insiden_id"]:checked').val()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route("insiden.get-terkait") }}', // Ganti dengan endpoint Anda
+                    method: 'POST',
+                    data: {
+                        jenis_insiden_id: $('input[name="jenis_insiden_id"]:checked').val(),
+                        unit_id: $('select[name="unit_id"]').val(),
+                        _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
+                    },
+                    success: function (response) {
+                        $('#insiden-terkait').html(response.html);
+                        $('input[name="pernah_terjadi"]').each(function() {
+                            if ($(this).val() == response.pernah_terjadi_unit_lain) {
+                                $(this).prop('checked', true);
+                            }
+                        });
+                    },
+                    error: function (xhr) {
+                        console.error('Request gagal:', xhr);
+                    }
+                });
+            }
+
             $(document).ready(function() {
-                const savedGrading = '{{ old('grading_risiko', $insiden->grading_risiko) }}';
+                const savedGrading = '{{ old('grading_risiko', $insiden?->grading?->grading_risiko) }}';
                 const autoGrading = $('.grading-text').text().toLowerCase();
                 const gradingRisiko = $('input[name="grading_risiko"]');
 
-                if (!savedGrading) {
+                if (!savedGrading && autoGrading) {
+                    gradingRisiko.each(function() {
+                        if ($(this).val() === autoGrading) {
+                            $(this).prop('checked', true);
+                        }
+                    });
+                } else {
                     gradingRisiko.each(function() {
                         if ($(this).val() === savedGrading) {
                             $(this).prop('checked', true);
                         }
                     });
                 }
+
+                $('input[name="jenis_insiden_id"], select[name="unit_id"]').on('change', checkInsidenTerkait);
+                $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
                 // form submit prevent
                 $('form').submit(function(e) {

@@ -39,6 +39,7 @@
 
         <div>
             <x-input-label for="pernah_terjadi" value="Apakah kejadian yang sama pernah terjadi di Unit Kerja lain?" />
+            
             <div class="mt-1 grid grid-cols-2 gap-3">
                 <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                     <label class="label cursor-pointer justify-start gap-2">
@@ -56,6 +57,20 @@
     
             <x-input-error class="mt-2" :messages="$errors->get('pernah_terjadi')" />
         </div>
+
+        <div id="insiden-terkait">
+            @if (old('jenis_insiden_id', $insiden?->jenis_insiden_id) && old('unit_id', $insiden?->unit_id))
+               <details class="collapse bg-base-200 collapse-arrow">
+                   <summary class="collapse-title text-lg font-medium px-6">Insiden di unit lain dengan jenis insiden yang sama ( {{ \App\Helpers\InsidenHelper::getJenisIncidenById(old('jenis_insiden_id', $insiden?->jenis_insiden_id)) }} )</summary>
+                   <div class="collapse-content">
+                        <div class="max-h-[250px] overflow-y-auto">
+                           {{ \App\Helpers\InsidenHelper::getOtherUnitIncident(old('jenis_insiden_id', $insiden?->jenis_insiden_id), old('unit_id', $insiden?->unit_id)) }}
+                        </div>
+                   </div>
+               </details>
+           @endif
+        </div>
+
     </div>
     
 </div>

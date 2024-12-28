@@ -114,7 +114,7 @@ class Insiden extends DataTable
             }
         }
 
-        return $model->with(['jenisInsiden', 'grading'])->orderBy('tanggal_insiden', 'desc');
+        return $model->with(['jenisInsiden', 'unit', 'grading'])->orderBy('tanggal_insiden', 'desc');
     }
 
     /**

@@ -45,10 +45,12 @@ Route::middleware('auth')->group(function () {
     Route::post('pasien/{id}/restore', [\App\Http\Controllers\PasienController::class, 'restore'])->name('pasien.restore');
 
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
+    Route::post('insiden/get/terkait', [\App\Http\Controllers\InsidenController::class, 'getInsidenTerkait'])->name('insiden.get-terkait');
     Route::resource('grading', \App\Http\Controllers\GradingController::class)->only(['show', 'store']);
     Route::post('grading/by-data', [\App\Http\Controllers\GradingController::class, 'getGradingByData'])->name('grading.by-data');
     
     Route::resource('roles', \App\Http\Controllers\RoleAndPermissionController::class);
+    Route::resource('settings', \App\Http\Controllers\SettingController::class);
 });
 
 

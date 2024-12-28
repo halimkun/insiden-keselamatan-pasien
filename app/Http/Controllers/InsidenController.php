@@ -137,8 +137,18 @@ class InsidenController extends Controller
                 $tindakan = Tindakan::create($tindakanData);
                 $insiden['tindakan_id'] = $tindakan->id;
 
-                $grading = Grading::create($request->only('grading_risiko', 'created_by'));
-                $insiden['grading_id'] = $grading->id;
+                if (!$request->grading_risiko) {
+                    $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($request->jenis_insiden_id, $request->unit_id);
+                    $impact      = \App\Helpers\InsidenHelper::getImpactLevel($request->dampak_insiden);
+                    $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+
+                    $grading = Grading::create([
+                        'grading_risiko' => \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading),
+                        'created_by'     => null,
+                    ]);
+
+                    $insiden['grading_id'] = $grading->id;
+                }
 
                 TelegramHelper::sendMessage("✅", "INSIDEN CREATED", array_merge(
                     $request->has('act') && $request->act == 'tambah' ? [
@@ -186,13 +196,42 @@ class InsidenController extends Controller
         return view('insiden.show', compact('insiden', 'probability', 'impact', 'riskGrading'));
     }
 
+    public function getInsidenTerkait(Request $request) {
+        $request->validate([
+            'jenis_insiden_id' => 'required|exists:jenis_insiden,id',
+            'unit_id'          => 'nullable|exists:unit,id',
+        ]);
+
+        $insiden = \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id, true);
+
+        if ($insiden > 0) {
+            $html = "
+                <details class='collapse bg-base-200 collapse-arrow'>
+                    <summary class='collapse-title text-lg font-medium px-6'>Insiden di unit lain dengan jenis insiden yang sama ( ". \App\Helpers\InsidenHelper::getJenisIncidenById($request->jenis_insiden_id) ." )</summary>
+                    <div class='collapse-content'>
+                        <div class='max-h-[250px] overflow-y-auto'>
+                            ". \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id) ."
+                        </div>
+                    </div>
+                </details>
+            ";
+        } else {
+            $html = "<p class='text-center text-lg font-medium'>Tidak ada insiden terkait</p>";
+        }
+
+        return response()->json([
+            'pernah_terjadi_unit_lain' => $insiden,
+            'html'                     => $html,
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id): View
     {
         $units = Unit::all();
-        $insiden = Insiden::with(['pasien', 'tindakan'])->find($id);
+        $insiden = Insiden::with(['pasien', 'tindakan', 'grading'])->find($id);
         $jenisInsiden = JenisInsiden::all();
 
         return view('insiden.edit', compact('insiden', 'jenisInsiden', 'units'));

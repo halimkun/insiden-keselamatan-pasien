@@ -199,7 +199,7 @@ class DummyInsiden extends Seeder
             $jenisInsiden = \App\Models\JenisInsiden::where('alias', $item['jenis_insiden_alias'])->first();
             
             // Masuk Pasien
-            $masukPasie = $faker->dateTimeBetween('2024-01-01', 'now');
+            $masukPasie = $faker->dateTimeBetween('2023-10-01', 'now');
 
             // Insiden
             $insiden = \App\Models\Insiden::create([

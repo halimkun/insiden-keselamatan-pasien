@@ -31,15 +31,9 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole('administrator');
 
         // ===== ===== ===== ===== =====  Komite Mutu User
-        $mutu = User::factory(5)->create();
+        $mutu = User::factory(3)->create();
         $mutu->each(function ($user) {
             $user->assignRole('komite-mutu');
-        });
-
-        // ===== ===== ===== ===== =====  Tim IKP User
-        $ikp = User::factory(5)->create();
-        $ikp->each(function ($user) {
-            $user->assignRole('tim-ikp');
         });
 
         // ===== ===== ===== ===== =====  Pelapor User
@@ -63,5 +57,8 @@ class DatabaseSeeder extends Seeder
 
         // ===== ===== ===== ===== =====  Insiden Data
         $this->call(DummyInsiden::class);
+
+        // ===== ===== ===== ===== =====  Setting Data
+        $this->call(SettingSeed::class);
     }
 }

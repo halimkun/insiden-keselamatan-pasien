@@ -65,7 +65,7 @@
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Jenis</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tgl Kejadian</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Dampak</th>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Korban</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tempat</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Grading</th>
 
                                         <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">#</th>
@@ -153,12 +153,18 @@
                         data: 'insiden',
                         name: 'insiden',
                         render: function(data, type, row) {
-                            return `<div class="max-w-sm truncate">${data}</div>`;
+                            return `<div>
+                                <div class="max-w-sm truncate text-base font-medium">${data}</div>
+                                <div class="ml-3 capitalize">- ${row.korban_insiden == 'lainnya' ? row.korban_insiden_lainnya : row.korban_insiden}</div>
+                            </div>`;
                         }
                     },
                     {
                         data: 'jenis_insiden.alias',
                         name: 'jenis_insiden.alias',
+                        render: function(data, type, row) {
+                            return `<div class="font-medium">${data}</div>`;
+                        }
                     },
                     {
                         data: 'waktu__insiden',
@@ -172,10 +178,13 @@
                         }
                     },
                     {
-                        data: 'korban_insiden',
-                        name: 'korban_insiden',
+                        data: 'unit.nama_unit',
+                        name: 'unit.nama_unit',
                         render: function(data, type, row) {
-                            return `<div class="capitalize">${data}</div>`;
+                            return `<div class="capitalize">
+                                <p>${row.tempat_kejadian}</p>    
+                                <p><span class="font-bold">Unit : </span>${data}</p>    
+                            </div>`;
                         }
                     },
                     {

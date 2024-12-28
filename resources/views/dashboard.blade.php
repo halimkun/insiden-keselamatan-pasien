@@ -91,7 +91,11 @@
                     options: {
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                max: 10,
+                                ticks: {
+                                    stepSize: 1
+                                }
                             }
                         }
                     }

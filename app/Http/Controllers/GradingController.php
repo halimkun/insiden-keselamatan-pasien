@@ -110,8 +110,10 @@ class GradingController extends Controller
         $riskGrading  = InsidenHelper::getRiskGrading($probabilitas, $impact);
 
         $html = view('components.grading-info', [
-            'title'      => 'Auto Grading System',
-            'riskGrading' => $riskGrading,
+            'title'            => 'Auto Grading System',
+            'riskGrading'      => $riskGrading,
+            'jenis_insiden_id' => $request->jenis_id,
+            'unit_id'          => $request->unit_id,
         ])->with('slot', '<p class="text-sm font-base">Berdasarkan data yang telah diinput (jenis insiden, unit, dan dampak insiden). <br>Sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">' . \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) . '</span>.</p>')->render();
 
         return response()->json([

@@ -137,8 +137,10 @@ class InsidenController extends Controller
                 $tindakan = Tindakan::create($tindakanData);
                 $insiden['tindakan_id'] = $tindakan->id;
 
-                $grading = Grading::create($request->only('grading_risiko', 'created_by'));
-                $insiden['grading_id'] = $grading->id;
+                if ($request->grading_risiko) {
+                    $grading = Grading::create($request->only('grading_risiko', 'created_by'));
+                    $insiden['grading_id'] = $grading->id;
+                }
 
                 TelegramHelper::sendMessage("✅", "INSIDEN CREATED", array_merge(
                     $request->has('act') && $request->act == 'tambah' ? [

@@ -209,7 +209,7 @@
                         @endphp
 
                         <div class="mt-6">
-                            <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading">
+                            <x-grading-info title="Auto Grading System" :riskGrading="$riskGrading" :jenis_insiden_id="old('jenis_insiden_id', $insiden?->jenis_insiden_id)" :unit_id="old('unit_id', $insiden?->unit_id)">
                                 <p class="text-sm font-base">Berdasarkan data yang telah diinput (jenis insiden, unit, dan dampak insiden). <br>Sistem memberikan grading insiden ini sebagai <span class="font-bold underline capitalize grading-text">{{ \App\Helpers\InsidenHelper::riskGradingToColor($riskGrading) }}</span>.</p>
                             </x-grading-info>
                         </div>
@@ -306,6 +306,32 @@
             }
         }
 
+        function checkInsidenTerkait() {
+            if (!$('input[name="jenis_insiden_id"]:checked').val()) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route("insiden.get-terkait") }}', // Ganti dengan endpoint Anda
+                method: 'POST',
+                data: {
+                    jenis_insiden_id: $('input[name="jenis_insiden_id"]:checked').val(),
+                    _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
+                },
+                success: function (response) {
+                    $('#insiden-terkait').html(response.html);
+                    $('input[name="pernah_terjadi"]').each(function() {
+                        if ($(this).val() == response.pernah_terjadi_unit_lain) {
+                            $(this).prop('checked', true);
+                        }
+                    });
+                },
+                error: function (xhr) {
+                    console.error('Request gagal:', xhr);
+                }
+            });
+        }
+
         $(document).ready(function() {
             $(document).on('click', '.delete-unit', function() {
                 $('#confirmDelete #unit').text($(this).data('unit'));
@@ -315,35 +341,34 @@
             });
 
             // Event listener ketika nilai input berubah
+            $('input[name="jenis_insiden_id"]').on('change', checkInsidenTerkait);
             $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
             $('form').submit(function(e) {
                 e.preventDefault();
                 const form = $(this);
                 const gradingText = form.find('.grading-text').text();
+                const userCanGradingInsiden = @json(auth()->user()->can('grading_insiden'));
                 
                 // if gradingText available and not empty
-                if (gradingText && gradingText.trim() !== '') {
-                    @can('grading_insiden')
-                        if ($('input[name="grading_risiko"]:checked').val() != gradingText) {
-                            Swal.fire({
-                                title: 'Konfirmasi Grading Insiden',
-                                text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading ?',
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonText: 'Ya, Kirim Laporan',
-                                cancelButtonText: 'Batal',
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    form[0].submit();
-                                }
-                            });
-                        } else {
+                if (!gradingText || gradingText.trim() === '') {
+                    form[0].submit();
+                    return;
+                }
+
+                if (userCanGradingInsiden && gradingCheckedValue != gradingText) {
+                    Swal.fire({
+                        title: 'Konfirmasi Grading Insiden',
+                        text: 'Apakah anda yakin ingin mengirim laporan insiden ini dengan grading yang berbeda dengan sistem auto grading?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Kirim Laporan',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             form[0].submit();
                         }
-                    @else
-                        form[0].submit();
-                    @endcan
+                    });
                 } else {
                     form[0].submit();
                 }

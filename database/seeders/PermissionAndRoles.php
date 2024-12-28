@@ -56,24 +56,6 @@ class PermissionAndRoles extends Seeder
                 'lihat_semua_insiden',          // Semua insiden
                 'lihat_insiden',                // Detail Insiden
             ],
-            'tim-ikp' => [
-                'lihat_semua_insiden',          // Semua insiden
-                'lihat_insiden',                // Detail Insiden
-                'edit_insiden',
-                'hapus_insiden',
-                'tambah_insiden',
-                'grading_insiden',
-
-                'lihat_pasien',
-                'edit_pasien',
-                'hapus_pasien',
-                'tambah_pasien',
-
-                'lihat_master_data',
-                'edit_master_data',
-                'hapus_master_data',
-                'tambah_master_data',
-            ],
             'pelapor' => [
                 'lihat_unit_insiden',           // Semua insiden
                 'lihat_insiden_pribadi',        // Insiden yang dibuat oleh dirinya
@@ -86,7 +68,16 @@ class PermissionAndRoles extends Seeder
                 'hapus_unit_insiden',
                 
                 'tambah_insiden',
+
+                'lihat_pasien',
+                'edit_pasien',
                 'tambah_pasien',
+                
+                'lihat_master_data',
+                'tambah_master_data',
+                'edit_master_data',
+
+                'grading_insiden'
             ],
         ];
 

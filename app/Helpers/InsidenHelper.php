@@ -39,6 +39,8 @@ class InsidenHelper
         $endDate   = Carbon::today();
         $startDate = Carbon::today()->subYears($period);
 
+        // TODO : tambahkan tanggal maksimal insiden, yaitu tanggal kejadian insiden.
+
         // Hitung jumlah insiden dalam periode waktu
         $frekuensi = DB::table('insiden')
             ->where('jenis_insiden_id', $jenisInsidenId)
@@ -93,6 +95,32 @@ class InsidenHelper
         return $color[$riskGrading];
     }
 
+    public static function getOtherUnitIncident(int $jenisInsidenId, int $unitId = null, bool $returnCount = false, string $unitMode = 'exclude')
+    {
+        $insiden = \App\Models\Insiden::with(['unit', 'jenis'])->where('jenis_insiden_id', $jenisInsidenId)
+        ->whereNull('deleted_at');
+
+        if ($unitId && $unitMode == 'exclude') {
+            $insiden = $insiden->where('unit_id', '!=', $unitId);
+        } else if ($unitId && $unitMode == 'include') {
+            $insiden = $insiden->where('unit_id', $unitId);
+        }
+
+        if ($returnCount) {
+            return $insiden->count();
+        }
+
+        $insiden = $insiden->get();
+
+        return view('components.insiden.simple-table', compact('insiden'));
+    }
+
+    public static function getJenisIncidenById(int $id)
+    {
+        $insiden = \App\Models\JenisInsiden::where('id', $id)->first();
+        return $insiden->alias ?? '';
+    }
+    
     /**
      * Mendapatkan kategori probabilitas berdasarkan frekuensi dan periode waktu.
      *

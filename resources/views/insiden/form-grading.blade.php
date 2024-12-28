@@ -58,7 +58,19 @@
             <x-input-error class="mt-2" :messages="$errors->get('pernah_terjadi')" />
         </div>
 
-        <div id="insiden-terkait"></div>
+        <div id="insiden-terkait">
+            @if (old('jenis_insiden_id', $insiden?->jenis_insiden_id) && old('unit_id', $insiden?->unit_id))
+               <details class="collapse bg-base-200 collapse-arrow">
+                   <summary class="collapse-title text-lg font-medium px-6">Insiden di unit lain dengan jenis insiden yang sama ( {{ \App\Helpers\InsidenHelper::getJenisIncidenById(old('jenis_insiden_id', $insiden?->jenis_insiden_id)) }} )</summary>
+                   <div class="collapse-content">
+                        <div class="max-h-[250px] overflow-y-auto">
+                           {{ \App\Helpers\InsidenHelper::getOtherUnitIncident(old('jenis_insiden_id', $insiden?->jenis_insiden_id), old('unit_id', $insiden?->unit_id)) }}
+                        </div>
+                   </div>
+               </details>
+           @endif
+        </div>
+
     </div>
     
 </div>

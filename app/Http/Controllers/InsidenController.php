@@ -333,6 +333,42 @@ class InsidenController extends Controller
         }
     }
 
+    public function pdf(Request $request, int $insiden)
+    {
+        $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);
+
+        if ($insiden && $insiden->pernah_terjadi) {
+            $terkait = Insiden::with(['tindakan'])
+                ->where('jenis_insiden_id', $insiden->jenis_insiden_id)
+                ->where('unit_id', '!=', $insiden->unit_id)
+                ->orderBy('created_at', 'desc')
+                ->limit(3)->get();
+        }
+
+        $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
+        $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
+
+        $riskGrading = \App\Helpers\InsidenHelper::getRiskGrading($probability, $impact);
+
+        // $html = view('insiden.pdf', [
+        //     'insiden'     => $insiden,
+        //     'probability' => $probability,
+        //     'impact'      => $impact,
+        //     'riskGrading' => $riskGrading,
+        //     'terkait'     => $terkait ?? null,
+        // ])->render();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('insiden.pdf', [
+            'insiden'     => $insiden,
+            'probability' => $probability,
+            'impact'      => $impact,
+            'riskGrading' => $riskGrading,
+            'terkait'     => $terkait ?? null,
+        ]);
+
+        return $pdf->stream('insiden.pdf');
+    }
+
     public function print(Request $request, int $insiden): View
     {
         $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);

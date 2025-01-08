@@ -1,5 +1,13 @@
 <x-app-layout>
-    <div class="f4 bg-white mx-auto shadow-lg rounded-lg text-gray-800">
+    {{-- button generate pdf --}}
+    <div class="flex items-center justify-end mb-4 max-w-[215mm] lg:mx-auto">
+        <a href="{{ route('insiden.pdf', $insiden->id) }}" class="bg-primary flex gap-2 items-center justify-center px-4 py-2 rounded-lg font-medium shadow text-sm text-white">
+            <x-icons.print class="h-4 w-4" />
+            PDF
+        </a>
+    </div>
+
+    <div class="f4 bg-white lg:mx-auto shadow-lg rounded-lg text-gray-800">
         <div class="mb-4">
             <h1 class="text-xl font-bold text-center">LAPORAN INSIDEN</h1>
             <h1 class="text-xl font-bold text-center">(INTERNAL)</h1>
@@ -80,7 +88,7 @@
                                             'lainnya'         => 'Lainnya : <br /><br /> ............................ ( sebutkan )'
                                         ] as $key => $item)
                                             <div class="flex gap-2">
-                                                {!! \App\Helpers\UsiaHelper::getKelompokUsia($insiden->pasien->tanggal_lahir) == $key ? '&#128505;' : '&#9744;' !!}
+                                                {!! '&#9744;' !!}
                                                 <p>{!! $item !!}</p>
                                             </div>
                                         @endforeach

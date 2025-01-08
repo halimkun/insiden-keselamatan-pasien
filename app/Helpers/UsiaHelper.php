@@ -10,12 +10,12 @@ class UsiaHelper
     {
         return [
             "1" => "0-1 Bulan",
-            "2" => "&#8250; 1 Bulan - 1 Tahun",
-            "3" => "&#8250; 1 Tahun - 5 Tahun",
-            "4" => "&#8250; 5 Tahun - 15 Tahun",
-            "5" => "&#8250; 15 Tahun - 30 Tahun",
-            "6" => "&#8250; 30 Tahun - 65 Tahun",
-            "7" => "&#8250; 65 Tahun"
+            "2" => "> 1 Bulan - 1 Tahun",
+            "3" => "> 1 Tahun - 5 Tahun",
+            "4" => "> 5 Tahun - 15 Tahun",
+            "5" => "> 15 Tahun - 30 Tahun",
+            "6" => "> 30 Tahun - 65 Tahun",
+            "7" => "> 65 Tahun"
         ];
     }
 

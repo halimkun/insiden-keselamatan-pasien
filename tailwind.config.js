@@ -21,6 +21,35 @@ export default {
         './public/static/css/*.css'
     ],
 
+    safelist: [
+        'border-red-500',
+        'border-blue-500',
+        'border-yellow-500',
+        'border-green-500',
+        'border-emerald-500',
+        'border-amber-500',
+        'border-rose-500',
+
+        'bg-red-500',
+        'bg-blue-500',
+        'bg-yellow-500',
+        'bg-green-500',
+        'bg-emerald-500',
+        'bg-amber-500',
+        'bg-rose-500',
+
+        'bg-red-400',
+        'bg-blue-400',
+        'bg-yellow-400',
+        'bg-green-400',
+        'bg-emerald-400',
+        'bg-amber-400',
+        'bg-rose-400',
+
+        'text-yellow-500',
+        'text-green-500',
+    ],
+
     // theme: {
     //     extend: {
     //         fontFamily: {

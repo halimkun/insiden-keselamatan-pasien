@@ -39,10 +39,19 @@ return new class extends Migration
             $table->tinyInteger('pernah_terjadi')->default(0);
             $table->string('status_pelapor');
 
+            // Grading
             // $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']); // Input manually
             $table->foreignId('grading_id')->nullable()->default(null)->constrained('grading');
 
+            // Pembuat Laporan
             $table->foreignId('created_by')->constrained('users');
+            $table->text('created_sign')->nullable()->default(null);
+
+            // Penerima Laporan
+            $table->foreignId('received_by')->nullable()->default(null)->constrained('users');
+            $table->text('received_sign')->nullable()->default(null);
+            $table->dateTime('received_at')->nullable()->default(null);
+
             $table->timestamps();
             $table->softDeletes();
         });

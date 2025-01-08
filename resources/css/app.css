@@ -29,6 +29,22 @@
     .inbox-height {
         @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
     }
+
+    .a4 {
+        width: 210mm;
+        /* height: 297mm; */
+        height: auto;
+        min-height: 297mm;
+        padding: 15mm;
+    }
+
+    .f4 {
+        width: 215mm;
+        /* height: 330mm; */
+        height: auto;
+        min-height: 330mm;
+        padding: 15mm;
+    }
 }
 
 .font-poppins {

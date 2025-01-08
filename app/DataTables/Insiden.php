@@ -61,14 +61,16 @@ class Insiden extends DataTable
 
             ->addColumn("action", function ($insiden) {
                 // Menggunakan URL route untuk Show, Edit, dan Delete
-                $showUrl = route('insiden.show', $insiden->id);
-                $editUrl = route('insiden.edit', $insiden->id);
+                $showUrl  = route('insiden.show', $insiden->id);
+                $editUrl  = route('insiden.edit', $insiden->id);
+                $printUrl = route('insiden.print', $insiden->id);
 
                 $html = view('components.actions.insiden-action', [
-                    'showUrl' => $showUrl,
-                    'editUrl' => $editUrl,
-
-                    'insiden' => $insiden,
+                    'showUrl'  => $showUrl,
+                    'editUrl'  => $editUrl,
+                    'printUrl' => $printUrl,
+                    
+                    'insiden'  => $insiden,
                 ])->render();
 
                 return $html;

@@ -142,8 +142,9 @@ class Insiden extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'tanggal_insiden' => 'date',
+        'tanggal_insiden'  => 'date',
         'tgl_pasien_masuk' => 'date',
+        'received_at'      => 'datetime',
     ];
 
     /**
@@ -199,5 +200,13 @@ class Insiden extends Model
     public function oleh()
     {
         return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function penerima()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'received_by', 'id');
     }
 }

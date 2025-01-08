@@ -46,6 +46,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
     Route::post('insiden/get/terkait', [\App\Http\Controllers\InsidenController::class, 'getInsidenTerkait'])->name('insiden.get-terkait');
+    Route::post('insiden/{insiden}/ttd', [\App\Http\Controllers\InsidenController::class, 'ttd'])->name('insiden.ttd');
+    Route::get('insiden/{insiden}/print', [\App\Http\Controllers\InsidenController::class, 'print'])->name('insiden.print');
+    
     Route::resource('grading', \App\Http\Controllers\GradingController::class)->only(['show', 'store']);
     Route::post('grading/by-data', [\App\Http\Controllers\GradingController::class, 'getGradingByData'])->name('grading.by-data');
     

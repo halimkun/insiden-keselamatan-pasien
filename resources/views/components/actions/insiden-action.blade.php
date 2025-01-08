@@ -20,6 +20,13 @@
             </div>
             <div tabindex="0" class="menu dropdown-content z-10 w-52 rounded-box border bg-base-100 p-2 shadow">
                 <ul>
+                    <li>
+                        <a href="{{ $printUrl }}" class="text-gray-600 hover:text-indigo-600">
+                            <x-icons.print class="h-[1rem] w-[1rem]" />
+                            Cetak Insiden
+                        </a>
+                    </li>
+
                     @can('grading_insiden')
                         @if ($insiden->grading)
                             @can('edit_insiden')

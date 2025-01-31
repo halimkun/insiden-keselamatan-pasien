@@ -292,9 +292,12 @@
                     <tr class="align-top border-b">
                         <th class="text-left leading-none py-2 m-0 align-top" style="width: 150px;">Tindakan Pasca Insiden</th>
                         <td class="leading-none py-2 m-0" colspan="3">
-                            <div class="inline-flex gap-1">
-                                : <p class="leading-5">{{ $insiden->tindakan->tindakan }}</p>
-                            </div>
+                            <table class="w-fit">
+                                <tr class="align-top">
+                                    <td style="width: 7px;">:</td>
+                                    <td><p class="leading-5">{{ $insiden->tindakan->tindakan }}</p></td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr class="align-top border-b">
@@ -382,15 +385,15 @@
                 <tr>
                     <td class="w-full">
                         <p class="font-bold">Pembuat Laporan</p>
-                        <p class="text-xs">{{ $insiden->created_at?->translatedFormat('d F Y') }}</p>
+                        <p class="text-xs">{{ $insiden->created_at?->translatedFormat('l, d F Y') }}</p>
 
                         @if ($insiden->created_sign)
                             <img src="{{ $insiden->created_sign }}" alt="ttd" class="h-[100px]">
                         @else
-                            <div class="my-10"></div>
+                            <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif
 
-                        <p class="font-bold">{{ $insiden->oleh->name }}</p>
+                        <p class="font-bold text-sm">{{ $insiden->oleh->name }}</p>
                     </td>
                     <td class="w-full">
                         <p class="font-bold">Penerima Laporan</p>
@@ -399,7 +402,7 @@
                         @if ($insiden->received_sign)
                             <img src="{{ $insiden->received_sign }}" alt="ttd" class="h-[100px]">
                         @else
-                            <div class="my-10"></div>
+                            <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif
 
                         <p class="font-bold">{{ $insiden->penerima->name ?? '-' }}</p>

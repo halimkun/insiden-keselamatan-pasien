@@ -241,11 +241,21 @@
                         </div>
 
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-indigo-500">Kirim Laporan</h2>
-                            <p class="text-sm text-gray-600">Kirim laporan insiden yang terjadi.</p>
+                            <h2 class="text-lg font-semibold text-indigo-500">Validasi & Kirim Laporan</h2>
+                            <p class="text-sm text-gray-600">Anda diharuskan untuk memvalidasi data yang telah diinput sebelum mengirim laporan.</p>
                         </div>
                     </div>
                 </header>
+
+                <div class="mt-4">
+                    <canvas id="signature-pad" class="signature-pad border" width="460" height="150"></canvas>
+                    <input type="text" hidden name="created_sign" id="created_sign" class="signature-pad-input" value="{{ old('created_sign') }}">
+
+                    {{-- button clear and validasi --}}
+                    <div class="flex items-center gap-4 mt-4">
+                        <button type="button" id="clear" class="btn btn-sm btn-danger">Clear</button>
+                    </div>
+                </div>
 
                 <div class="mt-6">
                     {{-- simple paragraf dengan inti bahwa memastikan data sudah benar --}}
@@ -333,6 +343,31 @@
         }
 
         $(document).ready(function() {
+
+            // Signature Pad
+            const canvas = document.querySelector("canvas");
+            const clearButton = document.getElementById('clear');
+            const signaturePad = new SignaturePad(canvas, {
+                penColor: 'rgb(0, 0, 0)',
+                backgroundColor: 'rgb(255, 255, 255)',
+                minWidth: 0.5,
+                maxWidth: 2,
+                throttle: 16,
+                minDistance: 0,
+                velocityFilterWeight: 0.9,
+            });
+
+            clearButton.addEventListener('click', function() {
+                signaturePad.clear();
+                $('input[name="created_sign"]').val('');
+            });
+
+            // if old on created_sign not empty
+            if ("{{ old('created_sign') }}") {
+                signaturePad.fromDataURL("{{ old('created_sign') }}");
+            }
+
+            // ===========================
             $(document).on('click', '.delete-unit', function() {
                 $('#confirmDelete #unit').text($(this).data('unit'));
                 var url = "{{ route('unit.destroy', ':id') }}".replace(':id', $(this).data('id'));
@@ -350,6 +385,19 @@
                 const gradingText = form.find('.grading-text').text();
                 const userCanGradingInsiden = @json(auth()->user()->can('grading_insiden'));
                 
+                // check if signature is empty
+                if (signaturePad.isEmpty()) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: 'Tanda tangan anda tidak boleh kosong',
+                        icon: 'warning',
+                    });
+                    return;
+                }
+
+                // fill the signature input
+                $('input[name="created_sign"]').val(signaturePad.toDataURL());
+
                 // if gradingText available and not empty
                 if (!gradingText || gradingText.trim() === '') {
                     form[0].submit();

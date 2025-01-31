@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <form method="POST" action="{{ route('insiden.update', $insiden->id) }}" role="form" enctype="multipart/form-data" class=" flex flex-col gap-4 lg:gap-8">
+    <form method="POST" action="{{ route('insiden.update', $insiden->id) }}" role="form" enctype="multipart/form-data" class="flex flex-col gap-4 lg:gap-8">
         @csrf
         @method('PATCH')
         <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8">
@@ -178,11 +178,21 @@
                         </div>
 
                         <div class="sm:flex-auto">
-                            <h2 class="text-lg font-semibold text-indigo-500">Kirim Laporan</h2>
-                            <p class="text-sm text-gray-600">Kirim laporan insiden yang terjadi.</p>
+                            <h2 class="text-lg font-semibold text-indigo-500">Validasi & Kirim Laporan</h2>
+                            <p class="text-sm text-gray-600">Anda diharuskan untuk memvalidasi data yang telah diinput sebelum mengirim laporan.</p>
                         </div>
                     </div>
                 </header>
+
+                <div class="mt-4">
+                    <canvas id="signature-pad" class="signature-pad border" width="460" height="150"></canvas>
+                    <input type="text" hidden name="created_sign" id="created_sign" class="signature-pad-input" value="{{ old('created_sign', $insiden->created_sign) }}">
+
+                    {{-- button clear and validasi --}}
+                    <div class="flex items-center gap-4 mt-4">
+                        <button type="button" id="clear" class="btn btn-sm btn-danger">Clear</button>
+                    </div>
+                </div>
 
                 <div class="mt-6">
                     <p class="text-sm text-gray-600">Sebelum mengirim laporan, pastikan data yang diinput sudah benar.</p>
@@ -234,6 +244,7 @@
                     console.log('Tunggu, semua nilai belum terisi');
                 }
             }
+            
             function checkInsidenTerkait() {
                 if (!$('input[name="jenis_insiden_id"]:checked').val()) {
                     return;
@@ -262,6 +273,31 @@
             }
 
             $(document).ready(function() {
+                const insidenData = @json($insiden);
+
+                // Signature Pad
+                const canvas = document.querySelector("canvas");
+                const clearButton = document.getElementById('clear');
+                const signaturePad = new SignaturePad(canvas, {
+                    penColor: 'rgb(0, 0, 0)',
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    minWidth: 0.5,
+                    maxWidth: 2,
+                    throttle: 16,
+                    minDistance: 0,
+                    velocityFilterWeight: 0.9,
+                });
+
+                clearButton.addEventListener('click', function() {
+                    signaturePad.clear();
+                    $('input[name="created_sign"]').val('');
+                });
+
+                if (insidenData.created_sign) {
+                    signaturePad.fromDataURL(insidenData.created_sign);
+                }
+
+                // =================
                 const savedGrading = '{{ old('grading_risiko', $insiden?->grading?->grading_risiko) }}';
                 const autoGrading = $('.grading-text').text().toLowerCase();
                 const gradingRisiko = $('input[name="grading_risiko"]');
@@ -287,6 +323,20 @@
                 $('form').submit(function(e) {
                     e.preventDefault();
                     const form = $(this);
+
+                    // check if signature is empty
+                    if (signaturePad.isEmpty()) {
+                        Swal.fire({
+                            title: 'Peringatan',
+                            text: 'Tanda tangan anda tidak boleh kosong',
+                            icon: 'warning',
+                        });
+                        return;
+                    }
+
+                    // fill the signature input
+                    $('input[name="created_sign"]').val(signaturePad.toDataURL());
+
                     // if selected grading is same with auto grading show confirm dialog
                     if ($('input[name="grading_risiko"]:checked').val() != autoGrading) {
                         Swal.fire({

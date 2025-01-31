@@ -250,6 +250,12 @@ class InsidenController extends Controller
             'created_by'    => Auth::id(),
         ]);
 
+        // validasi created_sign is valid image base64
+        if ($request->has('created_sign') && !preg_match('/^data:image\/(\w+);base64,/', $request->created_sign)) {
+            return Redirect::back()->with('error', 'Tanda tangan pembuat insiden tidak valid');
+        }
+
+
         $tindakanData = [
             'tindakan' => $request->tindakan ?? '',
             'oleh'     => $request->oleh,
@@ -257,7 +263,6 @@ class InsidenController extends Controller
         ];
 
         try {
-
             $insiden->update($request->except('tindakan', 'oleh', 'oleh_tim', 'oleh_petugas', 'grading_risiko'));
 
             if (!$insiden->grading) {

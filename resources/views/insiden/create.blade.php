@@ -384,6 +384,7 @@
                 const form = $(this);
                 const gradingText = form.find('.grading-text').text();
                 const userCanGradingInsiden = @json(auth()->user()->can('grading_insiden'));
+                const gradingCheckedValue = $('input[name="grading_risiko"]:checked').val();
                 
                 // check if signature is empty
                 if (signaturePad.isEmpty()) {

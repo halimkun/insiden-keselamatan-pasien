@@ -49,7 +49,7 @@
             <main>
                 
                 <div class="mx-auto max-w-screen-3xl px-4 md:px-6 2xl:px-10 2xl:py-3">
-                    @if ($errors->any())
+                    {{-- @if ($errors->any())
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-5" role="alert">
                             <strong class="font-bold">Something went wrong!</strong>
                             <ul class="mt-1 list-disc list-inside text-sm">
@@ -58,7 +58,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                    @endif
+                    @endif --}}
 
                     {{ $slot }}
                 </div>

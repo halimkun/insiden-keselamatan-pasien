@@ -33,6 +33,7 @@ class InsidenRequest extends FormRequest
             'tanggal_lahir'           => 'required_if:act,tambah|date',
 
             'jenis_insiden_id'        => 'required|exists:jenis_insiden,id',
+            'tgl_pasien_masuk'        => 'required|date',
             'tanggal_insiden'         => 'required|date',
             'waktu_insiden'           => 'required|date_format:H:i',
             'insiden'                 => 'required|string|max:255',

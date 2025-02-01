@@ -4,7 +4,8 @@
     <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between gap-2 px-6 py-5">
         @if (\App\Helpers\SettingHelper::get('site_logo'))
-            <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png')) }}" alt="Logo" class="w-[140px]" />
+        <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png' )) }}" alt="Logo"
+            class="w-[140px]" />
         @else
         <div class="text-xl font-bold leading-none text-white">
             {{ \App\Helpers\SettingHelper::get('site_name', 'Site Name') }}
@@ -54,7 +55,14 @@
                     </li>
                     <!-- Menu Item Insiden -->
                     @endcanany
+                </ul>
+            </div>
 
+            @canany(['lihat_pasien', 'lihat_karyawan', 'lihat_master_data'])
+            <div>
+                <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">MASTER DATA</h3>
+
+                <ul class="mb-6 flex flex-col gap-1.5">
                     @can('lihat_pasien')
                     <!-- Menu Item Pasien -->
                     <li>
@@ -80,14 +88,8 @@
                     </li>
                     <!-- Menu Item Karyawan -->
                     @endcan
-                </ul>
-            </div>
 
-            @can('lihat_master_data')
-            <div>
-                <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">MASTER DATA</h3>
-
-                <ul class="mb-6 flex flex-col gap-1.5">
+                    @can('lihat_master_data')
                     <!-- Menu Item Unit -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('unit.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -120,9 +122,10 @@
                         </a>
                     </li>
                     <!-- Menu Item Penanggung Biaya -->
+                    @endcan
                 </ul>
             </div>
-            @endcan
+            @endcanany
 
             {{-- only admin --}}
             @if (auth()->user()->isAdmin())
@@ -140,7 +143,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div>
                 <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">SETTINGS</h3>
                 <ul class="mb-6 flex flex-col gap-1.5">

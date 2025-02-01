@@ -87,7 +87,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Insiden extends Model
 {
     use SoftDeletes, HasFactory;
-    
+
     /**
      * The table associated with the model.
      *
@@ -134,6 +134,10 @@ class Insiden extends Model
         "status_pelapor",
         "grading_id",
         "created_by",
+        "created_sign",
+        "received_by",
+        "received_sign",
+        "received_at"
     ];
 
     /**
@@ -158,7 +162,8 @@ class Insiden extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function jenis() {
+    public function jenis()
+    {
         return $this->belongsTo(\App\Models\JenisInsiden::class, 'jenis_insiden_id', 'id');
     }
 

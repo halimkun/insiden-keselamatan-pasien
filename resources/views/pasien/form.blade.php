@@ -10,7 +10,7 @@
 
         <div class="w-full">
             <x-input-label for="nik" value="Nomor KTP" />
-            <x-text-input id="nik" name="nik" type="text" class="mt-1 block w-full" :value="old('nik', $pasien?->nik)" autocomplete="nik" placeholder="Nama pasien" />
+            <x-text-input id="nik" name="nik" type="text" class="mt-1 block w-full" :value="old('nik', $pasien?->nik)" autocomplete="nik" placeholder="nomor ktp" />
     
             <x-input-error class="mt-2" :messages="$errors->get('nik')" />
         </div>
@@ -19,7 +19,7 @@
     <div class="flex flex-col md:flex-row gap-6">
         <div class="w-full">
             <x-input-label for="tempat_lahir" :value="__('Tempat Lahir')" />
-            <x-text-input id="tempat_lahir" name="tempat_lahir" type="text" class="mt-1 block w-full" :value="old('tempat_lahir', $pasien?->tempat_lahir)" autocomplete="tempat_lahir" placeholder="Nama pasien" />
+            <x-text-input id="tempat_lahir" name="tempat_lahir" type="text" class="mt-1 block w-full" :value="old('tempat_lahir', $pasien?->tempat_lahir)" autocomplete="tempat_lahir" placeholder="tempat lahir" />
     
             <x-input-error class="mt-2" :messages="$errors->get('tempat_lahir')" />
         </div>

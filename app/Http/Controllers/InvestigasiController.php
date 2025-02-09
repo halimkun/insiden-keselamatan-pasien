@@ -93,7 +93,7 @@ class InvestigasiController extends Controller
      */
     public function show(Insiden $insiden, $id): View
     {
-        $investigasi = Investigasi::with(['grading', 'rekomendasi'])->find($id);
+        $investigasi = Investigasi::with(['grading', 'rekomendasi.penanggungJawab'])->find($id);
         $insiden     = $insiden->load(['jenis', 'pasien']);
 
         return view('investigasi.show', compact('investigasi', 'insiden'));
@@ -106,7 +106,7 @@ class InvestigasiController extends Controller
     {
         $investigasi = Investigasi::with(['grading', 'rekomendasi'])->find($id);
         $insiden     = $insiden->load(['jenis', 'pasien']);
-        $karyawan   = User::all();
+        $karyawan    = User::all();
         
         return view('investigasi.edit', compact('investigasi', 'insiden', 'karyawan'));
     }

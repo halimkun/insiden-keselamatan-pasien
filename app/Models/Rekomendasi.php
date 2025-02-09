@@ -54,13 +54,12 @@ class Rekomendasi extends Model
     {
         return $this->belongsTo(\App\Models\Investigasi::class, 'investigasi_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function penanggungJawab()
     {
         return $this->belongsTo(\App\Models\User::class, 'pj', 'id');
     }
-    
 }

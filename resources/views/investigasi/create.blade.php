@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="flex flex-col 2xl:flex-row items-start gap-3">
-        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full 2xl:w-2/5 sticky top-0">
+        <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg w-full 2xl:w-2/5 relative 2xl:sticky 2xl:top-0">
             <div class="w-full">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">

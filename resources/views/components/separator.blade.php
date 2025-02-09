@@ -10,6 +10,6 @@
         <span class="flex-shrink mx-4 text-xs {{ $color }} uppercase">
             {{ $text }}
         </span>
-        <div class="flex-grow border-t border-dashed {{ $border }}">
+        <div class="flex-grow border-t border-dashed {{ $border }}"></div>
     </div>
 </div>

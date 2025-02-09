@@ -214,4 +214,9 @@ class Insiden extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'received_by', 'id');
     }
+
+    public function investigasi()
+    {
+        return $this->hasOne(\App\Models\Investigasi::class, 'insiden_id', 'id');
+    }
 }

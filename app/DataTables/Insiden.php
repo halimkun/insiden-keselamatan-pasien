@@ -59,6 +59,14 @@ class Insiden extends DataTable
                 }
             })
 
+            ->addColumn('investigasi', function ($insiden) {
+                $html = view('components.actions.investigasi-button', [
+                    'insiden' => $insiden,
+                ])->render();
+
+                return $html;
+            })
+
             ->addColumn("action", function ($insiden) {
                 // Menggunakan URL route untuk Show, Edit, dan Delete
                 $showUrl  = route('insiden.show', $insiden->id);
@@ -93,7 +101,7 @@ class Insiden extends DataTable
                     ->orWhere('waktu_insiden', 'like', "%$keyword%");
             })
 
-            ->rawColumns(['waktu__insiden', 'grading', 'action'])
+            ->rawColumns(['waktu__insiden', 'grading', 'action', 'investigasi'])
 
             ->setRowId('id');
     }
@@ -116,7 +124,7 @@ class Insiden extends DataTable
             }
         }
 
-        return $model->with(['jenisInsiden', 'unit', 'grading'])->orderBy('tanggal_insiden', 'desc');
+        return $model->with(['jenisInsiden', 'unit', 'grading', 'investigasi'])->orderBy('tanggal_insiden', 'desc');
     }
 
     /**

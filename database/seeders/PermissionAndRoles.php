@@ -51,10 +51,23 @@ class PermissionAndRoles extends Seeder
                 
                 'tambah_insiden',
                 'grading_insiden',
+
+                'lihat_semua_investigasi',
+                'lihat_investigasi',
+
+                'tambah_investigasi',
+
+                'edit_semua_investigasi',
+                'edit_investigasi',
+
+                'hapus_investigasi',
+                'hapus_semua_investigasi',
             ],
             'komite-mutu' => [
                 'lihat_semua_insiden',          // Semua insiden
                 'lihat_insiden',                // Detail Insiden
+                'lihat_semua_investigasi',
+                'lihat_investigasi',
             ],
             'pelapor' => [
                 'lihat_unit_insiden',           // Semua insiden
@@ -68,6 +81,9 @@ class PermissionAndRoles extends Seeder
                 'hapus_unit_insiden',
                 
                 'tambah_insiden',
+                
+                'lihat_investigasi',
+                'edit_investigasi',
 
                 'lihat_pasien',
                 'edit_pasien',

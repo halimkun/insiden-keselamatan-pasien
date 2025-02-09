@@ -55,7 +55,7 @@
                             </div>
                         </div>
 
-                        <div class="w-full overflow-x-auto xl:overflow-visible">
+                        <div class="w-full overflow-x-auto 2xl:overflow-visible">
                             <table class="w-full divide-y divide-gray-300" id="tableData">
                                 <thead>
                                     <tr>
@@ -67,6 +67,7 @@
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Dampak</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tempat</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Grading</th>
+                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
 
                                         <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">#</th>
                                     </tr>
@@ -129,6 +130,7 @@
                 processing: true,
                 serverSide: true,
                 lengthChange: false,
+                sort: false,
 
                 pageLength: 10,
 
@@ -190,6 +192,10 @@
                     {
                         data: 'grading',
                         name: 'grading',
+                    },
+                    {
+                        data: 'investigasi',
+                        name: 'investigasi',
                     },
                     {
                         data: 'action',

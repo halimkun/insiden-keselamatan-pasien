@@ -55,6 +55,17 @@
                     </li>
                     <!-- Menu Item Insiden -->
                     @endcanany
+
+                    <!-- Menu Item Investigasi -->
+                    <li>
+                        <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('investigasi.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
+                            href="{{ route('investigasi.index') }}">
+                            <x-icons.report-search class="h-5 w-5" />
+
+                            Investigasi Sederhana
+                        </a>
+                    </li>
+                    <!-- Menu Item Investigasi -->
                 </ul>
             </div>
 

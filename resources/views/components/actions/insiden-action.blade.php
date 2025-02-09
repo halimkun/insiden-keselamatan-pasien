@@ -54,6 +54,13 @@
                         @endif
                     @endcan
 
+                    <li>
+                        <a href="{{ route('insiden.investigasi.create', $insiden->id) }}" class="text-gray-600 hover:text-indigo-600">
+                            <x-icons.report-search class="h-[1rem] w-[1rem]" />
+                            Buat Investigasi
+                        </a>
+                    </li>
+
                     @can('hapus_insiden')
                         @if ($insiden->created_by == Auth::id() || (Auth::user()->can('hapus_unit_insiden') && Auth::user()->detail?->unit_id == $insiden->unit_id) || Auth::user()->can('hapus_semua_insiden'))
                             @if($insiden->deleted_at)

@@ -161,11 +161,10 @@ class InvestigasiController extends Controller
             ->with('success', 'Investigasi updated successfully');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(Insiden $insiden, $id): RedirectResponse
     {
-        Investigasi::find($id)->delete();
+        Investigasi::where('id', $id)->where('insiden_id', $insiden->id)->delete();
 
-        return Redirect::route('investigasi.index')
-            ->with('success', 'Investigasi deleted successfully');
+        return Redirect::route('investigasi.index')->with('success', 'Investigasi deleted successfully');
     }
 }

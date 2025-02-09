@@ -197,38 +197,6 @@ class InsidenController extends Controller
     }
 
     /**
-     * Get insiden terkait by jenis insiden id and unit id.
-     */
-    public function getInsidenTerkait(Request $request) {
-        $request->validate([
-            'jenis_insiden_id' => 'required|exists:jenis_insiden,id',
-            'unit_id'          => 'nullable|exists:unit,id',
-        ]);
-
-        $insiden = \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id, true);
-
-        if ($insiden > 0) {
-            $html = "
-                <details class='collapse bg-base-200 collapse-arrow'>
-                    <summary class='collapse-title text-lg font-medium px-6'>Insiden di unit lain dengan jenis insiden yang sama ( ". \App\Helpers\InsidenHelper::getJenisIncidenById($request->jenis_insiden_id) ." )</summary>
-                    <div class='collapse-content'>
-                        <div class='max-h-[250px] overflow-y-auto'>
-                            ". \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id) ."
-                        </div>
-                    </div>
-                </details>
-            ";
-        } else {
-            $html = "<p class='text-center text-lg font-medium'>Tidak ada insiden terkait</p>";
-        }
-
-        return response()->json([
-            'pernah_terjadi_unit_lain' => $insiden,
-            'html'                     => $html,
-        ]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id): View
@@ -301,6 +269,63 @@ class InsidenController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id): RedirectResponse
+    {
+        try {
+            $insiden = Insiden::find($id);
+            $insiden->delete();
+
+            TelegramHelper::sendMessage("❌", "INSIDEN DELETED", [
+                "insiden" => $insiden->toArray(),
+            ]);
+        } catch (\Throwable $th) {
+            TelegramHelper::sendMessage("❌", "INSIDEN DELETE FAILED", [
+                "insiden" => $insiden->toArray(),
+                "error"   => $th->getMessage(),
+            ]);
+
+            return Redirect::route('insiden.index')->with('error', 'An error occurred: ' . $th->getMessage());
+        }
+
+        return Redirect::route('insiden.index')->with('success', 'Insiden deleted successfully');
+    }
+
+    /**
+     * Get insiden terkait by jenis insiden id and unit id.
+     */
+    public function getInsidenTerkait(Request $request)
+    {
+        $request->validate([
+            'jenis_insiden_id' => 'required|exists:jenis_insiden,id',
+            'unit_id'          => 'nullable|exists:unit,id',
+        ]);
+
+        $insiden = \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id, true);
+
+        if ($insiden > 0) {
+            $html = "
+                <details class='collapse bg-base-200 collapse-arrow'>
+                    <summary class='collapse-title text-lg font-medium px-6'>Insiden di unit lain dengan jenis insiden yang sama ( " . \App\Helpers\InsidenHelper::getJenisIncidenById($request->jenis_insiden_id) . " )</summary>
+                    <div class='collapse-content'>
+                        <div class='max-h-[250px] overflow-y-auto'>
+                            " . \App\Helpers\InsidenHelper::getOtherUnitIncident($request->jenis_insiden_id, $request->unit_id) . "
+                        </div>
+                    </div>
+                </details>
+            ";
+        } else {
+            $html = "<p class='text-center text-lg font-medium'>Tidak ada insiden terkait</p>";
+        }
+
+        return response()->json([
+            'pernah_terjadi_unit_lain' => $insiden,
+            'html'                     => $html,
+        ]);
+    }
+
     public function ttd(Request $request, Insiden $insiden): \Illuminate\Http\JsonResponse
     {
         $request->validate([
@@ -331,7 +356,7 @@ class InsidenController extends Controller
                 "insiden" => $insiden->toArray(),
                 "type"    => $type,
             ]);
-            
+
             return response()->json(['success' => true, 'message' => 'Tanda tangan berhasil disimpan', 'data' => $insiden]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
@@ -398,29 +423,5 @@ class InsidenController extends Controller
             'riskGrading' => $riskGrading,
             'terkait'     => $terkait ?? null,
         ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id): RedirectResponse
-    {
-        try {
-            $insiden = Insiden::find($id);
-            $insiden->delete();
-
-            TelegramHelper::sendMessage("❌", "INSIDEN DELETED", [
-                "insiden" => $insiden->toArray(),
-            ]);
-        } catch (\Throwable $th) {
-            TelegramHelper::sendMessage("❌", "INSIDEN DELETE FAILED", [
-                "insiden" => $insiden->toArray(),
-                "error"   => $th->getMessage(),
-            ]);
-
-            return Redirect::route('insiden.index')->with('error', 'An error occurred: ' . $th->getMessage());
-        }
-
-        return Redirect::route('insiden.index')->with('success', 'Insiden deleted successfully');
     }
 }

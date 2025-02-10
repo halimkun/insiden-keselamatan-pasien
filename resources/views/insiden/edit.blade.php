@@ -195,10 +195,10 @@
                 </div>
 
                 <div class="mt-4">
-                    <x-input-label for="rekomendasi" value="Rekomendasi Sederhana" />
-                    <textarea name="rekomendasi" id="rekomendasi" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" placeholder="rekomendasi sederhana">{{ old('rekomendasi', $insiden?->rekomendasi) }}</textarea>
+                    <x-input-label for="investigasi_sederhana" value="Investigasi Sederhana" />
+                    <textarea name="investigasi_sederhana" id="investigasi_sederhana" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" placeholder="investigasi sederhana">{{ old('investigasi_sederhana', $insiden?->investigasi_sederhana) }}</textarea>
                 
-                    <x-input-error class="mt-2" :messages="$errors->get('rekomendasi')" />
+                    <x-input-error class="mt-2" :messages="$errors->get('investigasi_sederhana')" />
                 </div>
 
                 <div class="mt-6">

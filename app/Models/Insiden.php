@@ -132,7 +132,7 @@ class Insiden extends Model
         "oleh_petugas",
         "pernah_terjadi",
         "status_pelapor",
-        'rekomendasi',
+        'investigasi_sederhana',
         "grading_id",
         "created_by",
         "created_sign",

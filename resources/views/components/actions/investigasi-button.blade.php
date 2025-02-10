@@ -1,4 +1,4 @@
-@canany(['lihat_investigasi', 'lihat_semua_investigasi'])
+{{-- @canany(['lihat_investigasi', 'lihat_semua_investigasi'])
     <div class="flex gap-3 items-center">
         @if ($insiden->investigasi)
             <a href="{{ route('insiden.investigasi.show', [$insiden->id, $insiden->investigasi->id]) }}" class="btn btn-xs btn-square btn-success text-white" title="Lihat Investigasi">
@@ -12,4 +12,4 @@
             @endcan
         @endif
     </div>
-@endcanany
+@endcanany --}}

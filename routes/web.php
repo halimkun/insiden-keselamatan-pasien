@@ -52,8 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('insiden/{insiden}/pdf', [\App\Http\Controllers\InsidenController::class, 'pdf'])->name('insiden.pdf');
     
     // Investigasi
-    Route::resource('investigasi', \App\Http\Controllers\InvestigasiController::class)->only(['index']);
-    Route::resource('insiden.investigasi', \App\Http\Controllers\InvestigasiController::class)->except(['index']);
+    // Route::resource('investigasi', \App\Http\Controllers\InvestigasiController::class)->only(['index']);
+    // Route::resource('insiden.investigasi', \App\Http\Controllers\InvestigasiController::class)->except(['index']);
 
     ///  Grading
     Route::resource('grading', \App\Http\Controllers\GradingController::class)->only(['show', 'store']);

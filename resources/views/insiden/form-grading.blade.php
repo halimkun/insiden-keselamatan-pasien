@@ -37,7 +37,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('grading_risiko')" />
         </div>
 
-        <div>
+        {{-- <div>
             <x-input-label for="pernah_terjadi" value="Apakah kejadian yang sama pernah terjadi di Unit Kerja lain?" />
             
             <div class="mt-1 grid grid-cols-2 gap-3">
@@ -56,7 +56,7 @@
             </div>
     
             <x-input-error class="mt-2" :messages="$errors->get('pernah_terjadi')" />
-        </div>
+        </div> --}}
 
         <div id="insiden-terkait">
             @if (old('jenis_insiden_id', $insiden?->jenis_insiden_id) && old('unit_id', $insiden?->unit_id))

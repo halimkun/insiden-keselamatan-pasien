@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use GeminiAPI\Laravel\Facades\Gemini;
 use Illuminate\Database\Seeder;
 
 class DummyInsiden extends Seeder
@@ -197,12 +198,11 @@ class DummyInsiden extends Seeder
 
             // Jenis Insiden
             $jenisInsiden = \App\Models\JenisInsiden::where('alias', $item['jenis_insiden_alias'])->first();
-            
+
             // Masuk Pasien
             $masukPasie = $faker->dateTimeBetween('2024-07-01', 'now');
 
-            // Insiden
-            $insiden = \App\Models\Insiden::create([
+            $insiden = [
                 "pasien_id"               => $pasien->id,
                 'tgl_pasien_masuk'        => $masukPasie->format('Y-m-d'),
                 "jenis_insiden_id"        => $jenisInsiden->id,
@@ -226,7 +226,17 @@ class DummyInsiden extends Seeder
                 "status_pelapor"          => $faker->randomElement(['Penemu Insiden', 'Terlibat Langsung']),
                 "grading_id"              => null,
                 "created_by"              => \App\Models\User::permission('tambah_insiden')->get()->random()->id,
-            ]);
+            ];
+
+            try {
+                $investigasi_sederhana = Gemini::generateText("Saya iginsin anda mejadi seorang yang pandai analisa kejadian dan insiden, anda juga seorang tim komite mutu yang pandai dalam membuat laporan dan analisa. saya ingin anda membuat investigasi sederhana terkait insiden keselamatan pasien, hindari penggunaan informasi yang berlebihan dan informasi sensitif seperti id, password dan yang lain,. penggunaan informasi dasar seperti nama, nomor rekam medis tanggal lahir tidak masalah. buat hanya investigasi sederhana saja, tidak diperlukan pengulangan detail seperti detail pasien, dan detail insiden, berikut ini data insiden yang perlu anda investigasi: " . json_encode($insiden) . ", dan ini adalah detail pasien yang terlibat: " . json_encode($pasien) . ", terima kasih.");
+                $insiden['investigasi_sederhana'] = $investigasi_sederhana;
+            } catch (\Throwable $th) {
+                $insiden['investigasi_sederhana'] = "-";
+            }
+
+            // Insiden
+            $insiden = \App\Models\Insiden::create($insiden);
         }
     }
 }

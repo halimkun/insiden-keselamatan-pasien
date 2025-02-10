@@ -54,7 +54,7 @@
                         @endif
                     @endcan
 
-                    @canany(['lihat_investigasi', 'lihat_semua_investigasi'])
+                    {{-- @canany(['lihat_investigasi', 'lihat_semua_investigasi'])
                         @if ($insiden->investigasi)
                             <li>
                                 <a href="{{ route('insiden.investigasi.show', [$insiden->id, $insiden->investigasi->id]) }}" class="text-gray-600 hover:text-indigo-600">
@@ -72,7 +72,7 @@
                                 </li>
                             @endcan
                         @endif
-                    @endcanany
+                    @endcanany --}}
 
                     @can('hapus_insiden')
                         @if ($insiden->created_by == Auth::id() || (Auth::user()->can('hapus_unit_insiden') && Auth::user()->detail?->unit_id == $insiden->unit_id) || Auth::user()->can('hapus_semua_insiden'))

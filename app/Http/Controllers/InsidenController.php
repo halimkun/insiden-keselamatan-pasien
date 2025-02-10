@@ -81,11 +81,12 @@ class InsidenController extends Controller
             }
         }
 
-        $insiden = new Insiden();
+        $insiden      = new Insiden();
         $jenisInsiden = JenisInsiden::all();
-        $units = Unit::all();
+        $units        = Unit::all();
+        $karyawan     = \App\Models\User::all();
 
-        return view('insiden.create', compact('insiden', 'jenisInsiden', 'units', 'pasien'));
+        return view('insiden.create', compact('insiden', 'jenisInsiden', 'units', 'pasien', 'karyawan'));
     }
 
     /**
@@ -201,11 +202,12 @@ class InsidenController extends Controller
      */
     public function edit($id): View
     {
-        $units = Unit::all();
-        $insiden = Insiden::with(['pasien', 'tindakan', 'grading'])->find($id);
+        $units        = Unit::all();
+        $insiden      = Insiden::with(['pasien', 'tindakan', 'grading'])->find($id);
         $jenisInsiden = JenisInsiden::all();
+        $karyawan     = \App\Models\User::all();
 
-        return view('insiden.edit', compact('insiden', 'jenisInsiden', 'units'));
+        return view('insiden.edit', compact('insiden', 'jenisInsiden', 'units', 'karyawan'));
     }
 
     /**

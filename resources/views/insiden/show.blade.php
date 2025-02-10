@@ -299,6 +299,22 @@
                             @endif
                         </div>
 
+                        <x-separator text="Investigasi Sederhana" color="text-gray-500" />
+
+                        <div class="mt-3 mb-5" id="grading-insiden">
+                            <dl class="divide-y divide-gray-100">
+
+                                <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                    <dt class="text-sm font-medium leading-6 text-gray-900">Investigasi Sederhana</dt>
+                                    {{-- <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{!! nl2br($insiden?->investigasi_sederhana) !!}</dd> --}}
+                                    <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                        @markdom($insiden->investigasi_sederhana)
+                                    </dd>
+                                </div>
+
+                            </dl>
+                        </div>
+
                         <x-separator text="Detail Laporan" color="text-gray-500" />
 
                         <div class="mt-3" id="detail-laporan">

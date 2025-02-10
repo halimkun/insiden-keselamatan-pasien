@@ -67,7 +67,7 @@
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Dampak</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Tempat</th>
                                         <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">Grading</th>
-                                        <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th>
+                                        {{-- <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"></th> --}}
 
                                         <th scope="col" class="px-3 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">#</th>
                                     </tr>
@@ -193,10 +193,10 @@
                         data: 'grading',
                         name: 'grading',
                     },
-                    {
-                        data: 'investigasi',
-                        name: 'investigasi',
-                    },
+                    // {
+                    //     data: 'investigasi',
+                    //     name: 'investigasi',
+                    // },
                     {
                         data: 'action',
                         name: 'action'

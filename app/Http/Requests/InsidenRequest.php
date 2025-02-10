@@ -63,6 +63,8 @@ class InsidenRequest extends FormRequest
             'pernah_terjadi'          => 'nullable|boolean',
             'status_pelapor'          => 'required|string|max:255',
             'grading_risiko'          => 'nullable|in:biru,hijau,kuning,merah',
+
+            'rekomendasi'             => 'nullable',
         ];
     }
 

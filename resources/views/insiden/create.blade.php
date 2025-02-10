@@ -257,6 +257,13 @@
                     </div>
                 </div>
 
+                <div class="mt-4">
+                    <x-input-label for="rekomendasi" value="Rekomendasi Sederhana" />
+                    <textarea name="rekomendasi" id="rekomendasi" rows="5" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50" placeholder="rekomendasi sederhana">{{ old('rekomendasi', $insiden?->rekomendasi) }}</textarea>
+                
+                    <x-input-error class="mt-2" :messages="$errors->get('rekomendasi')" />
+                </div>
+
                 <div class="mt-6">
                     {{-- simple paragraf dengan inti bahwa memastikan data sudah benar --}}
                     <p class="text-sm text-gray-600">Sebelum mengirim laporan, pastikan data yang diinput sudah benar.</p>

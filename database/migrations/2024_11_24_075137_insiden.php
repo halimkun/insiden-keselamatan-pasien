@@ -39,6 +39,9 @@ return new class extends Migration
             $table->tinyInteger('pernah_terjadi')->default(0);
             $table->string('status_pelapor');
 
+            // rekomendasi sederhana
+            $table->text('rekomendasi')->nullable()->default(null);
+
             // Grading
             // $table->enum('grading_risiko', ['Biru', 'Hijau', 'Kuning', 'Merah']); // Input manually
             $table->foreignId('grading_id')->nullable()->default(null)->constrained('grading');

@@ -259,7 +259,7 @@
                                             'Jantung dan Subspesialiasinya',
                                             'Paru dan Subspesialiasinya',
                                             'Jiwa dan Subspesialiasinya',
-                                            'Orthopedi Dalam dan Subspesialiasinya'
+                                            'Orthopedi dan Subspesialiasinya'
                                         ] as $key => $item)
                                             <p><span class="dejavu pr-1">{!! in_array($item, $kasus) ? '&#9745;' : '&#9744;' !!}</span>{!! $item !!}</p>
                                         @endforeach

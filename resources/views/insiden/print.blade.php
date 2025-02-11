@@ -224,7 +224,7 @@
                                             'Jantung dan Subspesialiasinya',
                                             'Paru dan Subspesialiasinya',
                                             'Jiwa dan Subspesialiasinya',
-                                            'Orthopedi Dalam dan Subspesialiasinya'
+                                            'Orthopedi dan Subspesialiasinya'
                                         ] as $item)
                                             <div class="flex gap-2">
                                                 {!! in_array($item, $kasus) ? '&#128505;' : '&#9744;' !!}

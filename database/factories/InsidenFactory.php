@@ -29,7 +29,7 @@ class InsidenFactory extends Factory
             'Jantung dan Subspesialiasinya',
             'Paru dan Subspesialiasinya',
             'Jiwa dan Subspesialiasinya',
-            'Orthopedi Dalam dan Subspesialiasinya'
+            'Orthopedi dan Subspesialiasinya'
         ];
 
         $tgl_masuk_pasien = $this->faker->dateTimeBetween("-5 Months", "now");

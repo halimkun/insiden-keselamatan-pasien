@@ -162,7 +162,7 @@
                 'Jantung dan Subspesialiasinya',
                 'Paru dan Subspesialiasinya',
                 'Jiwa dan Subspesialiasinya',
-                'Orthopedi Dalam dan Subspesialiasinya'
+                'Orthopedi dan Subspesialiasinya'
             ] as $kasus)
                 <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">
                     <label class="label cursor-pointer items-center justify-start gap-2">

@@ -42,7 +42,7 @@ class GradingController extends Controller
         $request->validate([
             'insiden_id'     => 'required|exists:insiden,id',
             'grading_risiko' => 'required|in:hijau,biru,kuning,merah',
-            'pernah_terjadi' => 'required|boolean',
+            // 'pernah_terjadi' => 'required|boolean',
         ]);
 
         try {
@@ -69,8 +69,8 @@ class GradingController extends Controller
                 $insiden->save();
             }
 
-            $insiden->pernah_terjadi = $request->pernah_terjadi;
-            $insiden->save();
+            // $insiden->pernah_terjadi = $request->pernah_terjadi;
+            // $insiden->save();
 
             DB::commit();
 

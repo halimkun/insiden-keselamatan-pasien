@@ -3,6 +3,12 @@
         <x-icons.search class="h-[1rem] w-[1rem]" />
     </a>
 
+    @if (!Auth::user()->can('grading_insiden') || !Auth::user()->can('hapus_insiden'))
+        <a href="{{ $showUrl }}" class="text-gray-600 hover:text-indigo-600" title="Lihat detail">
+            <x-icons.print class="h-[1rem] w-[1rem]" />
+        </a>
+    @endif
+
     @can('edit_insiden')
         @if ($insiden->created_by == Auth::id() || (Auth::user()->can('edit_unit_insiden') && Auth::user()->detail?->unit_id == $insiden->unit_id) || Auth::user()->can('edit_semua_insiden'))
             <a href="{{ $editUrl }}" class="text-gray-600 hover:text-indigo-600" title="Edit data">

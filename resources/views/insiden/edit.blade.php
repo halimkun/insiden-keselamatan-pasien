@@ -73,13 +73,23 @@
                         />
                         <x-text-input 
                             readonly 
-                            class="w-full md:w-auto flex-1" 
+                            class="w-full md:w-auto flex-2" 
                             id="gender" 
                             type="text" 
                             name="gender" 
                             label="Gender"
                             placeholder="gender"
                             value="{{ old('jenis_kelamin', $insiden?->pasien?->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan') }}"
+                        />
+                        <x-text-input 
+                            readonly 
+                            class="w-full md:w-auto flex-1" 
+                            id="gender" 
+                            type="text" 
+                            name="gender" 
+                            label="Gender"
+                            placeholder="Gender"
+                            value="{{ old('jenis_kelamin', $insiden?->pasien?->penanggungBiaya->jenis_penanggung) }}"
                         />
                     </div>
 

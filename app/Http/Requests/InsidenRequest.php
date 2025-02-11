@@ -31,6 +31,7 @@ class InsidenRequest extends FormRequest
             'jenis_kelamin'           => 'required_if:act,tambah|in:L,P',
             'tempat_lahir'            => 'required_if:act,tambah|string|max:255',
             'tanggal_lahir'           => 'required_if:act,tambah|date',
+            'penanggung_biaya_id'     => 'required_if:act,tambah|exists:penanggung_biaya,id',
 
             'jenis_insiden_id'        => 'required|exists:jenis_insiden,id',
             'tgl_pasien_masuk'        => 'required|date',

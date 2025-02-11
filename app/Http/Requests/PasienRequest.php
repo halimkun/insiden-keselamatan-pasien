@@ -23,7 +23,7 @@ class PasienRequest extends FormRequest
     {
         return [
 			'nama'                => 'required|string',
-            'no_rekam_medis'      => 'required|numeric|digits_between:8,11',
+            'no_rekam_medis'      => 'required|numeric|digits_between:6,11',
 			'tanggal_lahir'       => 'required',
 			'jenis_kelamin'       => 'required',
 			'alamat'              => 'string',
@@ -31,6 +31,7 @@ class PasienRequest extends FormRequest
             'tempat_lahir'        => 'string',
             'no_telp'             => 'nullable|numeric|digits_between:10,13',
             'email'               => 'nullable|email',
+            'penanggung_biaya_id' => 'required|numeric|exists:penanggung_biaya,id',
         ];
     }
 }

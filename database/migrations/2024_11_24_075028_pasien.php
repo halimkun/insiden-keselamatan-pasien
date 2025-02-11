@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('nik')->unique()->nullable()->default(null)->comment('Nomor Induk Kependudukan');
+            $table->foreignId('penanggung_biaya_id')->nullable()->constrained('penanggung_biaya');
             $table->string('no_rekam_medis')->unique();
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');

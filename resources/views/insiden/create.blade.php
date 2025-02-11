@@ -9,8 +9,7 @@
 
     <form method="POST" action="{{ route('insiden.store') }}" role="form" enctype="multipart/form-data" class="flex flex-col gap-4 lg:gap-8">
         @csrf
-        <div
-            class="bg-white p-4 shadow sm:rounded-lg sm:p-8 {{ request('act') == 'tambah' ? 'border border-amber-500' : '' }}">
+        <div class="bg-white p-4 shadow sm:rounded-lg sm:p-8 {{ request('act') == 'tambah' ? 'border border-amber-500' : '' }}">
             <div class="w-full">
                 <header class="flex flex-col items-center justify-between gap-4 lg:flex-row">
                     <div class="flex w-full items-center justify-start gap-4 lg:justify-center">
@@ -106,6 +105,18 @@
 
                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                         </div>
+                        
+                        <div class="w-full">
+                            <x-input-label for="penanggung_biaya_id" value="Penanggung Biaya" />
+                            <select name="penanggung_biaya_id" id="penanggung_biaya_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                <option value="">-- Pilih Penanggung Biaya --</option>
+                                @foreach ($penanggungBiaya as $item)
+                                    <option value="{{ $item->id }}" {{ old('penanggung_biaya_id', $pasien?->penanggung_biaya_id) == $item->id ? 'selected' : '' }}>{{ $item->jenis_penanggung }}</option>
+                                @endforeach
+                            </select>
+
+                            <x-input-error class="mt-2" :messages="$errors->get('penanggung_biaya_id')" />
+                        </div>
                     </div>
 
                     <div class="mt-4">
@@ -134,6 +145,7 @@
                         <x-text-input class="flex-2" id="dob" type="text" name="dob" label="Tanggal Lahir" value="{{ request('step') > 1 ? old('tanggal_lahir', $pasien?->tanggal_lahir->format('Y-m-d')) : null }}" readonly placeholder="Tanggal Lahir" />
                         <x-text-input class="flex-1" id="dob" type="text" name="dob" label="Usia" value="{{ request('step') > 1 ? old('tanggal_lahir', $pasien?->tanggal_lahir->diff(\Carbon\Carbon::now())->format('%y Tahun %m Bulan %d Hari')) : null }}" readonly placeholder="Usia" />
                         <x-text-input class="flex-1" id="gender" type="text" name="gender" label="Gender" value="{{ request('step') > 1 ? old('jenis_kelamin', $pasien?->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan') : null }}" readonly placeholder="gender" />
+                        <x-text-input class="flex-1" id="penanggung_biaya_id" type="text" name="penanggung_biaya_id" label="Gender" value="{{ request('step') > 1 ? old('penanggung_biaya_id', $pasien?->penanggungBiaya->jenis_penanggung) : null }}" readonly placeholder="penanggung biaya" />
                     </div>
                     @endif
 

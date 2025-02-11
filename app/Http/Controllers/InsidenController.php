@@ -72,7 +72,7 @@ class InsidenController extends Controller
                     return Redirect::route('insiden.create', ['step' => 1])->with('error', 'Pasien tidak valid, pastikan pilih pasien yang benar');
                 }
 
-                $pasien = \App\Models\Pasien::where('no_rekam_medis', $pkode)->first();
+                $pasien = \App\Models\Pasien::with('penanggungBiaya')->where('no_rekam_medis', $pkode)->first();
                 if (!$pasien) {
                     return Redirect::route('insiden.create', ['step' => 1])->with('error', 'Pasien tidak valid, pastikan pilih pasien yang benar');
                 }
@@ -81,12 +81,13 @@ class InsidenController extends Controller
             }
         }
 
-        $insiden      = new Insiden();
-        $jenisInsiden = JenisInsiden::all();
-        $units        = Unit::all();
-        $karyawan     = \App\Models\User::all();
+        $insiden         = new Insiden();
+        $jenisInsiden    = JenisInsiden::all();
+        $units           = Unit::all();
+        $karyawan        = \App\Models\User::all();
+        $penanggungBiaya = \App\Models\PenanggungBiaya::all();
 
-        return view('insiden.create', compact('insiden', 'jenisInsiden', 'units', 'pasien', 'karyawan'));
+        return view('insiden.create', compact('penanggungBiaya', 'insiden', 'jenisInsiden', 'units', 'pasien', 'karyawan'));
     }
 
     /**
@@ -187,7 +188,7 @@ class InsidenController extends Controller
      */
     public function show($id): View
     {
-        $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($id);
+        $insiden = Insiden::with(['oleh', 'pasien.penanggungBiaya', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($id);
 
         $probability = \App\Helpers\InsidenHelper::getProbabilityLevel($insiden->jenis_insiden_id, $insiden->unit_id);
         $impact = \App\Helpers\InsidenHelper::getImpactLevel($insiden->dampak_insiden);
@@ -202,12 +203,13 @@ class InsidenController extends Controller
      */
     public function edit($id): View
     {
-        $units        = Unit::all();
-        $insiden      = Insiden::with(['pasien', 'tindakan', 'grading'])->find($id);
-        $jenisInsiden = JenisInsiden::all();
-        $karyawan     = \App\Models\User::all();
+        $units           = Unit::all();
+        $insiden         = Insiden::with(['pasien.penanggungBiaya', 'tindakan', 'grading'])->find($id);
+        $jenisInsiden    = JenisInsiden::all();
+        $karyawan        = \App\Models\User::all();
+        $penanggungBiaya = \App\Models\PenanggungBiaya::all();
 
-        return view('insiden.edit', compact('insiden', 'jenisInsiden', 'units', 'karyawan'));
+        return view('insiden.edit', compact('penanggungBiaya', 'insiden', 'jenisInsiden', 'units', 'karyawan'));
     }
 
     /**
@@ -367,7 +369,7 @@ class InsidenController extends Controller
 
     public function pdf(Request $request, int $insiden)
     {
-        $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);
+        $insiden = Insiden::with(['oleh', 'pasien.penanggungBiaya', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);
 
         if ($insiden && $insiden->pernah_terjadi) {
             $terkait = Insiden::with(['tindakan'])
@@ -407,7 +409,7 @@ class InsidenController extends Controller
 
     public function print(Request $request, int $insiden): View
     {
-        $insiden = Insiden::with(['oleh', 'pasien', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);
+        $insiden = Insiden::with(['oleh', 'pasien.penanggungBiaya', 'jenis', 'unit', 'tindakan', 'grading.user'])->find($insiden);
 
         if ($insiden && $insiden->pernah_terjadi) {
             $terkait = Insiden::with(['tindakan'])

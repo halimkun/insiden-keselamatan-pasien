@@ -390,6 +390,10 @@ class InsidenController extends Controller
         //     'terkait'     => $terkait ?? null,
         // ])->render();
 
+        // save created_sign and received_sign from $insiden to storage
+        $insiden->created_sign = $this->saveBase64ImageSign($insiden->created_sign, 'created_sign_' . $insiden->id);
+        $insiden->received_sign = $this->saveBase64ImageSign($insiden->received_sign, 'received_sign_' . $insiden->id);
+
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('insiden.pdf', [
             'insiden'     => $insiden,
             'probability' => $probability,
@@ -425,5 +429,24 @@ class InsidenController extends Controller
             'riskGrading' => $riskGrading,
             'terkait'     => $terkait ?? null,
         ]);
+    }
+
+    function saveBase64ImageSign($base64String, $filename)
+    {
+        // Pisahkan metadata Base64
+        list($type, $base64Data) = explode(';', $base64String);
+        list(, $base64Data) = explode(',', $base64Data);
+        $imageData = base64_decode($base64Data);
+
+        // Tentukan ekstensi berdasarkan format Base64
+        $extension = str_replace('data:image/', '', $type);
+
+        // Buat nama file unik
+        $fileName = 'images/sign/' . $filename . '.' . $extension;
+
+        // Simpan ke Storage (dalam /public/images/sign 
+        file_put_contents(public_path($fileName), $imageData);
+
+        return $fileName; // Path untuk database
     }
 }

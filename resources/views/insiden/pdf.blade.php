@@ -388,7 +388,7 @@
                         <p class="text-xs">{{ $insiden->created_at?->translatedFormat('l, d F Y') }}</p>
 
                         @if ($insiden->created_sign)
-                            <img src="data:image/png;base64,{{ $insiden->created_sign }}" alt="ttd" class="h-[100px]">
+                            <img class="h-[100px]" src="{{ asset($insiden->created_sign) }}">
                         @else
                             <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif
@@ -400,7 +400,7 @@
                         <p class="text-xs">{{ $insiden->received_at?->translatedFormat('d F Y') ?? '-'}}</p>
 
                         @if ($insiden->received_sign)
-                            <img src="data:image/png;base64,{{ $insiden->received_sign }}" alt="ttd" class="h-[100px]">
+                            <img class="h-[100px]" src="{{ asset($insiden->received_sign) }}">
                         @else
                             <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif

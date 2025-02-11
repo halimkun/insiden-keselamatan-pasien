@@ -444,6 +444,11 @@ class InsidenController extends Controller
         // Buat nama file unik
         $fileName = 'images/sign/' . $filename . '.' . $extension;
 
+        // check if folder not exists, create folder
+        if (!file_exists(public_path('images/sign'))) {
+            mkdir(public_path('images/sign'), 0777, true);
+        }
+
         // Simpan ke Storage (dalam /public/images/sign 
         file_put_contents(public_path($fileName), $imageData);
 

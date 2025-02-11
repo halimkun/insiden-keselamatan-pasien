@@ -1,7 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard
+            @can('lihat_semua_insiden')
+                Global Dashboard
+            @else
+                Dashboard
+            @endcan
         </h2>
     </x-slot>
 
@@ -9,8 +13,13 @@
         <div class="bg-white dark:bg-boxdark overflow-hidden w-full sm:rounded-lg">
             <div class="p-3 flex flex-col md:flex-row gap-3 justify-between lg:items-center">
                 <div class="px-2">
-                    <h2 class="text-lg font-semibold text-gray-800">Dashboard</h2>
-                    <p class="text-sm text-gray-500">Selamat datang di dashboard aplikasi insiden</p>
+                    @can('lihat_semua_insiden')
+                        <h2 class="text-lg font-semibold text-gray-800">Global Dashboard</h2>
+                        <p class="text-sm text-gray-500">Ringkas informasi insiden yang terjadi</p>
+                    @else
+                        <h2 class="text-lg font-semibold text-gray-800">Dashboard</h2>
+                        <p class="text-sm text-gray-500">Ringkas informasi insiden yang terjadi di unit kerja Anda</p>
+                    @endcan
                 </div>
 
                 <div class="self-end">

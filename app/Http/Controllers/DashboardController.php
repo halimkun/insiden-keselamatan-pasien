@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Insiden;
 use Illuminate\Http\Request;
 use App\Helpers\CustomHelper;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -37,13 +38,23 @@ class DashboardController extends Controller
         // Ambil data insiden yang dikelompokkan berdasarkan jenis_insiden_id dan hitung jumlahnya
         $insidenCountByJenis = Insiden::with('jenis')->selectRaw('jenis_insiden_id, COUNT(*) as total')
             ->whereYear('tanggal_insiden', $year) // Filter berdasarkan tahun
-            ->groupBy('jenis_insiden_id') // Kelompokkan berdasarkan jenis_insiden_id
-            ->get(); // Ambil hasilnya
+            ->groupBy('jenis_insiden_id'); // Kelompokkan berdasarkan jenis_insiden_id
+        
+        if (Auth::user()->can('lihat_semua_insiden')) {
+            $insidenCountByJenis = $insidenCountByJenis;
+        } else if (Auth::user()->can('lihat_unit_insiden')) {
+            $insidenCountByJenis->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+        } else {
+            $insidenCountByJenis->where('created_by', Auth::id());
+        }
+        
+        $insidenCountByJenis = $insidenCountByJenis->get(); // Ambil hasilnya
 
         // Kembalikan hasil sebagai koleksi untuk mempermudah manipulasi
         $insidenCount = $insidenCountByJenis->mapWithKeys(function ($item) {
             return [$item->jenis->alias => $item->total];
         });
+
 
         // Gabungkan dengan data jenis insiden, tambahkan 0 jika tidak ada data insiden untuk jenis tersebut
         $result = $jenisInsiden->mapWithKeys(function ($jenis) use ($insidenCount) {
@@ -62,8 +73,17 @@ class DashboardController extends Controller
     {
         // Ambil data dan kelompokkan berdasarkan grading risiko (non-case-sensitive)
         $groupedInsiden = Insiden::with('grading')
-            ->whereYear('tanggal_insiden', $year ?? now()->year)
-            ->get()
+            ->whereYear('tanggal_insiden', $year ?? now()->year);
+
+        if (Auth::user()->can('lihat_semua_insiden')) {
+            $groupedInsiden = $groupedInsiden;
+        } else if (Auth::user()->can('lihat_unit_insiden')) {
+            $groupedInsiden->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+        } else {
+            $groupedInsiden->where('created_by', Auth::id());
+        }
+
+        $groupedInsiden = $groupedInsiden->get()
             ->groupBy(fn($item) => strtolower($item->grading->grading_risiko ?? ''));
 
         // Jika tidak ada data, langsung kembalikan hasil default
@@ -95,15 +115,25 @@ class DashboardController extends Controller
         // Gunakan tahun saat ini jika $year null
         $year = $year ?? now()->year;
 
-        // Ambil data insiden berdasarkan bulan untuk tahun yang dipilih
-        return Insiden::selectRaw('MONTH(tanggal_insiden) as month, COUNT(*) as count')
+        $data = Insiden::selectRaw('MONTH(tanggal_insiden) as month, COUNT(*) as count')
             ->whereYear('tanggal_insiden', $year)
             ->groupBy('month')
-            ->orderBy('month')
-            ->get()
+            ->orderBy('month');
+
+        if (Auth::user()->can('lihat_semua_insiden')) {
+            $data = $data;
+        } else if (Auth::user()->can('lihat_unit_insiden')) {
+            $data->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+        } else {
+            $data->where('created_by', Auth::id());
+        }
+
+        $data = $data->get()
             ->mapWithKeys(function ($item) {
                 return [CustomHelper::getShortMonthName($item->month) => $item->count];
-            })
-            ->toArray();
+            })->toArray();
+
+        // Ambil data insiden berdasarkan bulan untuk tahun yang dipilih
+        return $data;
     }
 }

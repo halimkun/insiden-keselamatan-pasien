@@ -167,8 +167,8 @@ class DummyInsiden extends Seeder
             'Anastesi dan Subspesialiasinya',
             'Kulit & Kelamin dan Subspesialiasinya',
             'Jantung dan Subspesialiasinya',
-            'Paru Dalam dan Subspesialiasinya',
-            'Jiwa Dalam dan Subspesialiasinya',
+            'Paru dan Subspesialiasinya',
+            'Jiwa dan Subspesialiasinya',
             'Orthopedi Dalam dan Subspesialiasinya'
         ];
 

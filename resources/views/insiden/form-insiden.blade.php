@@ -160,8 +160,8 @@
                 'Anastesi dan Subspesialiasinya',
                 'Kulit & Kelamin dan Subspesialiasinya',
                 'Jantung dan Subspesialiasinya',
-                'Paru Dalam dan Subspesialiasinya',
-                'Jiwa Dalam dan Subspesialiasinya',
+                'Paru dan Subspesialiasinya',
+                'Jiwa dan Subspesialiasinya',
                 'Orthopedi Dalam dan Subspesialiasinya'
             ] as $kasus)
                 <div class="form-control rounded-lg border border-gray-200 p-0.5 px-3 transition-all duration-300 ease-in-out hover:bg-gray-200">

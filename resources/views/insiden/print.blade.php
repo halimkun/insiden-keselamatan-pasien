@@ -222,8 +222,8 @@
                                             'Anastesi dan Subspesialiasinya',
                                             'Kulit & Kelamin dan Subspesialiasinya',
                                             'Jantung dan Subspesialiasinya',
-                                            'Paru Dalam dan Subspesialiasinya',
-                                            'Jiwa Dalam dan Subspesialiasinya',
+                                            'Paru dan Subspesialiasinya',
+                                            'Jiwa dan Subspesialiasinya',
                                             'Orthopedi Dalam dan Subspesialiasinya'
                                         ] as $item)
                                             <div class="flex gap-2">

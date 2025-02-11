@@ -35,7 +35,7 @@ class JenisInsiden extends DataTable
                     </a>
                 ';
 
-                if (Gate::allows('edit_master_data')) {
+                if (Gate::allows('edit_jenis_insiden')) {
                     $html .= '
                         <a href="' . $editUrl . '" class="hover:text-indigo-900" title="Edit ' . $jenisInsiden->nama_jenis_insiden . '">
                             ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
@@ -43,7 +43,7 @@ class JenisInsiden extends DataTable
                     ';
                 }
 
-                if (Gate::allows('hapus_master_data')) {
+                if (Gate::allows('hapus_jenis_insiden')) {
                     if ($jenisInsiden->deleted_at) {
                         $html .= '
                             <button class="text-green-600 hover:text-green-900 restore-jenis-insiden" data-id="' . $jenisInsiden->id . '" data-jenis_insiden="' . $jenisInsiden->nama_jenis_insiden . '" onclick="confirmRestore.showModal()" title="Restore ' . $jenisInsiden->nama_jenis_insiden . '">

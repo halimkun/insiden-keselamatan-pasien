@@ -35,7 +35,7 @@ class PenanggungBiaya extends DataTable
                     </a>
                 ';
 
-                if (Gate::allows('edit_master_data')) {
+                if (Gate::allows('edit_penanggung_biaya')) {
                     $html .= '
                         <a href="' . $editUrl . '" class="hover:text-indigo-900" title="Edit Penanggung Biaya">
                             ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
@@ -43,7 +43,7 @@ class PenanggungBiaya extends DataTable
                     ';
                 }
 
-                if (Gate::allows('hapus_master_data')) {
+                if (Gate::allows('hapus_penanggung_biaya')) {
                     $html .= '
                         <button class="text-red-600 hover:text-red-900 delete-penanggung-biaya" data-id="' . $penanggungBiaya->id . '" data-penanggung_biaya="' . $penanggungBiaya->jenis_penanggung . '" onclick="confirmDelete.showModal()" title="Hapus Penanggung Biaya">
                             ' . Blade::render('<x-icons.trash class="h-[1rem] w-[1rem]" />') . '

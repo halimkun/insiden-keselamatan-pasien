@@ -31,7 +31,7 @@
                     <p class="mt-1 text-sm text-gray-600">Data Unit Kerja Rumah Sakit.</p>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                    @can('tambah_master_data')
+                    @can('tambah_unit')
                     <a type="button" href="{{ route('unit.create') }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                         <x-icons.circle-plus class="h-5 w-5" />
                         Tambah Data

@@ -35,7 +35,7 @@ class Unit extends DataTable
                     </a>
                 ';
                 
-                if (Gate::allows('edit_master_data')) {
+                if (Gate::allows('edit_unit')) {
                     $html .= '
                         <a href="' . $editUrl . '" class="hover:text-indigo-900" title="Edit ' . $unit->nama_unit . '">
                             ' . Blade::render('<x-icons.edit-circle class="h-[1rem] w-[1rem]" />') . '
@@ -43,7 +43,7 @@ class Unit extends DataTable
                     ';  
                 }
 
-                if (Gate::allows('hapus_master_data')) {
+                if (Gate::allows('hapus_unit')) {
                     if ($unit->deleted_at) {
                         $html .= '
                             <button class="text-green-600 hover:text-green-900 restore-unit" data-id="' . $unit->id . '" data-unit="' . $unit->nama_unit . '" onclick="confirmRestore.showModal()" title="Restore ' . $unit->nama_unit . '">

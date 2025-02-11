@@ -69,7 +69,7 @@
                 </ul>
             </div>
 
-            @canany(['lihat_pasien', 'lihat_karyawan', 'lihat_master_data'])
+            @canany(['lihat_pasien', 'lihat_karyawan', 'lihat_unit', 'lihat_jenis_insiden', 'lihat_penanggung_biaya'])
             <div>
                 <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">MASTER DATA</h3>
 
@@ -100,7 +100,7 @@
                     <!-- Menu Item Karyawan -->
                     @endcan
 
-                    @can('lihat_master_data')
+                    @can('lihat_unit')
                     <!-- Menu Item Unit -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('unit.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -111,7 +111,9 @@
                         </a>
                     </li>
                     <!-- Menu Item Unit -->
+                    @endcan
 
+                    @can('lihat_jenis_insiden')
                     <!-- Menu Item Jenis Insiden -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('jenis-insiden.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"
@@ -122,7 +124,9 @@
                         </a>
                     </li>
                     <!-- Menu Item Jenis Insiden -->
+                    @endcan
 
+                    @can('lihat_penanggung_biaya')
                     <!-- Menu Item Penanggung Biaya -->
                     <li>
                         <a class="group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 {{ request()->routeIs('penanggung-biaya.index') ? 'bg-graydark dark:bg-meta-4' : '' }}"

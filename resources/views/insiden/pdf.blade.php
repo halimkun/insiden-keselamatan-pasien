@@ -341,7 +341,7 @@
                 </tbody>
             </table>
 
-            @if ($insiden->pernah_terjadi && $terkait)
+            {{-- @if ($insiden->pernah_terjadi && $terkait)
             <div class="mt-5" style="font-size: 12pt; font-weight: normal;">
                 <p class="font-bold mb-3">Insiden Terkait Yang Terjadi Pada Unit Kerja Lain.</p>
                 @foreach ($terkait as $item)
@@ -353,7 +353,7 @@
                 </div>
                 @endforeach
             </div>
-            @endif
+            @endif --}}
         </div>
 
         <table class="table w-full">
@@ -388,7 +388,7 @@
                         <p class="text-xs">{{ $insiden->created_at?->translatedFormat('l, d F Y') }}</p>
 
                         @if ($insiden->created_sign)
-                            <img src="{{ $insiden->created_sign }}" alt="ttd" class="h-[100px]">
+                            <img src="data:image/png;base64,{{ $insiden->created_sign }}" alt="ttd" class="h-[100px]">
                         @else
                             <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif
@@ -400,7 +400,7 @@
                         <p class="text-xs">{{ $insiden->received_at?->translatedFormat('d F Y') ?? '-'}}</p>
 
                         @if ($insiden->received_sign)
-                            <img src="{{ $insiden->received_sign }}" alt="ttd" class="h-[100px]">
+                            <img src="data:image/png;base64,{{ $insiden->received_sign }}" alt="ttd" class="h-[100px]">
                         @else
                             <div style="padding-top: 50px; padding-bottom: 50px;"></div>
                         @endif

@@ -305,7 +305,7 @@
                     </tbody>
                 </table>
 
-                @if ($insiden->pernah_terjadi && $terkait)
+                {{-- @if ($insiden->pernah_terjadi && $terkait)
                 <div class="mt-5">
                     <p class="font-bold mb-3">Insiden Terkait Yang Terjadi Pada Unit Kerja Lain.</p>
                     @foreach ($terkait as $item)
@@ -317,7 +317,7 @@
                     </div>
                     @endforeach
                 </div>
-                @endif
+                @endif --}}
             </div>
 
             <div class="section flex gap-3">

@@ -60,9 +60,8 @@ class InsidenExport implements FromCollection, WithHeadings
                 "Pembuat Laporan"             => $item->oleh->name,
                 "Status Pelapor"              => $item->status_pelapor,
 
-                "Laporan Diterima Oleh"       => $item->penerima->name,
-                "Tanggal Laporan Diterima"    => $item->received_at->format('d-m-Y'),
-
+                "Laporan Diterima Oleh"       => $item->penerima?->name ?? "-",
+                "Tanggal Laporan Diterima"    => $item->received_at?->format('d-m-Y') ?? "-",
             ];
         });
 

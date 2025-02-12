@@ -333,7 +333,7 @@
                     });
                 }
 
-                $('input[name="jenis_insiden_id"], select[name="unit_id"]').on('change', checkInsidenTerkait);
+                // $('input[name="jenis_insiden_id"], select[name="unit_id"]').on('change', checkInsidenTerkait);
                 $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
                 // form submit prevent

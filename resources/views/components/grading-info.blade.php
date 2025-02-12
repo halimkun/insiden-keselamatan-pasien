@@ -56,7 +56,7 @@
             {!! $slot !!}
         </div>
 
-        @if ($jenis_insiden_id && $unit_id)
+        {{-- @if ($jenis_insiden_id && $unit_id)
         <div class="mt-3 w-full">
             <details class='collapse bg-white collapse-arrow w-full'>
                 <summary class='collapse-title text-lg font-medium px-6'>Data Insiden Pada Unit Kerja dan Jenis Yang sama</summary>
@@ -67,6 +67,6 @@
                 </div>
             </details>
         </div>
-        @endif
+        @endif --}}
     </div>
 </div>

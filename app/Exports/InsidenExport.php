@@ -48,12 +48,12 @@ class InsidenExport implements FromCollection, WithHeadings
                 "Unit"                        => $item->unit->nama_unit,
                 "Dampak Terhadap Pasien"      => $item->dampak_insiden,
 
-                "Tindakan"                    => $item->tindakan->tindakan,
-                "Tindakan Oleh"               => $item->tindakan->oleh,
-                "Penindak Detail"             => $item->tindakan->detail ?? "-",
+                "Tindakan"                    => $item->tindakan?->tindakan ?? "-",
+                "Tindakan Oleh"               => $item->tindakan?->oleh ?? "-",
+                "Penindak Detail"             => $item->tindakan?->detail ?? "-",
 
-                "Grading"                     => $item->grading->grading_risiko,
-                "Grading Oleh"                => $item->grading->oleh->name,
+                "Grading"                     => $item->grading?->grading_risiko ?? "-",
+                "Grading Oleh"                => $item->grading?->oleh?->name ?? "-",
 
                 "Investigasi Sederhana"       => $item->investigasi_sederhana,
 

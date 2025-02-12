@@ -27,7 +27,7 @@
         <div class="flex items-center justify-between w-full max-w-7xl mx-auto">
             {{-- logo --}}
             <a href="{{ route('login') }}" class="text-xl font-semibold text-black">
-                <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png')) }}" alt="Logo" class="w-[120px]" />
+                <img src="{{ asset("images/" . \App\Helpers\SettingHelper::get('site_logo', 'logo.png')) }}" alt="Logo" class="max-w-[250px]" />
             </a>
 
             {{-- menu center --}}

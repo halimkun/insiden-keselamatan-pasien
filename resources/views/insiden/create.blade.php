@@ -300,7 +300,7 @@
         function checkAndSubmit() {
             // Ambil semua nilai dari elemen input
             const jenisInsiden = $('input[name="jenis_insiden_id"]:checked').val();
-            const unitId = $('select[name="unit_id"]').val();
+            const unitId = $('#unit_id').val();
             const dampakInsiden = $('input[name="dampak_insiden"]:checked').val();
 
             // Periksa apakah semua nilai sudah terisi
@@ -396,7 +396,7 @@
 
             // Event listener ketika nilai input berubah
             // $('input[name="jenis_insiden_id"]').on('change', checkInsidenTerkait);
-            $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
+            $('input[name="jenis_insiden_id"], #unit_id, input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
             $('form').submit(function(e) {
                 e.preventDefault();

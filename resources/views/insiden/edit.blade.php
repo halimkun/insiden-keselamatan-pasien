@@ -228,7 +228,7 @@
             function checkAndSubmit() {
                 // Ambil semua nilai dari elemen input
                 const jenisInsiden = $('input[name="jenis_insiden_id"]:checked').val();
-                const unitId = $('select[name="unit_id"]').val();
+                const unitId = $('#unit_id').val();
                 const dampakInsiden = $('input[name="dampak_insiden"]:checked').val();
 
                 // Periksa apakah semua nilai sudah terisi
@@ -272,7 +272,7 @@
                     method: 'POST',
                     data: {
                         jenis_insiden_id: $('input[name="jenis_insiden_id"]:checked').val(),
-                        unit_id: $('select[name="unit_id"]').val(),
+                        unit_id: $('#unit_id').val(),
                         _token: $('meta[name="csrf-token"]').attr('content') // Tambahkan CSRF token jika diperlukan
                     },
                     success: function (response) {
@@ -333,8 +333,7 @@
                     });
                 }
 
-                // $('input[name="jenis_insiden_id"], select[name="unit_id"]').on('change', checkInsidenTerkait);
-                $('input[name="jenis_insiden_id"], select[name="unit_id"], input[name="dampak_insiden"]').on('change', checkAndSubmit);
+                $('input[name="jenis_insiden_id"], #unit_id, input[name="dampak_insiden"]').on('change', checkAndSubmit);
 
                 // form submit prevent
                 $('form').submit(function(e) {

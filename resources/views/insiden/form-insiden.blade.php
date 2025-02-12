@@ -196,12 +196,17 @@
 
         <div class="w-full">
             <x-input-label for="unit_id" value="Unit / Departemen terkait yang menyebabkan insiden" />
-            <select id="unit_id" name="unit_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                <option value="">-- Pilih Unit --</option>
-                @foreach ($units as $unit)
-                    <option value="{{ $unit->id }}" {{ old('unit_id', $insiden?->unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->nama_unit }}</option>
-                @endforeach
-            </select>
+            @can('lihat_semua_insiden')
+                <select id="unit_id" name="unit_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                    <option value="">-- Pilih Unit --</option>
+                    @foreach ($units as $unit)
+                        <option value="{{ $unit->id }}" {{ old('unit_id', $insiden?->unit_id) == $unit->id ? 'selected' : '' }}>{{ $unit->nama_unit }}</option>
+                    @endforeach
+                </select>
+            @else
+                <x-text-input id="nama_unit" type="text" class="mt-1 block w-full" value="{{ Auth::user()->detail->unit->nama_unit }}" disabled />
+                <x-text-input id="unit_id" type="text" name="unit_id" value="{{ Auth::user()->detail->unit_id }}" hidden />
+            @endcan
 
             <x-input-error class="mt-2" :messages="$errors->get('unit_id')" />
         </div>

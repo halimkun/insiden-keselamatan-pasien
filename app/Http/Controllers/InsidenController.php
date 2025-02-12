@@ -107,15 +107,16 @@ class InsidenController extends Controller
             ]);
 
             $pasienData = [
-                'nama'           => $request->nama,
-                'nik'            => $request->nik ?? null,
-                'no_rekam_medis' => $request->no_rekam_medis,
-                'tempat_lahir'   => $request->tempat_lahir,
-                'tanggal_lahir'  => $request->tanggal_lahir,
-                'jenis_kelamin'  => $request->jenis_kelamin,
-                'no_telp'        => $request->no_telp ?? null,
-                'email'          => $request->email ?? null,
-                'alamat'         => $request->alamat ?? null,
+                'nama'                => $request->nama,
+                'nik'                 => $request->nik ?? null,
+                'no_rekam_medis'      => $request->no_rekam_medis,
+                'tempat_lahir'        => $request->tempat_lahir,
+                'tanggal_lahir'       => $request->tanggal_lahir,
+                'jenis_kelamin'       => $request->jenis_kelamin,
+                'no_telp'             => $request->no_telp ?? null,
+                'email'               => $request->email ?? null,
+                'alamat'              => $request->alamat ?? null,
+                'penanggung_biaya_id' => $request->penanggung_biaya_id ?? null,
             ];
         }
 

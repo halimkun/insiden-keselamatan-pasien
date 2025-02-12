@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::post('pasien/{id}/restore', [\App\Http\Controllers\PasienController::class, 'restore'])->name('pasien.restore');
 
     ///  Insiden
+    Route::get('/insiden/export', [\App\Http\Controllers\ExportInsidenController::class, 'index'])->name('insiden.export');
+    
     Route::resource('insiden', \App\Http\Controllers\InsidenController::class);
     Route::post('insiden/get/terkait', [\App\Http\Controllers\InsidenController::class, 'getInsidenTerkait'])->name('insiden.get-terkait');
     Route::post('insiden/{insiden}/ttd', [\App\Http\Controllers\InsidenController::class, 'ttd'])->name('insiden.ttd');

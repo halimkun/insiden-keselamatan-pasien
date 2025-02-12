@@ -56,6 +56,11 @@ class Grading extends Model
         return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
     }
 
+    public function oleh()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by', 'id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

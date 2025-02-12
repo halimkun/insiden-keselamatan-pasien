@@ -124,7 +124,7 @@ class Insiden extends DataTable
             }
         }
 
-        return $model->with(['jenisInsiden', 'unit', 'grading', 'investigasi'])->orderBy('tanggal_insiden', 'desc');
+        return $model->with(['jenisInsiden', 'unit', 'grading', 'investigasi', 'pasien.penanggungBiaya'])->orderBy('tanggal_insiden', 'desc');
     }
 
     /**

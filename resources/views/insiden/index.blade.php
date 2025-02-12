@@ -34,15 +34,20 @@
                     <p class="mt-1 text-sm text-gray-600">Data insiden pasien yang terjadi di rumah sakit.</p>
                 </div>
 
-                @can('tambah_insiden')
-                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                        <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}"
-                            class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                            <x-icons.circle-plus class="h-5 w-5" />
-                            Add New
-                        </a>
-                    </div>
-                @endcan
+                <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    @can('tambah_insiden')
+                    <a type="button" href="{{ route('insiden.create', ['step' => '1']) }}" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        <x-icons.circle-plus class="h-5 w-5" />
+                        Add New
+                    </a>
+                    @endcan
+
+                    {{-- export button --}}
+                    <a href="{{ route('insiden.export') }}" class="inline-flex items-center gap-2 rounded-md bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                        <x-icons.file-excel class="h-5 w-5" />
+                        Export
+                    </a>
+                </div>
             </header>
 
             <div class="flow-root">
@@ -155,9 +160,11 @@
                         data: 'insiden',
                         name: 'insiden',
                         render: function(data, type, row) {
+                            console.log(row);
                             return `<div>
                                 <div class="max-w-sm truncate text-base font-medium">${data}</div>
-                                <div class="ml-3 capitalize">- ${row.korban_insiden == 'lainnya' ? row.korban_insiden_lainnya : row.korban_insiden}</div>
+                                <div class="ml-3 capitalize">- ${row?.pasien?.nama} <span class="font-medium">( ${row.korban_insiden == 'lainnya' ? row.korban_insiden_lainnya : row.korban_insiden} )</span></div>
+                                <div class="ml-3 capitalize">- <span class="font-medium">${row?.pasien?.penanggung_biaya?.jenis_penanggung}</span></div>
                             </div>`;
                         }
                     },

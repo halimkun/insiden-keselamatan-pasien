@@ -163,7 +163,7 @@ class DummyInsiden extends Seeder
             'Obstetri Gynekologi dan Subspesialiasinya',
             'THT dan Subspesialiasinya',
             'Mata dan Subspesialiasinya',
-            'Safar dan Subspesialiasinya',
+            'Saraf dan Subspesialiasinya',
             'Anastesi dan Subspesialiasinya',
             'Kulit & Kelamin dan Subspesialiasinya',
             'Jantung dan Subspesialiasinya',

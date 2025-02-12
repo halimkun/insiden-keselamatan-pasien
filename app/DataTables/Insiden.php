@@ -118,7 +118,7 @@ class Insiden extends DataTable
         if (!$user->can('lihat_semua_insiden')) {
             if ($user->can('lihat_unit_insiden')) {
                 $unitId = $user->detail?->unit_id ?? 0;
-                $model->where('unit_id', $unitId)->orWhere('created_by', $user->id);
+                $model->where('unit_id', $unitId); // ->orWhere('created_by', $user->id);
             } else { // Jika bukan unit, maka hanya bisa melihat insiden yang dibuat oleh dirinya
                 $model->where('created_by', $user->id);
             }

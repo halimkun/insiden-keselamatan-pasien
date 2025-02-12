@@ -34,12 +34,32 @@ class DatabaseSeeder extends Seeder
         $mutu = User::factory(3)->create();
         $mutu->each(function ($user) {
             $user->assignRole('komite-mutu');
+
+            \App\Models\UserDetail::factory()->create([
+                'user_id' => $user->id,
+            ]);
         });
+
+        $meMutu = User::factory()->create([
+            'name'     => 'Komite Mutu',
+            'username' => 'komite-mutu',
+            'email'    => 'komite.mutu@mail.com'
+        ]);
+
+        \App\Models\UserDetail::factory()->create([
+            'user_id' => $meMutu->id,
+        ]);
+
+        $meMutu->assignRole('komite-mutu');
 
         // ===== ===== ===== ===== =====  Pelapor User
         $pelapor = User::factory(5)->create();
         $pelapor->each(function ($user) {
             $user->assignRole('pelapor');
+
+            \App\Models\UserDetail::factory()->create([
+                'user_id' => $user->id,
+            ]);
         });
 
         // ===== ===== ===== ===== =====  Pelapor Lainnya
@@ -47,6 +67,10 @@ class DatabaseSeeder extends Seeder
             'name'     => 'Pelapor',
             'username' => 'pelapor',
             'email'    => 'pelapor@mail.com'
+        ]);
+
+        \App\Models\UserDetail::factory()->create([
+            'user_id' => $me->id,
         ]);
 
         $me->assignRole('pelapor');

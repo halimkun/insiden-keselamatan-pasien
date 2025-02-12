@@ -109,6 +109,6 @@ class User extends Authenticatable
      */
     public function detail()
     {
-        return $this->hasOne(UserDetail::class);
+        return $this->hasOne(UserDetail::class, 'user_id', 'id');
     }
 }

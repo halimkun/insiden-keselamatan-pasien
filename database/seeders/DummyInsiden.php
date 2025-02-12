@@ -203,6 +203,9 @@ class DummyInsiden extends Seeder
             // Masuk Pasien
             $masukPasie = $faker->dateTimeBetween('2024-07-01', 'now');
 
+            // All Users
+            $users = \App\Models\User::with('detail')->whereHas('detail')->inRandomOrder()->first();
+
             $insiden = [
                 "pasien_id"               => $pasien->id,
                 'tgl_pasien_masuk'        => $masukPasie->format('Y-m-d'),
@@ -220,13 +223,13 @@ class DummyInsiden extends Seeder
                 "kasus_insiden"           => $faker->randomElement($kasusInsiden),
                 "kasus_insiden_lainnya"   => null,
                 "tempat_kejadian"         => $item['tempat_kejadian'],
-                "unit_id"                 => \App\Models\Unit::all()->random()->id,
+                "unit_id"                 => $users->detail->unit_id,
                 "dampak_insiden"          => $item['jenis_insiden_alias'] == 'SENTINEL' ? 'mayor' : $faker->randomElement(['minor', 'moderat']),
                 "tindakan_id"             => $tindakan->id,
                 "pernah_terjadi"          => $faker->randomElement([0, 1]),
                 "status_pelapor"          => $faker->randomElement(['Penemu Insiden', 'Terlibat Langsung']),
                 "grading_id"              => null,
-                "created_by"              => \App\Models\User::permission('tambah_insiden')->get()->random()->id,
+                "created_by"              => $users->id,
             ];
 
             // try {

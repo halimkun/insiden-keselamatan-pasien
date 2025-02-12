@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,7 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class UserDetail extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     /**
      * The table associated with the model.

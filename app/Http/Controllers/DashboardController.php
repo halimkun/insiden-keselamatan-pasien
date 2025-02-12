@@ -43,7 +43,7 @@ class DashboardController extends Controller
         if (Auth::user()->can('lihat_semua_insiden')) {
             $insidenCountByJenis = $insidenCountByJenis;
         } else if (Auth::user()->can('lihat_unit_insiden')) {
-            $insidenCountByJenis->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+            $insidenCountByJenis->where('unit_id', Auth::user()->detail->unit_id); // ->orWhere('created_by', Auth::id());
         } else {
             $insidenCountByJenis->where('created_by', Auth::id());
         }
@@ -78,7 +78,7 @@ class DashboardController extends Controller
         if (Auth::user()->can('lihat_semua_insiden')) {
             $groupedInsiden = $groupedInsiden;
         } else if (Auth::user()->can('lihat_unit_insiden')) {
-            $groupedInsiden->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+            $groupedInsiden->where('unit_id', Auth::user()->detail->unit_id); // ->orWhere('created_by', Auth::id());
         } else {
             $groupedInsiden->where('created_by', Auth::id());
         }
@@ -123,7 +123,7 @@ class DashboardController extends Controller
         if (Auth::user()->can('lihat_semua_insiden')) {
             $data = $data;
         } else if (Auth::user()->can('lihat_unit_insiden')) {
-            $data->where('unit_id', Auth::user()->unit_id)->orWhere('created_by', Auth::id());
+            $data->where('unit_id', Auth::user()->detail->unit_id); // ->orWhere('created_by', Auth::id());
         } else {
             $data->where('created_by', Auth::id());
         }

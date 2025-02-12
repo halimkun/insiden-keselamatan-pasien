@@ -22,19 +22,19 @@ class InvestigasiDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('tanggal_mulai', function($investigasi) {
+            ->addColumn('tanggal_mulai', function ($investigasi) {
                 return \Carbon\Carbon::parse($investigasi->tanggal_mulai)->translatedFormat('d M Y');
             })
-            
-            ->addColumn('tanggal_selesai', function($investigasi) {
+
+            ->addColumn('tanggal_selesai', function ($investigasi) {
                 return \Carbon\Carbon::parse($investigasi->tanggal_selesai)->translatedFormat('d M Y');
             })
-            
-            ->addColumn('tanggal_pengesahan', function($investigasi) {
+
+            ->addColumn('tanggal_pengesahan', function ($investigasi) {
                 return \Carbon\Carbon::parse($investigasi->tanggal_pengesahan)->translatedFormat('d M Y');
             })
 
-            ->addColumn('info', function($investigasi) {
+            ->addColumn('info', function ($investigasi) {
                 $html = view('components.badges.investigasi-status', [
                     'investigasi' => $investigasi
                 ])->render();
@@ -42,7 +42,7 @@ class InvestigasiDataTable extends DataTable
                 return $html;
             })
 
-            ->addColumn('action', function($investigasi) {
+            ->addColumn('action', function ($investigasi) {
                 $html = view('components.actions.investigasi', [
                     'investigasi' => $investigasi
                 ])->render();
@@ -61,17 +61,16 @@ class InvestigasiDataTable extends DataTable
     public function query(Investigasi $model): QueryBuilder
     {
         $user = auth()->user()->load('detail');
-        
+
         $model = $model->newQuery();
         return $model->with('insiden', 'rekomendasi', 'grading')
             ->whereHas('insiden', function ($query) use ($user) {
                 if ($user->can('lihat_semua_investigasi')) {
                     return $query;
                 }
-                
+
                 if ($user->can('lihat_investigasi')) {
-                    return $query->where('unit_id', $user->detail?->unit_id)
-                        ->orWhere('created_by', $user->id);
+                    return $query->where('unit_id', $user->detail?->unit_id); // ->orWhere('created_by', $user->id);
                 }
 
                 return $query->where('created_by', $user->id);

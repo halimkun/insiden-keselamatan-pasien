@@ -379,6 +379,13 @@
                 </tr>
             </table>
 
+            <hr class="my-5">
+            
+            <div class="rounded-xl bg-gray-200 px-4 py-3">
+                <p class="text-sm font-semibold">Investigasi Sederhana</p>
+                <p class="text-sm">{{ $insiden->investigasi_sederhana }}</p>
+            </div>
+
             <div class="my-8"></div>
 
             <table class="table w-full" style="font-size: 12pt; font-weight: normal;">
@@ -409,39 +416,6 @@
                     </td>
                 </tr>
             </table>
-
-            {{-- <div>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td class='border border-gray-400 p-2 w-[50%]'>
-                                <p class="font-bold">Pembuat Laporan</p>
-                                <p class="text-xs">{{ $insiden->created_at?->translatedFormat('d F Y') }}</p>
-                                <div class="flex items-center justify-start load-ttd-pembuat">
-                                    @if ($insiden->created_sign)
-                                        <img src="{{ $insiden->created_sign }}" alt="ttd" class="h-[100px]">
-                                    @endif
-                                </div>
-                                <p class="font-bold">{{ $insiden->oleh->name }}</p>
-                            </td>
-                            <td class='border border-gray-400 p-2 w-[50%]'>
-                                <div class="flex flex-col h-full justify-between">
-                                    <div>
-                                        <p class="font-bold">Penerima Laporan</p>
-                                        <p class="text-xs">{{ $insiden->received_at?->translatedFormat('d F Y') ?? '-'}}</p>
-                                    </div>
-                                    <div class="flex items-center justify-start load-ttd-penerima">
-                                        @if ($insiden->received_sign)
-                                            <img src="{{ $insiden->received_sign }}" alt="ttd" class="h-[100px]">
-                                        @endif
-                                    </div>
-                                    <p class="font-bold">{{ $insiden->penerima->name ?? '-' }}</p>
-                                </div>                                    
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> --}}
         </div>
     </div>
 </body>

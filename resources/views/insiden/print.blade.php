@@ -343,6 +343,13 @@
 
                 <hr class="my-5">
 
+                <div class="rounded-xl bg-gray-200 px-4 py-3">
+                    <p class="text-sm font-semibold">Investigasi Sederhana</p>
+                    <p class="text-sm">{{ $insiden->investigasi_sederhana }}</p>
+                </div>
+
+                <hr class="my-5">
+
                 <div>
                     <table class="table">
                         <tbody>

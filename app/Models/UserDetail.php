@@ -60,7 +60,7 @@ class UserDetail extends Model
      */
     protected $fillable = [
         'user_id',
-        'jabatan',
+        'jabatan_id',
         'departemen',
         'no_hp',
         'unit_id'
@@ -85,5 +85,15 @@ class UserDetail extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    /**
+     * Get the jabatan that owns the UserDetail
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class);
     }
 }

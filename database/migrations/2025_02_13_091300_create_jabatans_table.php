@@ -11,17 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('unit', function (Blueprint $table) {
+        Schema::create('jabatan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_unit');
+            $table->string('kode')->unique();
+            $table->string('nama');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
 
-        // alter to karyawan table
+        // add foreign key to user_detail after user_id
         Schema::table('user_detail', function (Blueprint $table) {
-            $table->foreignId('unit_id')->after('user_id')->constrained('unit')->onDelete('cascade');
+            $table->foreignId('jabatan_id')->constrained('jabatan');
         });
+        
     }
 
     /**
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('unit');
+        Schema::dropIfExists('jabatan');
     }
 };

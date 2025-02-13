@@ -64,7 +64,7 @@
         <div class="flex w-full flex-col items-start justify-start gap-6 lg:flex-row">
             <div class="w-full">
                 <x-input-label for="jabatan" value="Jabatan" />
-                <x-text-input disabled id="jabatan" name="jabatan" type="text" class="mt-1 block w-full bg-gray-100" :value="old('jabatan', $user?->detail?->jabatan)" autocomplete="jabatan" placeholder="jabatan" />
+                <x-text-input disabled id="jabatan" name="jabatan" type="text" class="mt-1 block w-full bg-gray-100" :value="old('jabatan', $user?->detail?->jabatan->nama)" autocomplete="jabatan" placeholder="jabatan" />
                 <x-input-error class="mt-2" :messages="$errors->get('jabatan')" />
             </div>
 

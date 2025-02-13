@@ -18,6 +18,7 @@ class PermissionAndRoles extends Seeder
             'Karyawan'         => ['lihat', 'edit', 'hapus', 'tambah', 'ubah_password', 'set_permission'],
             'Pasien'           => ['lihat', 'edit', 'hapus', 'tambah'],
             'Unit'             => ['lihat', 'edit', 'hapus', 'tambah'],
+            "Jabatan"          => ['lihat', 'edit', 'hapus', 'tambah'],
             'Jenis Insiden'    => ['lihat', 'edit', 'hapus', 'tambah'],
             'Penanggung Biaya' => ['lihat', 'edit', 'hapus', 'tambah'],
             'Insiden'          => ['lihat_semua', 'lihat_unit', 'lihat_pribadi', 'lihat', 'edit', 'edit_unit', 'edit_semua', 'hapus', 'hapus_unit', 'hapus_semua', 'tambah', 'grading'],

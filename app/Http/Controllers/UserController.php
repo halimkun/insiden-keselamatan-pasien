@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\TelegramHelper;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\Jabatan;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Helpers\TelegramHelper;
 use App\Http\Requests\UserRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -32,10 +33,11 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        $user = new User();
-        $units = Unit::all();
+        $user     = new User();
+        $units    = Unit::all();
+        $jabatans = Jabatan::all();
 
-        return view('user.create', compact('user', 'units'))->with('isCreate', true);
+        return view('user.create', compact('user', 'units', 'jabatans'))->with('isCreate', true);
     }
 
     /**
@@ -52,7 +54,7 @@ class UserController extends Controller
         $data['remember_token']    = \Illuminate\Support\Str::random(10);
 
         $detail = [
-            'jabatan'    => $request->jabatan,
+            'jabatan_id'    => $request->jabatan_id,
             'unit_id'    => $request->unit,
             'departemen' => $request->departemen,
             'no_hp'      => $request->no_hp,
@@ -107,10 +109,11 @@ class UserController extends Controller
      */
     public function edit($id): View
     {
-        $user = User::find($id);
-        $units = Unit::all();
+        $user     = User::find($id);
+        $units    = Unit::all();
+        $jabatans = Jabatan::all();
 
-        return view('user.edit', compact('user', 'units'));
+        return view('user.edit', compact('user', 'units', 'jabatans'));
     }
 
     /**
@@ -262,7 +265,7 @@ class UserController extends Controller
 
         $detail = [
             'user_id'    => $user->id,
-            'jabatan'    => $request->jabatan,
+            'jabatan_id'    => $request->jabatan_id,
             'unit_id'    => $request->unit,
             'departemen' => $request->departemen,
             'no_hp'      => $request->no_hp,

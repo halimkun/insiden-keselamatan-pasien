@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('unit', \App\Http\Controllers\UnitController::class);
         Route::resource('jenis-insiden', \App\Http\Controllers\JenisInsidenController::class);
         Route::resource('penanggung-biaya', \App\Http\Controllers\PenanggungBiayaController::class);
+        Route::resource('jabatan', \App\Http\Controllers\JabatanController::class);
     });
 
     ///  Pasien

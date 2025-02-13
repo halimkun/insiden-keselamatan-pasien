@@ -28,9 +28,14 @@
 
     <div class="flex w-full flex-col items-start justify-start gap-6 lg:flex-row">
         <div class="w-full">
-            <x-input-label for="jabatan" value="Jabatan" />
-            <x-text-input id="jabatan" name="jabatan" type="text" class="mt-1 block w-full" :value="old('jabatan', $user?->detail?->jabatan)" autocomplete="jabatan" placeholder="jabatan" />
-            <x-input-error class="mt-2" :messages="$errors->get('jabatan')" />
+            <x-input-label for="jabatan_id" value="Jabatan" />
+            <select id="jabatan_id" name="jabatan_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                <option value="">-- Pilih Jabatan --</option>
+                @foreach ($jabatans as $jabatan)
+                    <option value="{{ $jabatan->id }}" {{ old('jabatan_id', $user?->detail?->jabatan_id) == $jabatan->id ? 'selected' : '' }}>{{ $jabatan->nama }}</option>
+                @endforeach
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('jabatan_id')" />
         </div>
 
         <div class="w-full">

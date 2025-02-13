@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('user_detail', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users');
-            $table->string('jabatan');
             $table->string('departemen');
             $table->string('no_hp')->unique()->nullable();
             $table->timestamps();

@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
 
         // ===== ===== ===== ===== =====  Master Data
         $this->call(MasterData::class);
+
+        // ===== ===== ===== ===== =====  Jabatan
+        $this->call(JabatanSeed::class);
         
 
 
@@ -28,15 +31,21 @@ class DatabaseSeeder extends Seeder
             'email'    => 'admin@mail.com'
         ]);
 
+        \App\Models\UserDetail::factory()->create([
+            'user_id'    => $admin->id,
+            'jabatan_id' => \App\Models\Jabatan::where('nama', 'Kepala Unit Sistem Informasi Dan Teknologi')->first()->id
+        ]);
+
         $admin->assignRole('administrator');
 
         // ===== ===== ===== ===== =====  Komite Mutu User
         $mutu = User::factory(3)->create();
-        $mutu->each(function ($user) {
+        $mutu->each(function ($user, $index) {
             $user->assignRole('komite-mutu');
 
             \App\Models\UserDetail::factory()->create([
-                'user_id' => $user->id,
+                'user_id'    => $user->id,
+                'jabatan_id' => $index > 0 ? \App\Models\Jabatan::where('nama', 'Komite Mutu')->first()->id : \App\Models\Jabatan::where('nama', 'Ketua Komite Mutu')->first()->id
             ]);
         });
 
@@ -53,7 +62,7 @@ class DatabaseSeeder extends Seeder
         $meMutu->assignRole('komite-mutu');
 
         // ===== ===== ===== ===== =====  Pelapor User
-        $pelapor = User::factory(5)->create();
+        $pelapor = User::factory(10)->create();
         $pelapor->each(function ($user) {
             $user->assignRole('pelapor');
 

@@ -27,6 +27,13 @@ class MasterData extends Seeder
             'Laboratorium',
             'Persalinan',
             'Perinatologi',
+            "UGD / IGD",
+            "Poliklinik",
+            "Rekam Medis",
+            "Keuangan Dan Akuntansi",
+            "Sistem Informasi Dan Teknologi",
+            "IPSRS",
+            "VK"
         ];
 
         sort($units);

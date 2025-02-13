@@ -16,13 +16,23 @@ class UserDetailFactory extends Factory
      */
     public function definition(): array
     {
-        $units = \App\Models\Unit::all();
+        $units      = \App\Models\Unit::inRandomOrder()->first();
+        $unit_id    = $units->id;
+        $departemen = $units->nama_unit;
+
+        $jabatan    = \App\Models\Jabatan::where('nama', 'like', "%$departemen%")
+            ->whereNot('nama', 'Kepala Unit Sistem Informasi Dan Teknologi')
+            ->inRandomOrder()->first();
+
+        if (!$jabatan) {
+            $jabatan = \App\Models\Jabatan::inRandomOrder()->first();
+        }
 
         return [
             'user_id'    => null,
-            'unit_id'    => $units->random()->id,
-            'jabatan'    => $this->faker->randomElement(['Ketua', 'Pelaksana']),
-            'departemen' => $units->random()->nama_unit,
+            'unit_id'    => $unit_id,
+            'jabatan_id' => $jabatan->id,
+            'departemen' => $departemen,
             'no_hp'      => $this->faker->phoneNumber,
         ];
     }

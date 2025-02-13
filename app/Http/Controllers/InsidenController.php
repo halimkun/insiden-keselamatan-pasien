@@ -394,8 +394,8 @@ class InsidenController extends Controller
         // ])->render();
 
         // save created_sign and received_sign from $insiden to storage
-        $insiden->created_sign = $this->saveBase64ImageSign($insiden->created_sign, 'created_sign_' . $insiden->id);
-        $insiden->received_sign = $this->saveBase64ImageSign($insiden->received_sign, 'received_sign_' . $insiden->id);
+        $insiden->created_sign ? $this->saveBase64ImageSign($insiden->created_sign, 'created_sign_' . $insiden->id) : null;
+        $insiden->received_sign ? $this->saveBase64ImageSign($insiden->received_sign, 'received_sign_' . $insiden->id) : null;
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('insiden.pdf', [
             'insiden'     => $insiden,
@@ -449,7 +449,7 @@ class InsidenController extends Controller
 
         // save image to storage public
         \Storage::disk('public')->put($fileName, $imageData);
-        
+
         // check if folder not exists, create folder
         // if (!file_exists(public_path('images/sign'))) {
         //     mkdir(public_path('images/sign'), 0777, true);

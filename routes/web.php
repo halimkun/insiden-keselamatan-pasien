@@ -54,6 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::get('insiden/{insiden}/print', [\App\Http\Controllers\InsidenController::class, 'print'])->name('insiden.print');
     Route::get('insiden/{insiden}/pdf', [\App\Http\Controllers\InsidenController::class, 'pdf'])->name('insiden.pdf');
     
+    Route::get('insiden/{insiden}/rca/create', function() {
+        $insiden = \App\Models\Insiden::find(request()->route('insiden'));
+        $karyawan = \App\Models\User::all();
+
+        return view('test-rca.form', compact('insiden', 'karyawan'));
+    })->name('insiden.create-rca');
+    
     // Investigasi
     // Route::resource('investigasi', \App\Http\Controllers\InvestigasiController::class)->only(['index']);
     // Route::resource('insiden.investigasi', \App\Http\Controllers\InvestigasiController::class)->except(['index']);

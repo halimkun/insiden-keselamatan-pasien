@@ -60,6 +60,13 @@
                         @endif
                     @endcan
 
+                    <li>
+                        <a href="insiden/{{ $insiden->id }}/rca/create" class="text-gray-600 hover:text-indigo-600">
+                            <x-icons.report class="h-[1rem] w-[1rem]" />
+                            Buat RCA
+                        </a>
+                    </li>
+
                     {{-- @canany(['lihat_investigasi', 'lihat_semua_investigasi'])
                         @if ($insiden->investigasi)
                             <li>

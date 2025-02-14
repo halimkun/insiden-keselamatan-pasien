@@ -198,3 +198,12 @@ span.flatpickr-weekday, .flatpickr-months .flatpickr-month {
 [x-cloak] {
     display: none !important;
 }
+
+table.dataTable > tbody > tr.selected {
+    @apply bg-primary text-white;
+}
+
+div.dt-container span.select-info,
+div.dt-container span.select-item {
+  @apply ml-0 block md:ml-2 md:inline-block;
+}

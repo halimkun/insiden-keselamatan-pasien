@@ -19,7 +19,7 @@
             <div>
                 <a href="/">
                     {{-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> --}}
-                    <img src="{{ asset("images/logo.png") }}" alt="Logo" class="w-[150px]" />
+                    <img src="{{ asset(\App\Helpers\SettingHelper::get('site_logo', 'images/logo.png')) }}" alt="Logo" class="w-[270px] max-h-[50px]" />
                 </a>
             </div>
 

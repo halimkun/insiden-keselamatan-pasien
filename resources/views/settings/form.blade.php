@@ -48,7 +48,7 @@
     <div class="flex items-stretch gap-4 max-w-xl">
         @if (\App\Helpers\SettingHelper::get('site_logo'))
             <div class="border rounded-xl shadow flex items-center justify-center px-3">
-                <img src="{{ asset('images/' . \App\Helpers\SettingHelper::get('site_logo')) }}" alt="site logo" class="w-32 object-cover rounded-md shadow-sm">
+                <img src="{{ asset(\App\Helpers\SettingHelper::get('site_logo')) }}" alt="site logo" class="w-32 object-cover rounded-md shadow-sm">
             </div>
         @endif
 

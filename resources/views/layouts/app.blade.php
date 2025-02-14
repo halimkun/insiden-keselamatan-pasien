@@ -71,6 +71,22 @@
     </div>
     {{-- ===== Page Wrapper End ===== --}}
 
+    {{-- ===== DIALOG JUKNIK ===== --}}
+   <dialog id="juknisModal" class="modal">
+        <div class="modal-box w-11/12 max-w-3xl bg-white p-4 rounded-lg shadow-lg">
+            <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+            <h3 class="text-lg font-bold">Juknis Insidek Keselamatan Pasien !</h3>
+            <p>Petunjuk dan panduan dalam menggunakan aplikasi ini.</p>
+
+            <div class="mt-4">
+                {{-- iframe to show pdf on public folder --}}
+                <iframe src="{{ asset('docs/juknis.pdf') }}" class="w-full min-h-[calc(100svh-15rem)]" frameborder="0"></iframe>
+            </div>
+        </div>
+    </dialog>
+
     <script src="{{ asset('static/js/sweetalert2@11.js') }}"></script>
 
     {{-- ===== Scripts ===== --}}
@@ -78,6 +94,17 @@
 
     <script>
         $(document).ready(function() {
+            const localStorageJuknisModal = localStorage.getItem('juknisModal');
+
+            setTimeout(() => {
+                if (!localStorageJuknisModal) {
+                    document.getElementById('juknisModal').showModal();
+                }
+
+                // set to local storage to prevent showing again
+                localStorage.setItem('juknisModal', 'true');
+            }, 1000);
+
             @if (session('success'))
                 Swal.fire({icon: 'success',title: 'Success',text: '{{ session('success') }}',showConfirmButton: false,timer: 2500});
             @endif

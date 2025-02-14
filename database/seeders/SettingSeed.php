@@ -18,7 +18,7 @@ class SettingSeed extends Seeder
         $data = [
             'site_name'        => 'Insiden Keselamatan Pasien',
             'site_description' => 'Solusi praktis untuk mencatat dan menilai risiko insiden demi meningkatkan keselamatan pasien',
-            'site_logo'        => 'logo.png',
+            'site_logo'        => 'images/logo.png',
 
             'faskes_name'      => 'Nama Fasilitas Kesehatan',
             'faskes_address'   => $faker->address,

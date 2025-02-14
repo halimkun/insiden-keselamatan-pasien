@@ -77,13 +77,13 @@ class User extends DataTable
         $model = $model->newQuery();
 
         // add relation to roles
-        $model->with('roles');
+        $model->with('roles', 'detail.unit', 'detail.jabatan');
 
         if ($this->request->has("show_deleted") && $this->request->show_deleted) {
             return $model->onlyTrashed(); // Hanya menampilkan data yang sudah dihapus
         }
 
-        return $model;
+        return $model->orderBy('name');
     }
 
     /**

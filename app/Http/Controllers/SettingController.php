@@ -57,23 +57,25 @@ class SettingController extends Controller
 
         // logo handle
         if ($logo) {
-            // get old logo name, if logo name is not logo.png then delete it
-            $oldLogo = $setting->where('key', 'site_logo')->first();
-            $oldLogo = $oldLogo->value;
-
-            if ($oldLogo != 'logo.png') {
-                $oldLogoPath = public_path('images/' . $oldLogo);
-                if (file_exists($oldLogoPath)) {
-                    unlink($oldLogoPath);
+            // Ambil setting logo lama hanya sekali
+            $oldLogoSetting = $setting->where('key', 'site_logo')->first();
+        
+            if ($oldLogoSetting) {
+                $oldLogo = $oldLogoSetting->value;
+        
+                if ($oldLogo && $oldLogo !== 'logo.png') {
+                    $oldLogoName = basename($oldLogo);
+                    \Storage::disk('public')->delete('images/' . $oldLogoName);
                 }
             }
-
-            // save new logo
+        
+            // Simpan logo baru
             $logoName = time() . '.' . $logo->extension();
-            $logo->move(public_path('images'), $logoName);
-
-            $setting->where('key', 'site_logo')->update(['value' => $logoName]);
-        }
+            $logoPath = $logo->storeAs('images', $logoName, 'public');
+        
+            // Update setting dengan path baru
+            $setting->where('key', 'site_logo')->update(['value' => 'storage/' . $logoPath]);
+        }        
 
         return redirect()->route('settings.index')->with('success', 'Settings updated successfully.');
     }

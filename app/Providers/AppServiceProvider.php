@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
 
         // force https
-        URL::forceScheme('https');
+        if (env('APP_ENV') == 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
